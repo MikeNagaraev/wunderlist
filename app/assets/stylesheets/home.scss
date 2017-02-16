@@ -3,6 +3,8 @@ $home-aside-color: #ffffff;
 $burger-menu-color: darken(#506c4e, 5%);
 $header-height: 50px;
 $add-todo-color: rgba(102,137,100,0.75);
+$burger-line-width: 50px;
+$add-category-color: #5FBEDB;
 
 html {
   min-height: 100%;
@@ -12,7 +14,7 @@ body {
   color: #ffffff;
   // background: url('https://www.minceandskirlie.com/wp/wp-content/uploads/2013/05/SavedPicture-2013529203653.jpg');
   background: url('../images/buildings.png') no-repeat;
-  // overflow: hidden;
+  overflow: hidden;
   min-height: 100%;
   background-size: 100% 100%;
   font-size: 10px;
@@ -29,6 +31,7 @@ body {
     height: 100%;
     width: 85%;
     transition: width 0.4s;
+    height: 100%;
 
     &-body {
       box-sizing: border-box;
@@ -52,8 +55,11 @@ body {
     .todos-container {
       list-style: none;
       padding: 0;
+      overflow-y: auto;
+      max-height: 85%;
 
       .todo-item {
+        -webkit-user-select: none;
         height: 40px;
         background: #ffffff;
         color: #000000;
@@ -63,8 +69,6 @@ body {
         border-radius: 3px;
         font-size: 1.4rem;
         margin-top: 10px;
-        -webkit-user-select: none;
-        user-select: none !important;
 
         .remove-icon {
           cursor: pointer;
@@ -73,6 +77,7 @@ body {
     }
 
     .add-todo {
+      -webkit-user-select: none;
       left: 50%;
       transform: translateX(-50%);
       position: relative;
@@ -80,6 +85,7 @@ body {
       background: $add-todo-color;
       height: 45px;
       border-radius: 4px;
+      margin-bottom: 20px;
 
       &-icon {
         position: absolute;
@@ -118,11 +124,39 @@ body {
   }
 
   &-aside {
+    position: relative;
     float: left;
     width: 15%;
-    min-height: 100%;
+    height: 100%;
     background: $home-aside-color;
     transition: width 0.4s;
+    background: #ededed;
+    overflow: hidden;
+
+    .add-category {
+      width: 100%;
+      height: 50px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      // width: $burger-line-width;
+      background: $add-category-color;
+      font-size: 1.7rem;
+      cursor: pointer;
+
+      p {
+        position: absolute;
+        margin: 0;
+        color: #ffffff;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+
+        span {
+          padding-right: 20px;
+        }
+      }
+    }
 
     &-header {
       height: $header-height;
@@ -132,7 +166,7 @@ body {
       .burger-menu {
         float: left;
         height: 100%;
-        width: 50px;
+        width: $burger-line-width;
         text-align: center;
         background: $burger-menu-color;
         cursor: pointer;
@@ -150,7 +184,7 @@ body {
 
       &-container {
         float: right;
-        width: 80%;
+        width: calc(100% - $burger-line-width);
         height: 100%;
       }
     }
@@ -158,18 +192,16 @@ body {
     &-body {
       height: calc(100% - $header-height);
       width: 100%;
-      background: #ededed;
 
       &-burger-line {
-        width: 20%;
+        width: $burger-line-width;
         height: 100%;
         float: left;
       }
 
       &-container {
-        width: 80%;
+        width: calc(100% - $burger-line-width);
         height: 100%;
-        float: right;
       }
     }
   }

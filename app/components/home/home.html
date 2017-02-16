@@ -1,8 +1,9 @@
 <div ng-controller="HomeController as home">
+  <!-- <div ui-view="categories"></div> -->
   <div class="home-header">
 
   </div>
-  <div class="home-body">
+  <div class="home-body" ng-controller="CategoriesController as category">
     <div class="home-aside">
       <div class="home-aside-header">
         <div class="burger-menu opened" onclick="toggleAside()">
@@ -14,18 +15,28 @@
         </div>
       </div>
       <div class="home-aside-body">
+
+
         <div class="home-aside-body-burger-line">
 
         </div>
         <div class="home-aside-body-container">
-
+          <ul class="categories-list">
+            <li ng-repeat="cat in category.categories" class="category-item" onclick="selectCategory(event)" ng-click="category.setCurrentCategory(cat)">
+              {{cat.title}}
+              <span class="glyphicon glyphicon-option-vertical category-options"></span>
+            </li>
+          </ul>
         </div>
+      </div>
+      <div class="add-category" title="Add category" onclick="showCategoryWindow()">
+        <p><span class="glyphicon glyphicon-plus"></span> Create New Category</p>
       </div>
     </div>
     <div class="home-container">
       <div class="home-container-header">
         <p class="home-container-header-title">
-          Home
+          {{category.currentCategory.title}}
         </p>
       </div>
       <div class="home-container-body">
@@ -34,21 +45,42 @@
             +
           </div>
           <div class="add-todo-input">
-            <form ng-submit="home.addTodo()">
+            <form ng-submit="category.addTodo()">
               <div class="form-group">
-                <input type="text" placeholder="Add a to-do..." ng-model="home.title" class="form-control">
+                <input type="text" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
               </div>
             </form>
           </div>
         </div>
         <div>
           <ul class="todos-container">
-            <li class="todo-item" ng-repeat="todo in home.scope.todos">
-              <span class="glyphicon glyphicon-remove remove-icon" ng-click="home.removeTodo(todo)"></span> {{todo.title}}
+            <li class="todo-item" ng-repeat="todo in category.currentCategory.todos track by $index">
+              <span class="glyphicon glyphicon-remove remove-icon" ng-click="category.deleteTodo(todo)"></span> {{todo.title}}
             </li>
           </ul>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="modal-category" class="modal" role="dialog">
+  <div class="modal-dialog" ng-controller="CategoriesController as category">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onclick="hideCategoryWindow()">&times;</button>
+        <h4 class="modal-title">Create New Category</h4>
+      </div>
+      <form class="form-group add-category-input" ng-submit="category.addCategory()">
+        <div class="modal-body">
+          <input type="text" class="form-control" placeholder="Category Name" ng-model='category.title'>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" onclick="hideCategoryWindow()">Cancel</button>
+          <button type="submit" class="btn btn-primary" onclick="hideCategoryWindow()">Save</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

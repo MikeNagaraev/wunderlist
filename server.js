@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'app')));
 
 app.use('/', index);
 app.use('/', todos);
-// app.use('/', categories);
+app.use('/', categories);
 
 app.set('port', (process.env.PORT || 5000));
 
