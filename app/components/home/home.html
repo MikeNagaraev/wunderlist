@@ -1,0 +1,54 @@
+<div ng-controller="HomeController as home">
+  <div class="home-header">
+
+  </div>
+  <div class="home-body">
+    <div class="home-aside">
+      <div class="home-aside-header">
+        <div class="burger-menu opened" onclick="toggleAside()">
+          <i class="glyphicon glyphicon-align-justify">
+          </i>
+        </div>
+        <div class="home-aside-header-container">
+
+        </div>
+      </div>
+      <div class="home-aside-body">
+        <div class="home-aside-body-burger-line">
+
+        </div>
+        <div class="home-aside-body-container">
+
+        </div>
+      </div>
+    </div>
+    <div class="home-container">
+      <div class="home-container-header">
+        <p class="home-container-header-title">
+          Home
+        </p>
+      </div>
+      <div class="home-container-body">
+        <div class="add-todo">
+          <div class="add-todo-icon">
+            +
+          </div>
+          <div class="add-todo-input">
+            <form ng-submit="home.addTodo()">
+              <div class="form-group">
+                <input type="text" placeholder="Add a to-do..." ng-model="home.title" class="form-control">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div>
+          <ul class="todos-container">
+            <li class="todo-item" ng-repeat="todo in home.scope.todos">
+              <span class="glyphicon glyphicon-remove remove-icon" ng-click="home.removeTodo(todo)"></span> {{todo.title}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

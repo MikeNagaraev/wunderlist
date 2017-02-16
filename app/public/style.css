@@ -1,0 +1,125 @@
+html {
+  min-height: 100%; }
+
+body {
+  color: #ffffff;
+  background: url(77ea26a8f6f08a3f76c28c8af48701e8.png) no-repeat;
+  min-height: 100%;
+  background-size: 100% 100%;
+  font-size: 10px; }
+
+.home-body {
+  width: 100%;
+  min-height: 100%; }
+
+.home-container {
+  float: right;
+  height: 100%;
+  width: 85%;
+  transition: width 0.4s; }
+  .home-container-body {
+    box-sizing: border-box;
+    padding: 20px; }
+  .home-container-header {
+    height: 50px;
+    width: 100%;
+    background: #668964;
+    line-height: 50px; }
+    .home-container-header-title {
+      padding-left: 20px;
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: bold; }
+  .home-container .todos-container {
+    list-style: none;
+    padding: 0; }
+    .home-container .todos-container .todo-item {
+      height: 40px;
+      background: #ffffff;
+      color: #000000;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border-radius: 3px;
+      font-size: 1.4rem;
+      margin-top: 10px;
+      -webkit-user-select: none;
+      user-select: none !important; }
+      .home-container .todos-container .todo-item .remove-icon {
+        cursor: pointer; }
+  .home-container .add-todo {
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+    width: 100%;
+    background: rgba(102, 137, 100, 0.75);
+    height: 45px;
+    border-radius: 4px; }
+    .home-container .add-todo-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.4rem;
+      cursor: pointer; }
+    .home-container .add-todo-input {
+      display: inline-block;
+      width: 85%;
+      height: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      position: relative;
+      left: 50px; }
+      .home-container .add-todo-input input {
+        width: 100%;
+        height: 100%;
+        background: none;
+        border: 0;
+        color: #ffffff;
+        outline: none;
+        box-shadow: none;
+        font-size: 1.4rem; }
+      .home-container .add-todo-input ::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.7); }
+
+.home-aside {
+  float: left;
+  width: 15%;
+  min-height: 100%;
+  background: #ffffff;
+  transition: width 0.4s; }
+  .home-aside-header {
+    height: 50px;
+    width: 100%;
+    background: #506c4e; }
+    .home-aside-header .burger-menu {
+      float: left;
+      height: 100%;
+      width: 50px;
+      text-align: center;
+      background: #455d43;
+      cursor: pointer; }
+      .home-aside-header .burger-menu:hover {
+        background: #3a4e39; }
+      .home-aside-header .burger-menu i {
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2.5rem; }
+    .home-aside-header-container {
+      float: right;
+      width: 80%;
+      height: 100%; }
+  .home-aside-body {
+    height: calc(100% - $header-height);
+    width: 100%;
+    background: #ededed; }
+    .home-aside-body-burger-line {
+      width: 20%;
+      height: 100%;
+      float: left; }
+    .home-aside-body-container {
+      width: 80%;
+      height: 100%;
+      float: right; }
+
+/*# sourceMappingURL=style.css.map*/
