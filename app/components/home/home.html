@@ -6,7 +6,7 @@
   <div class="home-body" ng-controller="CategoriesController as category">
     <div class="home-aside">
       <div class="home-aside-header">
-        <div class="burger-menu opened" onclick="toggleAside()">
+        <div class="burger-menu opened" toggle-directive>
           <i class="glyphicon glyphicon-align-justify">
           </i>
         </div>
@@ -22,14 +22,14 @@
         </div>
         <div class="home-aside-body-container">
           <ul class="categories-list">
-            <li ng-repeat="cat in category.categories" class="category-item" onclick="selectCategory(event)" ng-click="category.setCurrentCategory(cat)">
+            <li ng-repeat="cat in category.categories" class="category-item" selectable-directive ng-click="category.setCurrentCategory(cat)">
               {{cat.title}}
               <span class="glyphicon glyphicon-option-vertical category-options"></span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="add-category" title="Add category" onclick="showCategoryWindow()">
+      <div class="add-category" title="Add category" modal-show>
         <p><span class="glyphicon glyphicon-plus"></span> Create New Category</p>
       </div>
     </div>
@@ -69,7 +69,7 @@
   <div class="modal-dialog" ng-controller="CategoriesController as category">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" onclick="hideCategoryWindow()">&times;</button>
+        <button type="button" class="close" modal-hide>&times;</button>
         <h4 class="modal-title">Create New Category</h4>
       </div>
       <form class="form-group add-category-input" ng-submit="category.addCategory()">
@@ -77,8 +77,8 @@
           <input type="text" class="form-control" placeholder="Category Name" ng-model='category.title'>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" onclick="hideCategoryWindow()">Cancel</button>
-          <button type="submit" class="btn btn-primary" onclick="hideCategoryWindow()">Save</button>
+          <button type="button" class="btn btn-default" modal-hide>Cancel</button>
+          <button type="submit" class="btn btn-primary" modal-hide>Save</button>
         </div>
       </form>
     </div>
