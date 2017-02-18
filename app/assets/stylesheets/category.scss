@@ -22,8 +22,23 @@ $selected-item-color: #C0E7F3;
   list-style: none;
   width: 100%;
 
+  .category-options-container {
+    display: none;
+    position: absolute;
+    right: -45px;
+    top: 35px;
+    background: #ffffff;
+    z-index: 999;
+    min-width: 40px;
+    min-height: 40px;
+    color: #000000;
+    padding: 0;
+    list-style: none;
+  }
+
   .category-item {
     width: 100%;
+    position: relative;
     box-sizing: border-box;
     padding: 5px 5px 5px 20px;
     height: 40px;
@@ -44,7 +59,6 @@ $selected-item-color: #C0E7F3;
   .selected {
     background: $selected-item-color;
   }
-
   // .category-item:first-child {
   //   border-top: 1px solid #000000;
   // }

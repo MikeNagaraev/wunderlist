@@ -1,5 +1,4 @@
 <div ng-controller="HomeController as home">
-  <!-- <div ui-view="categories"></div> -->
   <div class="home-header">
 
   </div>
@@ -21,12 +20,11 @@
 
         </div>
         <div class="home-aside-body-container">
-          <ul class="categories-list">
-            <li ng-repeat="cat in category.categories" class="category-item" selectable-directive ng-click="category.setCurrentCategory(cat)">
-              {{cat.title}}
-              <span class="glyphicon glyphicon-option-vertical category-options"></span>
-            </li>
-          </ul>
+          <div class="category-toggle closed" ui-sref="home.categories" category-toggle>
+            <a>Категории</a>
+            <div><span class="glyphicon glyphicon-chevron-down"></span></div>
+          </div>
+          <div ui-view></div>
         </div>
       </div>
       <div class="add-category" title="Add category" modal-show>

@@ -1,5 +1,10 @@
-<!-- <ul ng-controller="CategoriesController as category">
-  <li ng-repeat="num in category.array">
-    {{num}}
+<ul class="categories-list">
+  <li ng-repeat="cat in category.categories" class="category-item" selectable-directive ng-click="category.setCurrentCategory(cat)">
+    {{cat.title}}
+    <span class="glyphicon glyphicon-option-vertical category-options" category-options></span>
+    <ul class="category-options-container">
+      <li ng-click="category.edit(cat)">Edit</li>
+      <li ng-click="category.delete(cat)">Delete</li>
+    </ul>
   </li>
-</ul> -->
+</ul>

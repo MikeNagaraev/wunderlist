@@ -51,7 +51,37 @@ const app = angular.module('wunderlist', [angularRouter])
       }
     }
   })
-  .directive("modalShow", function() {
+  .directive("categoryOptions", () => {
+    return {
+      controller: ($scope, $element) => {
+        $scope.showOptions = () => {
+          let toggledOption = $element.next('.category-options-container');
+          if ($(toggledOption).css('display') === 'block') {
+            $(toggledOption).toggle('slideDown');
+          } else {
+            $('.category-options-container').hide();
+            $(toggledOption).toggle();
+          }
+        }
+
+        $element.click($scope.showOptions);
+      }
+    }
+  })
+  .directive("categoryToggle", () => {
+    return {
+      controller: ($scope, $element) => {
+        $scope.toggleCategoryList = () => {
+          $('.categories-list').toggle();
+          $element.find('.glyphicon').toggleClass('glyphicon-chevron-up')
+          $element.find('.glyphicon').toggleClass('glyphicon-chevron-down')
+        }
+
+        $element.click($scope.toggleCategoryList)
+      }
+    }
+  })
+  .directive("modalShow", () => {
     return {
       controller: ($scope, $element) => {
         $scope.showCategoryWindow = () => {
@@ -63,7 +93,7 @@ const app = angular.module('wunderlist', [angularRouter])
       }
     }
   })
-  .directive("modalHide", function() {
+  .directive("modalHide", () => {
     return {
       controller: ($scope, $element) => {
         $scope.hideCategoryWindow = () => {
@@ -75,7 +105,7 @@ const app = angular.module('wunderlist', [angularRouter])
       }
     }
   })
-  .directive("toggleDirective", function() {
+  .directive("toggleDirective", () => {
     return {
       controller: ($scope, $element) => {
         $scope.toggleAside = () => {
@@ -99,9 +129,6 @@ const app = angular.module('wunderlist', [angularRouter])
             $('.home-container').css('width', 'calc(100% - 50px)');
           }
         }
-
       }
     }
-
-
   })

@@ -4995,26 +4995,56 @@ Object.defineProperty(exports, '__esModule', {
 });
 
 exports['default'] = function ($stateProvider, $urlRouterProvider) {
-  $stateProvider.state('home', {
+  // let home = {
+  //   name: 'home',
+  //   url: '/home',
+  //   templateUrl: '../components/home/home.html',
+  //   controller: 'HomeController',
+  //   resolve: {
+  //     categoriesPromise: ['categoriesService', function(categoriesService) {
+  //       return categoriesService.getAll();
+  //     }]
+  //   },
+  //   views: {
+  //     'categories': {
+  //       templateUrl: '../components/categories/categories.list.html',
+  //       controller: function() {
+  //
+  //       }
+  //     }
+  //   }
+  // }
+  //
+  // let categoriesList = {
+  //   name: 'categories.list',
+  //   parent: home,
+  //   controller: 'CategoriesController',
+  //   templateUrl: '../components/categories/categories.list.html'
+  // }
+  var home = {
+    name: 'home',
     url: '/home',
-    // abstract: true,
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    // template: "<div ui-view></div>",
     resolve: {
-      // todosPromise: ['todosService', function(todosService) {
-      //   return todosService.getAll();
-      // }],
       categoriesPromise: ['categoriesService', function (categoriesService) {
         return categoriesService.getAll();
       }]
+    },
+    params: {
+      autoActivateChild: 'home.categories'
     }
-  });
-  // .state('home.categories', {
-  //   parent: 'home',
-  //   controller: 'CategoriesController',
-  //   templateUrl: '../components/categories/categories.list.html'
-  // })
+  };
+
+  var categoriesList = {
+    name: 'home.categories',
+    parent: home,
+    controller: 'CategoriesController',
+    templateUrl: '../components/categories/categories.list.html'
+  };
+
+  $stateProvider.state(home).state(categoriesList);
+
   $urlRouterProvider.otherwise('home');
 };
 
@@ -48469,6 +48499,34 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       };
 
       $element.click($scope.selectCategory);
+    }
+  };
+}).directive("categoryOptions", function () {
+  return {
+    controller: function controller($scope, $element) {
+      $scope.showOptions = function () {
+        var toggledOption = $element.next('.category-options-container');
+        if ($(toggledOption).css('display') === 'block') {
+          $(toggledOption).toggle('slideDown');
+        } else {
+          $('.category-options-container').hide();
+          $(toggledOption).toggle();
+        }
+      };
+
+      $element.click($scope.showOptions);
+    }
+  };
+}).directive("categoryToggle", function () {
+  return {
+    controller: function controller($scope, $element) {
+      $scope.toggleCategoryList = function () {
+        $('.categories-list').toggle();
+        $element.find('.glyphicon').toggleClass('glyphicon-chevron-up');
+        $element.find('.glyphicon').toggleClass('glyphicon-chevron-down');
+      };
+
+      $element.click($scope.toggleCategoryList);
     }
   };
 }).directive("modalShow", function () {
