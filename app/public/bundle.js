@@ -4773,8 +4773,10 @@ module.exports = angular;
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports['default'] = CategoriesController;
+CategoriesController.$inject = ['$scope', 'categoriesService'];
 
-exports['default'] = function ($scope, categoriesService) {
+function CategoriesController($scope, categoriesService) {
   var _this = this;
 
   this.scope = $scope;
@@ -4802,7 +4804,6 @@ exports['default'] = function ($scope, categoriesService) {
   this.editCategory = function (category) {};
 
   this.setCurrentCategory = function (category) {
-    console.log('category', category);
     if (category) {
       if (category._id === _this.currentCategory._id) {
         return;
@@ -4814,7 +4815,6 @@ exports['default'] = function ($scope, categoriesService) {
       }
     }
     categoriesService.get(_this.currentCategory._id).then(function (success) {
-      console.log('currentpage', success.data);
       angular.copy(success.data, _this.currentCategory);
     });
   };
@@ -4824,7 +4824,6 @@ exports['default'] = function ($scope, categoriesService) {
       title: _this.todoTitle,
       priority: _this.priority
     }).then(function (success) {
-      console.log('income todo', success.data);
       _this.currentCategory.todos.push(success.data);
     }, function (error) {
       return console.log(error);
@@ -4841,7 +4840,7 @@ exports['default'] = function ($scope, categoriesService) {
   // this.removeCategory = function(category) {
   //   categoriesService.remove(category);
   // }.bind(this)
-};
+}
 
 module.exports = exports['default'];
 
@@ -48427,7 +48426,7 @@ $provide.value("$locale", {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -48449,6 +48448,8 @@ var _componentsCategoriesCategoriesController = __webpack_require__(2);
 
 var _componentsCategoriesCategoriesController2 = _interopRequireDefault(_componentsCategoriesCategoriesController);
 
+var _directivesIndex = __webpack_require__(11);
+
 var _componentsCategoriesCategoriesService = __webpack_require__(3);
 
 var _componentsCategoriesCategoriesService2 = _interopRequireDefault(_componentsCategoriesCategoriesService);
@@ -48467,7 +48468,7 @@ var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainS
 
 // import application from './assets/javascripts/application';
 
-var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   return new _config2['default']($stateProvider, $urlRouterProvider);
 }]).controller('HomeController', ['$scope', 'todosService', function ($scope, todosService) {
   return new _componentsHomeHomeController2['default']($scope, todosService);
@@ -48475,13 +48476,45 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
 // .controller('TodosController', ['$scope', 'todosService', function($scope, todosService) {
 //   return new todosController($scope, todosService)
 // }])
-.controller('CategoriesController', ['$scope', 'categoriesService', function ($scope, categoriesService) {
-  return new _componentsCategoriesCategoriesController2['default']($scope, categoriesService);
-}]).factory('categoriesService', ['$http', function ($http) {
+// .controller('CategoriesController', ['$scope', 'categoriesService', function($scope, categoriesService) {
+//   return new categoriesController($scope, categoriesService);
+// }])
+.directive('selectableDirective', function () {
+  return new _directivesIndex.selectableDirective();
+}).directive('categoryOptions', function () {
+  return new _directivesIndex.categoryOptions();
+}).directive('categoryToggle', function () {
+  return new _directivesIndex.categoryToggle();
+}).directive('modalShow', function () {
+  return new _directivesIndex.modalShow();
+}).directive('modalHide', function () {
+  return new _directivesIndex.modalHide();
+}).directive('toggleDirective', function () {
+  return new _directivesIndex.toggleDirective();
+}).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).factory('categoriesService', ['$http', function ($http) {
   return new _componentsCategoriesCategoriesService2['default']($http);
 }]).service('todosService', ['$http', function ($http) {
   return new _componentsTodosTodosService2['default']($http);
-}]).directive("selectableDirective", function () {
+}]);
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.selectableDirective = selectableDirective;
+exports.categoryOptions = categoryOptions;
+exports.categoryToggle = categoryToggle;
+exports.modalShow = modalShow;
+exports.modalHide = modalHide;
+exports.toggleDirective = toggleDirective;
+
+function selectableDirective($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.selectCategory = function () {
@@ -48501,7 +48534,9 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       $element.click($scope.selectCategory);
     }
   };
-}).directive("categoryOptions", function () {
+}
+
+function categoryOptions($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.showOptions = function () {
@@ -48517,7 +48552,9 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       $element.click($scope.showOptions);
     }
   };
-}).directive("categoryToggle", function () {
+}
+
+function categoryToggle($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.toggleCategoryList = function () {
@@ -48529,7 +48566,9 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       $element.click($scope.toggleCategoryList);
     }
   };
-}).directive("modalShow", function () {
+}
+
+function modalShow($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.showCategoryWindow = function () {
@@ -48540,7 +48579,9 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       $element.click($scope.showCategoryWindow);
     }
   };
-}).directive("modalHide", function () {
+}
+
+function modalHide($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.hideCategoryWindow = function () {
@@ -48551,7 +48592,9 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       $element.click($scope.hideCategoryWindow);
     }
   };
-}).directive("toggleDirective", function () {
+}
+
+function toggleDirective($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.toggleAside = function () {
@@ -48577,7 +48620,24 @@ var app = _angular2['default'].module('wunderlist', [_angularUiRouter2['default'
       };
     }
   };
-});
+}
+
+// .directive("selectableDirective", function() {})
+//   .directive("categoryOptions", () => {
+//
+//   })
+//   .directive("categoryToggle", () => {
+//
+//   })
+//   .directive("modalShow", () => {
+//
+//   })
+//   .directive("modalHide", () => {
+//
+//   })
+//   .directive("toggleDirective", () => {
+//
+//   })
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ })

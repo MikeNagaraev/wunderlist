@@ -1,4 +1,6 @@
-export default function($scope, categoriesService) {
+CategoriesController.$inject = ['$scope', 'categoriesService']
+
+export default function CategoriesController($scope, categoriesService) {
   this.scope = $scope;
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
@@ -28,9 +30,8 @@ export default function($scope, categoriesService) {
   }
 
   this.setCurrentCategory = (category) => {
-    console.log('category', category)
     if (category) {
-      if(category._id === this.currentCategory._id) {
+      if (category._id === this.currentCategory._id) {
         return
       }
       this.currentCategory = category;
@@ -41,7 +42,6 @@ export default function($scope, categoriesService) {
     }
     categoriesService.get(this.currentCategory._id)
       .then(success => {
-        console.log('currentpage', success.data)
         angular.copy(success.data, this.currentCategory)
       })
   }
@@ -51,7 +51,6 @@ export default function($scope, categoriesService) {
       title: this.todoTitle,
       priority: this.priority
     }).then(success => {
-      console.log('income todo', success.data)
       this.currentCategory.todos.push(success.data)
     }, error => console.log(error))
     this.todoTitle = '';
