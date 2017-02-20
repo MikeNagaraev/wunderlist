@@ -1,6 +1,6 @@
-<ul class="categories-list">
+<ul class="categories-list" ng-controller="CategoriesController as category">
   <li ng-repeat="cat in category.categories" class="category-item" selectable-directive ng-click="category.setCurrentCategory(cat)">
-    {{cat.title}}
+    <a ui-sref="home.categories({id: cat._id})">{{cat.title}}</a>
     <span class="glyphicon glyphicon-option-vertical category-options" category-options></span>
     <ul class="category-options-container">
       <li ng-click="category.edit(cat)">Edit</li>

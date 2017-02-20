@@ -14,17 +14,14 @@
         </div>
       </div>
       <div class="home-aside-body">
-
-
         <div class="home-aside-body-burger-line">
 
         </div>
         <div class="home-aside-body-container">
-          <div class="category-toggle closed" ui-sref="home.categories" category-toggle>
-            <a>Категории</a>
-            <div><span class="glyphicon glyphicon-chevron-down"></span></div>
+          <div class="category-block-title">
+            <h4>Категории</h4>
           </div>
-          <div ui-view></div>
+          <div categories-directive></div>
         </div>
       </div>
       <div class="add-category" title="Add category" modal-show>
@@ -32,39 +29,14 @@
       </div>
     </div>
     <div class="home-container">
-      <div class="home-container-header">
-        <p class="home-container-header-title">
-          {{category.currentCategory.title}}
-        </p>
-      </div>
-      <div class="home-container-body">
-        <div class="add-todo">
-          <div class="add-todo-icon">
-            +
-          </div>
-          <div class="add-todo-input">
-            <form ng-submit="category.addTodo()">
-              <div class="form-group">
-                <input type="text" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
-              </div>
-            </form>
-          </div>
-        </div>
-        <div>
-          <ul class="todos-container">
-            <li class="todo-item" ng-repeat="todo in category.currentCategory.todos track by $index">
-              <span class="glyphicon glyphicon-remove remove-icon" ng-click="category.deleteTodo(todo)"></span> {{todo.title}}
-            </li>
-          </ul>
-        </div>
-      </div>
+        <ui-view></ui-view>
     </div>
   </div>
 </div>
 
 
 <div id="modal-category" class="modal" role="dialog">
-  <div class="modal-dialog" ng-controller="CategoriesController as category">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" modal-hide>&times;</button>

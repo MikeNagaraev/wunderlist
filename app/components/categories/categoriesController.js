@@ -29,22 +29,22 @@ export default function CategoriesController($scope, categoriesService) {
 
   }
 
-  this.setCurrentCategory = (category) => {
-    if (category) {
-      if (category._id === this.currentCategory._id) {
-        return
-      }
-      this.currentCategory = category;
-    } else {
-      if (this.categories.length) {
-        this.currentCategory = this.categories[0];
-      }
-    }
-    categoriesService.get(this.currentCategory._id)
-      .then(success => {
-        angular.copy(success.data, this.currentCategory)
-      })
-  }
+  // this.setCurrentCategory = (category) => {
+  //   if (category) {
+  //     if (category._id === this.currentCategory._id) {
+  //       return
+  //     }
+  //     this.currentCategory = category;
+  //   } else {
+  //     if (this.categories.length) {
+  //       this.currentCategory = this.categories[0];
+  //     }
+  //   }
+  //   categoriesService.get(this.currentCategory._id)
+  //     .then(success => {
+  //       angular.copy(success.data, this.currentCategory)
+  //     })
+  // }
 
   this.addTodo = () => {
     categoriesService.addTodo(this.currentCategory._id, {

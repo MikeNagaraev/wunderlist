@@ -1,30 +1,6 @@
-export default function($stateProvider, $urlRouterProvider) {
-  // let home = {
-  //   name: 'home',
-  //   url: '/home',
-  //   templateUrl: '../components/home/home.html',
-  //   controller: 'HomeController',
-  //   resolve: {
-  //     categoriesPromise: ['categoriesService', function(categoriesService) {
-  //       return categoriesService.getAll();
-  //     }]
-  //   },
-  //   views: {
-  //     'categories': {
-  //       templateUrl: '../components/categories/categories.list.html',
-  //       controller: function() {
-  //
-  //       }
-  //     }
-  //   }
-  // }
-  //
-  // let categoriesList = {
-  //   name: 'categories.list',
-  //   parent: home,
-  //   controller: 'CategoriesController',
-  //   templateUrl: '../components/categories/categories.list.html'
-  // }
+MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+
+export default function MainConfig($stateProvider, $urlRouterProvider) {
   let home = {
     name: 'home',
     url: '/home',
@@ -34,22 +10,45 @@ export default function($stateProvider, $urlRouterProvider) {
       categoriesPromise: ['categoriesService', function(categoriesService) {
         return categoriesService.getAll();
       }]
-    },
-    params: {
-        autoActivateChild: 'home.categories'
     }
+    //to Controller get all
+    // $.deffer()
   }
 
-  let categoriesList = {
+  let categories = {
     name: 'home.categories',
-    parent: home,
+    url: '/categories/:id',
     controller: 'CategoriesController',
-    templateUrl: '../components/categories/categories.list.html'
+    controllerAs: 'category',
+    templateUrl: '../components/categories/category.html'
+  }
+
+  // let category = {
+  //   name: 'home.catcategory',
+  //   url: 'categories/:id',
+  //   controller: 'CategoriesController',
+  // }
+
+  let login = {
+    name: 'login',
+    url: '/login',
+    templateUrl: '../components/auth/login.html',
+    controller: 'AuthController'
+  }
+
+  let register = {
+    name: 'registration',
+    url: '/register',
+    templateUrl: '../components/auth/register.html',
+    controller: 'AuthController'
   }
 
   $stateProvider
     .state(home)
-    .state(categoriesList)
+    .state(categories)
+    // .state(category)
+    .state(login)
+    .state(register)
 
   $urlRouterProvider.otherwise('home');
 }
