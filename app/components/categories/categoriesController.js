@@ -5,10 +5,6 @@ export default function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
-  if (!this.currentCategory && this.categories) {
-    this.currentCategory = this.categories[0]
-  }
-
   this.addCategory = () => {
     if (this.title != "" || this.title) {
       categoriesService.create({
@@ -28,23 +24,6 @@ export default function CategoriesController($scope, categoriesService) {
   this.editCategory = (category) => {
 
   }
-
-  // this.setCurrentCategory = (category) => {
-  //   if (category) {
-  //     if (category._id === this.currentCategory._id) {
-  //       return
-  //     }
-  //     this.currentCategory = category;
-  //   } else {
-  //     if (this.categories.length) {
-  //       this.currentCategory = this.categories[0];
-  //     }
-  //   }
-  //   categoriesService.get(this.currentCategory._id)
-  //     .then(success => {
-  //       angular.copy(success.data, this.currentCategory)
-  //     })
-  // }
 
   this.addTodo = () => {
     categoriesService.addTodo(this.currentCategory._id, {

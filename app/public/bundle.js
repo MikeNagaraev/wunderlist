@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4759,7 +4759,7 @@ angular.module('ui.router.state')
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(10);
+__webpack_require__(11);
 module.exports = angular;
 
 
@@ -4797,10 +4797,6 @@ function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
-  if (!this.currentCategory && this.categories) {
-    this.currentCategory = this.categories[0];
-  }
-
   this.addCategory = function () {
     if (_this.title != "" || _this.title) {
       categoriesService.create({
@@ -4816,23 +4812,6 @@ function CategoriesController($scope, categoriesService) {
   this.deleteCategory = function (category) {};
 
   this.editCategory = function (category) {};
-
-  // this.setCurrentCategory = (category) => {
-  //   if (category) {
-  //     if (category._id === this.currentCategory._id) {
-  //       return
-  //     }
-  //     this.currentCategory = category;
-  //   } else {
-  //     if (this.categories.length) {
-  //       this.currentCategory = this.categories[0];
-  //     }
-  //   }
-  //   categoriesService.get(this.currentCategory._id)
-  //     .then(success => {
-  //       angular.copy(success.data, this.currentCategory)
-  //     })
-  // }
 
   this.addTodo = function () {
     categoriesService.addTodo(_this.currentCategory._id, {
@@ -4869,6 +4848,25 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+exports['default'] = function () {
+  return {
+    templateUrl: './categories.html'
+  };
+};
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 exports['default'] = CategoriesService;
 CategoriesService.$inject = ['$http'];
 
@@ -4886,7 +4884,9 @@ function CategoriesService($http) {
   };
 
   store.get = function (id) {
-    return $http.get('/categories/' + id);
+    return $http.get('/categories/' + id).then(function (success) {
+      return angular.copy(success.data, store.currentCategory);
+    });
   };
 
   store.create = function (category) {
@@ -4936,7 +4936,7 @@ function CategoriesService($http) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4953,7 +4953,7 @@ function HomeController($scope) {}
 module.exports = exports['default'];
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4971,6 +4971,7 @@ function MainConfig($stateProvider, $urlRouterProvider) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
+    controllerAs: 'category',
     resolve: {
       categoriesPromise: ['categoriesService', function (categoriesService) {
         return categoriesService.getAll();
@@ -4982,17 +4983,16 @@ function MainConfig($stateProvider, $urlRouterProvider) {
 
   var categories = {
     name: 'home.categories',
-    url: '/categories/:id',
+    url: '/categories/{id}',
     controller: 'CategoriesController',
     controllerAs: 'category',
-    templateUrl: '../components/categories/category.html'
+    templateUrl: '../components/categories/category.html',
+    resolve: {
+      promise: ['$stateParams', 'categoriesService', function ($stateParams, categoriesService) {
+        return categoriesService.get($stateParams.id);
+      }]
+    }
   };
-
-  // let category = {
-  //   name: 'home.catcategory',
-  //   url: 'categories/:id',
-  //   controller: 'CategoriesController',
-  // }
 
   var login = {
     name: 'login',
@@ -5018,7 +5018,7 @@ function MainConfig($stateProvider, $urlRouterProvider) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5158,16 +5158,16 @@ function toggleDirective($scope, $element) {
 //   .directive("toggleDirective", () => {
 //
 //   })
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /**
@@ -38306,7 +38306,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -48533,7 +48533,7 @@ return jQuery;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48553,7 +48553,7 @@ var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
 ////Controllers////
 
-var _componentsHomeHomeController = __webpack_require__(6);
+var _componentsHomeHomeController = __webpack_require__(7);
 
 var _componentsHomeHomeController2 = _interopRequireDefault(_componentsHomeHomeController);
 
@@ -48567,7 +48567,7 @@ var _componentsAuthAuthController2 = _interopRequireDefault(_componentsAuthAuthC
 
 ////Services////
 
-var _componentsCategoriesCategoriesService = __webpack_require__(5);
+var _componentsCategoriesCategoriesService = __webpack_require__(6);
 
 var _componentsCategoriesCategoriesService2 = _interopRequireDefault(_componentsCategoriesCategoriesService);
 
@@ -48577,21 +48577,21 @@ var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthServ
 
 ////Directives////
 
-var _directives = __webpack_require__(8);
+var _directives = __webpack_require__(9);
 
-var _componentsCategoriesCategoriesDirective = __webpack_require__(13);
+var _componentsCategoriesCategoriesDirective = __webpack_require__(5);
 
 var _componentsCategoriesCategoriesDirective2 = _interopRequireDefault(_componentsCategoriesCategoriesDirective);
 
 //// Assets /////
 
-var _assetsStylesheetsMainScss = __webpack_require__(9);
+var _assetsStylesheetsMainScss = __webpack_require__(10);
 
 var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainScss);
 
 ////Config//////
 
-var _config = __webpack_require__(7);
+var _config = __webpack_require__(8);
 
 var _config2 = _interopRequireDefault(_config);
 
@@ -48614,25 +48614,6 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     templateUrl: './components/categories/categories.html'
   };
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']);
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-exports['default'] = function () {
-  return {
-    templateUrl: './categories.html'
-  };
-};
-
-module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

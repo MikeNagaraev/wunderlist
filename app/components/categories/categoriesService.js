@@ -15,6 +15,7 @@ export default function CategoriesService($http) {
 
   store.get = (id) => {
     return $http.get('/categories/' + id)
+      .then(success => angular.copy(success.data, store.currentCategory))
   }
 
   store.create = (category) => {

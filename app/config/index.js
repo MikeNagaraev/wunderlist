@@ -6,6 +6,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
+    controllerAs: 'category',
     resolve: {
       categoriesPromise: ['categoriesService', function(categoriesService) {
         return categoriesService.getAll();
@@ -17,17 +18,16 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
 
   let categories = {
     name: 'home.categories',
-    url: '/categories/:id',
+    url: '/categories/{id}',
     controller: 'CategoriesController',
     controllerAs: 'category',
-    templateUrl: '../components/categories/category.html'
+    templateUrl: '../components/categories/category.html',
+    resolve: {
+      promise: ['$stateParams', 'categoriesService', function($stateParams, categoriesService) {
+        return categoriesService.get($stateParams.id);
+      }]
+    }
   }
-
-  // let category = {
-  //   name: 'home.catcategory',
-  //   url: 'categories/:id',
-  //   controller: 'CategoriesController',
-  // }
 
   let login = {
     name: 'login',
