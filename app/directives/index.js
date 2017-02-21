@@ -1,3 +1,12 @@
+export function sortableList($scope, $elemet) {
+  return {
+    controller: ($scope, $element) => {
+      $element.sortable()
+      $element.disableSelection();
+    }
+  }
+}
+
 export function selectableDirective($scope, $element) {
   return {
     controller: ($scope, $element) => {

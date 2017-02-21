@@ -5031,12 +5031,22 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.sortableList = sortableList;
 exports.selectableDirective = selectableDirective;
 exports.categoryOptions = categoryOptions;
 exports.categoryToggle = categoryToggle;
 exports.modalShow = modalShow;
 exports.modalHide = modalHide;
 exports.toggleDirective = toggleDirective;
+
+function sortableList($scope, $elemet) {
+  return {
+    controller: function controller($scope, $element) {
+      $element.sortable();
+      $element.disableSelection();
+    }
+  };
+}
 
 function selectableDirective($scope, $element) {
   return {
@@ -48601,7 +48611,7 @@ var _config2 = _interopRequireDefault(_config);
 
 /////////////////////////////////////////////////////////
 
-_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(_config2['default']).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).directive('selectableDirective', function () {
+_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(_config2['default']).run(function ($rootScope, $location) {}).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).directive('selectableDirective', function () {
   return new _directives.selectableDirective();
 }).directive('categoryOptions', function () {
   return new _directives.categoryOptions();
@@ -48613,6 +48623,8 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return new _directives.modalHide();
 }).directive('toggleDirective', function () {
   return new _directives.toggleDirective();
+}).directive('sortableList', function () {
+  return new _directives.sortableList();
 }).directive('categoriesDirective', function () {
   return {
     templateUrl: './components/categories/categories.html'

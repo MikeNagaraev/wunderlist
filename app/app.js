@@ -22,7 +22,8 @@ import {
   categoryToggle,
   modalShow,
   modalHide,
-  toggleDirective
+  toggleDirective,
+  sortableList
 } from './directives'
 
 import categoriesDirective from './components/categories/categoriesDirective'
@@ -39,6 +40,9 @@ import mainConfig from './config';
 
 angular.module('wunderlist', [angularRouter])
   .config(mainConfig)
+  .run(($rootScope, $location) => {
+
+  })
   .controller('HomeController', HomeController)
   .controller('CategoriesController', CategoriesController)
   .controller('AuthController', AuthController)
@@ -48,6 +52,7 @@ angular.module('wunderlist', [angularRouter])
   .directive('modalShow', () => new modalShow())
   .directive('modalHide', () => new modalHide())
   .directive('toggleDirective', () => new toggleDirective())
+  .directive('sortableList', () => new sortableList())
   .directive('categoriesDirective', function() {
     return {
       templateUrl: './components/categories/categories.html',
