@@ -17,7 +17,6 @@ export default function CategoriesService($http) {
     return $http.get('/categories/' + id)
       .then(success => angular.copy(success.data, store.currentCategory))
   }
-
   store.create = (category) => {
     return $http.post('categories', category)
       .then(function(success) {
@@ -25,8 +24,28 @@ export default function CategoriesService($http) {
         },
         error => console.log(error))
   }
+  store.delete = id => {
+    return $http.delete('/categories/' + id)
+      .then(success => {
+        let deleteId;
+        store.categories.forEach((el, index) => {
+          if (el._id === id) {
+            deleteId = index;
+          }
+        })
+        store.categories.splice(deleteId, 1);
+        store.setDefaultCurrentCategory();
+      })
+  }
 
-
+  store.setDefaultCurrentCategory = () => {
+    if (store.categories.length) {
+      store.get(store.categories[0]._id)
+    } else {
+      angular.copy({}, store.currentCategory);
+      window.location = '/#/home';
+    }
+  }
 
   store.addTodo = (id, todo) => {
     return $http.post('categories/' + id + '/todos', todo)
@@ -44,23 +63,5 @@ export default function CategoriesService($http) {
         category.todos.splice(deleteId, 1)
       })
   }
-  //
-  // store.remove = category => {
-  //   return $http.delete('/categories/' + category._id)
-  //     .then(success => {
-  //         store.deleteById(success.data.id);
-  //       },
-  //       error => console.log(error))
-  // }
-  //
-  // store.deleteById = id => {
-  //   let deletId;
-  //   store.categories.forEach((el, index) => {
-  //     if (el._id === id) {
-  //       deletId = index;
-  //     }
-  //   })
-  //   store.categories.splice(deletId, 1);
-  // }
   return store;
 }

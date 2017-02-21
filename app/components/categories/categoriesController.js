@@ -18,7 +18,7 @@ export default function CategoriesController($scope, categoriesService) {
   };
 
   this.deleteCategory = (category) => {
-
+    categoriesService.delete(category._id);
   }
 
   this.editCategory = (category) => {

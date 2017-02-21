@@ -4809,7 +4809,9 @@ function CategoriesController($scope, categoriesService) {
     }
   };
 
-  this.deleteCategory = function (category) {};
+  this.deleteCategory = function (category) {
+    categoriesService['delete'](category._id);
+  };
 
   this.editCategory = function (category) {};
 
@@ -4888,13 +4890,33 @@ function CategoriesService($http) {
       return angular.copy(success.data, store.currentCategory);
     });
   };
-
   store.create = function (category) {
     return $http.post('categories', category).then(function (success) {
       store.categories.push(success.data);
     }, function (error) {
       return console.log(error);
     });
+  };
+  store['delete'] = function (id) {
+    return $http['delete']('/categories/' + id).then(function (success) {
+      var deleteId = undefined;
+      store.categories.forEach(function (el, index) {
+        if (el._id === id) {
+          deleteId = index;
+        }
+      });
+      store.categories.splice(deleteId, 1);
+      store.setDefaultCurrentCategory();
+    });
+  };
+
+  store.setDefaultCurrentCategory = function () {
+    if (store.categories.length) {
+      store.get(store.categories[0]._id);
+    } else {
+      angular.copy({}, store.currentCategory);
+      window.location = '/#/home';
+    }
   };
 
   store.addTodo = function (id, todo) {
@@ -4912,24 +4934,6 @@ function CategoriesService($http) {
       category.todos.splice(deleteId, 1);
     });
   };
-  //
-  // store.remove = category => {
-  //   return $http.delete('/categories/' + category._id)
-  //     .then(success => {
-  //         store.deleteById(success.data.id);
-  //       },
-  //       error => console.log(error))
-  // }
-  //
-  // store.deleteById = id => {
-  //   let deletId;
-  //   store.categories.forEach((el, index) => {
-  //     if (el._id === id) {
-  //       deletId = index;
-  //     }
-  //   })
-  //   store.categories.splice(deletId, 1);
-  // }
   return store;
 }
 
