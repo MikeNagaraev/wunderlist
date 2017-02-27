@@ -2,14 +2,17 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var path = require('path');
+var passport = require('passport');
 
 require('./server/db/models/Todo');
 require('./server/db/models/User');
 require('./server/db/models/Category');
+require('./server/config/passport');
 
 var index = require('./server/routes/index');
 var todos = require('./server/routes/todos');
 var categories = require('./server/routes/categories');
+var auth = require('./server/routes/auth');
 
 mongoose.connect('mongodb://mikhail:123456789@ds151289.mlab.com:51289/wunderlist');
 
@@ -21,8 +24,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'app')));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', index);
 app.use('/', todos);
+app.use('/', auth);
 app.use('/', categories);
 
 app.set('port', (process.env.PORT || 5000));

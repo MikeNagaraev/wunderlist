@@ -34,19 +34,36 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     url: '/login',
     templateUrl: '../components/auth/login.html',
     controller: 'AuthController'
+    // onEnter: ['$state', 'auth', function($state, auth) {
+    //   if (auth.isLoggedIn()) {
+    //     $state.go('home');
+    //   }
+    // }]
   }
 
   let register = {
-    name: 'registration',
+    name: 'register',
     url: '/register',
     templateUrl: '../components/auth/register.html',
+    controller: 'AuthController'
+    // onEnter: ['$state', 'auth', function($state, auth) {
+    //   if (auth.isLoggedIn()) {
+    //     $state.go('home');
+    //   }
+    // }]
+  }
+
+  let indexAuth = {
+    name: 'authIndex',
+    url: '/auth',
+    templateUrl: '../components/auth/index.html',
     controller: 'AuthController'
   }
 
   $stateProvider
     .state(home)
     .state(categories)
-    // .state(category)
+    .state(indexAuth)
     .state(login)
     .state(register)
 

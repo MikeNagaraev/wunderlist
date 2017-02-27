@@ -5003,18 +5003,33 @@ function MainConfig($stateProvider, $urlRouterProvider) {
     url: '/login',
     templateUrl: '../components/auth/login.html',
     controller: 'AuthController'
+    // onEnter: ['$state', 'auth', function($state, auth) {
+    //   if (auth.isLoggedIn()) {
+    //     $state.go('home');
+    //   }
+    // }]
   };
 
   var register = {
-    name: 'registration',
+    name: 'register',
     url: '/register',
     templateUrl: '../components/auth/register.html',
     controller: 'AuthController'
+    // onEnter: ['$state', 'auth', function($state, auth) {
+    //   if (auth.isLoggedIn()) {
+    //     $state.go('home');
+    //   }
+    // }]
   };
 
-  $stateProvider.state(home).state(categories)
-  // .state(category)
-  .state(login).state(register);
+  var indexAuth = {
+    name: 'authIndex',
+    url: '/auth',
+    templateUrl: '../components/auth/index.html',
+    controller: 'AuthController'
+  };
+
+  $stateProvider.state(home).state(categories).state(indexAuth).state(login).state(register);
 
   $urlRouterProvider.otherwise('home');
 }
@@ -48629,7 +48644,75 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return {
     templateUrl: './components/categories/categories.html'
   };
-}).factory('categoriesService', _componentsCategoriesCategoriesService2['default']);
+}).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', ['$scope', '$state', 'auth', function ($scope, $state, auth) {
+  $scope.user = {};
+
+  $scope.register = function () {
+
+    auth.register($scope.user).then(function () {
+      $state.go('home');
+    }, function (error) {
+      $scope.error = error;
+    });
+  };
+
+  $scope.logIn = function () {
+    auth.logIn($scope.user).then(function () {
+      $state.go('home');
+    }, function (error) {
+      $scope.error = error;
+    });
+  };
+}]).factory('auth', ['$http', '$window', function ($http, $window) {
+  var auth = {};
+
+  auth.saveToken = function (token) {
+    $window.localStorage['app-auth-token'] = token;
+  };
+
+  auth.getToken = function () {
+    return $window.localStorage['app-auth-token'];
+  };
+
+  auth.isLoggedIn = function () {
+    var token = auth.getToken();
+
+    if (token) {
+      var payload = JSON.parse($window.atob(token.split('.')[1]));
+      return payload.exp > Date.now() / 1000;
+    } else {
+      return false;
+    }
+  };
+
+  auth.currentUser = function () {
+    if (auth.isLoggedIn()) {
+      var token = auth.getToken();
+      var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+      return payload.username;
+    }
+  };
+
+  auth.register = function (user) {
+    console.log(user);
+    return $http.post('/register', user).then(function (data) {
+      auth.saveToken(data.token);
+    });
+  };
+
+  auth.logIn = function (user) {
+    return $http.post('/login', user).then(function (data) {
+      auth.saveToken(data.token);
+    });
+  };
+
+  auth.logOut = function () {
+    $window.localStorage.removeItem('app-auth-token');
+  };
+
+  return auth;
+}]);
 
 /***/ })
 /******/ ]);

@@ -59,3 +59,78 @@ angular.module('wunderlist', [angularRouter])
     }
   })
   .factory('categoriesService', categoriesService)
+  .controller('AuthController', [
+    '$scope',
+    '$state',
+    'auth',
+    function($scope, $state, auth) {
+      $scope.user = {};
+
+      $scope.register = function() {
+
+        auth.register($scope.user).then(function() {
+          $state.go('home');
+        }, function(error) {
+          $scope.error = error;
+        });
+      };
+
+      $scope.logIn = function() {
+        auth.logIn($scope.user).then(function() {
+          $state.go('home');
+        }, function(error) {
+          $scope.error = error;
+        });
+      };
+    }
+  ])
+  .factory('auth', ['$http', '$window', function($http, $window) {
+    var auth = {};
+
+    auth.saveToken = function(token) {
+      $window.localStorage['app-auth-token'] = token;
+    }
+
+    auth.getToken = function() {
+      return $window.localStorage['app-auth-token'];
+    }
+
+    auth.isLoggedIn = function() {
+      var token = auth.getToken();
+
+      if (token) {
+        var payload = JSON.parse($window.atob(token.split('.')[1]))
+        return payload.exp > Date.now() / 1000;
+      } else {
+        return false;
+      }
+    }
+
+    auth.currentUser = function() {
+      if (auth.isLoggedIn()) {
+        var token = auth.getToken();
+        var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+        return payload.username;
+      }
+    }
+
+    auth.register = function(user) {
+      console.log(user)
+      return $http.post('/register', user).then(function(data) {
+        auth.saveToken(data.token);
+      });
+    };
+
+    auth.logIn = function(user) {
+      return $http.post('/login', user).then(function(data) {
+        auth.saveToken(data.token);
+      });
+    };
+
+    auth.logOut = function() {
+      $window.localStorage.removeItem('app-auth-token');
+    };
+
+    return auth;
+  }])
