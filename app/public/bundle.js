@@ -5003,7 +5003,8 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     name: 'login',
     url: '/login',
     templateUrl: '../components/auth/login.html',
-    controller: 'AuthController'
+    controller: 'AuthController',
+    controllerAs: 'auth'
     // onEnter: ['$state', 'auth', function($state, auth) {
     //   if (auth.isLoggedIn()) {
     //     $state.go('home');
@@ -5015,12 +5016,20 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     name: 'register',
     url: '/register',
     templateUrl: '../components/auth/register.html',
-    controller: 'AuthController'
+    controller: 'AuthController',
+    controllerAs: 'auth'
     // onEnter: ['$state', 'auth', function($state, auth) {
     //   if (auth.isLoggedIn()) {
     //     $state.go('home');
     //   }
     // }]
+  };
+
+  var logFacebook = {
+    name: 'logFacebook',
+    url: '/auth/facebook',
+    controller: 'AuthController',
+    controllerAs: 'auth'
   };
 
   var authIndex = {
@@ -5044,7 +5053,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     }
   };
 
-  $stateProvider.state(home).state(categories).state(authIndex).state(login).state(profile).state(register);
+  $stateProvider.state(home).state(categories).state(authIndex).state(login).state(logFacebook).state(profile).state(register);
 
   $urlRouterProvider.otherwise('home');
 }
@@ -48670,7 +48679,7 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     templateUrl: './components/categories/categories.html'
   };
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', ['$scope', '$state', 'auth', function ($scope, $state, auth) {
-  $scope.register = function () {
+  this.register = function () {
     auth.register($scope.user).then(function () {
       $state.go('home');
     }, function (error) {
@@ -48678,7 +48687,11 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     });
   };
 
-  $scope.logIn = function () {
+  this.logFacebook = function () {
+    auth.logFacebook();
+  };
+
+  this.logIn = function () {
     auth.logIn($scope.user).then(function () {
       $state.go('home');
     }, function (error) {
@@ -48723,6 +48736,10 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
 
       return payload.username;
     }
+  };
+
+  auth.logFacebook = function () {
+    $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
   };
 
   auth.register = function (user) {

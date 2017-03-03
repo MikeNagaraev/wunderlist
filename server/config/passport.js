@@ -36,7 +36,6 @@ passport.use(new LocalStrategy(
             message: 'Incorrect password.'
           });
         }
-        console.log('usersss',user)
 
         return done(null, user);
       });
@@ -47,7 +46,8 @@ passport.use(new LocalStrategy(
 passport.use(new FacebookStrategy({
     clientID: configAuth.facebookAuth.clientID,
     clientSecret: configAuth.facebookAuth.clientSecret,
-    callbackURL: configAuth.facebookAuth.callbackURL
+    callbackURL: configAuth.facebookAuth.callbackURL,
+    profileFields: ['id', 'emails', 'name']
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function() {
@@ -56,8 +56,11 @@ passport.use(new FacebookStrategy({
       }, function(err, user) {
         if (err)
           return done(err);
-        if (user)
+        if (user) {
+          console.log('profile',user);
+
           return done(null, user);
+        }
         else {
           var newUser = new User();
           newUser.facebook.id = profile.id;
@@ -68,9 +71,9 @@ passport.use(new FacebookStrategy({
           newUser.save(function(err) {
             if (err)
               throw err;
+              console.log('profile',newUser);
             return done(null, newUser);
           })
-          console.log(profile);
         }
       });
     });

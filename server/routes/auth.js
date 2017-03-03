@@ -19,10 +19,19 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
   scope: ['email']
 }));
 
-router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/home',
-  failureRedirect: '/auth'
-}));
+router.get('/auth/facebook/callback', function(req, res, next) {
+  passport.authenticate('facebook', function(err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    console.log('user', user)
+    if (user) {
+      return res.json({
+        user: user
+      });
+    }
+  })(req, res, next);
+});
 
 
 router.post('/register', function(req, res, next) {

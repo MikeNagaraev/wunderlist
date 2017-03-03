@@ -70,7 +70,7 @@ angular.module('wunderlist', [angularRouter])
     '$state',
     'auth',
     function($scope, $state, auth) {
-      $scope.register = function() {
+      this.register = function() {
         auth.register($scope.user).then(function() {
           $state.go('home');
         }, function(error) {
@@ -78,7 +78,11 @@ angular.module('wunderlist', [angularRouter])
         });
       };
 
-      $scope.logIn = function() {
+      this.logFacebook = () => {
+        auth.logFacebook()
+      }
+
+      this.logIn = function() {
         auth.logIn($scope.user).then(function() {
           $state.go('home');
         }, function(error) {
@@ -126,6 +130,10 @@ angular.module('wunderlist', [angularRouter])
 
         return payload.username;
       }
+    }
+
+    auth.logFacebook = () => {
+      $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
     }
 
     auth.register = function(user) {

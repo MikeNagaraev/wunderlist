@@ -34,7 +34,8 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     name: 'login',
     url: '/login',
     templateUrl: '../components/auth/login.html',
-    controller: 'AuthController'
+    controller: 'AuthController',
+    controllerAs: 'auth'
     // onEnter: ['$state', 'auth', function($state, auth) {
     //   if (auth.isLoggedIn()) {
     //     $state.go('home');
@@ -46,12 +47,20 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     name: 'register',
     url: '/register',
     templateUrl: '../components/auth/register.html',
-    controller: 'AuthController'
+    controller: 'AuthController',
+    controllerAs: 'auth'
     // onEnter: ['$state', 'auth', function($state, auth) {
     //   if (auth.isLoggedIn()) {
     //     $state.go('home');
     //   }
     // }]
+  }
+
+  let logFacebook = {
+    name: 'logFacebook',
+    url: '/auth/facebook',
+    controller: 'AuthController',
+    controllerAs: 'auth'
   }
 
   let authIndex = {
@@ -80,6 +89,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     .state(categories)
     .state(authIndex)
     .state(login)
+    .state(logFacebook)
     .state(profile)
     .state(register)
 

@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('passport');
+var cors = require('cors');
 
 require('./server/db/models/Todo');
 require('./server/db/models/User');
@@ -18,6 +19,8 @@ mongoose.connect('mongodb://mikhail:123456789@ds151289.mlab.com:51289/wunderlist
 
 var app = express();
 
+
+
 app.use(bodyParser.urlencoded({
   extended: false
 }));
@@ -27,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'app')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(cors());
 app.use('/', index);
 app.use('/', todos);
 app.use('/', auth);
