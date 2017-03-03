@@ -4969,7 +4969,7 @@ Object.defineProperty(exports, '__esModule', {
 exports['default'] = MainConfig;
 MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-function MainConfig($stateProvider, $urlRouterProvider) {
+function MainConfig($stateProvider, $urlRouterProvider, $location) {
   var home = {
     name: 'home',
     url: '/home',
@@ -4977,6 +4977,7 @@ function MainConfig($stateProvider, $urlRouterProvider) {
     controller: 'HomeController',
     controllerAs: 'category',
     resolve: {
+
       categoriesPromise: ['categoriesService', function (categoriesService) {
         return categoriesService.getAll();
       }]
@@ -5022,14 +5023,28 @@ function MainConfig($stateProvider, $urlRouterProvider) {
     // }]
   };
 
-  var indexAuth = {
+  var authIndex = {
     name: 'authIndex',
     url: '/auth',
     templateUrl: '../components/auth/index.html',
-    controller: 'AuthController'
+    controller: 'AuthController',
+    controllerAs: 'auth'
   };
 
-  $stateProvider.state(home).state(categories).state(indexAuth).state(login).state(register);
+  var profile = {
+    name: 'profile',
+    url: '/profile',
+    templateUrl: '../components/user/profile.html',
+    controller: 'UserController',
+    controllerAs: 'user',
+    resolve: {
+      promise: ['auth', function (auth) {
+        return auth.getUser();
+      }]
+    }
+  };
+
+  $stateProvider.state(home).state(categories).state(authIndex).state(login).state(profile).state(register);
 
   $urlRouterProvider.otherwise('home');
 }
@@ -48594,6 +48609,10 @@ var _componentsAuthAuthController = __webpack_require__(2);
 
 var _componentsAuthAuthController2 = _interopRequireDefault(_componentsAuthAuthController);
 
+var _componentsUserUserController = __webpack_require__(14);
+
+var _componentsUserUserController2 = _interopRequireDefault(_componentsUserUserController);
+
 ////Services////
 
 var _componentsCategoriesCategoriesService = __webpack_require__(6);
@@ -48626,7 +48645,13 @@ var _config2 = _interopRequireDefault(_config);
 
 /////////////////////////////////////////////////////////
 
-_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(_config2['default']).run(function ($rootScope, $location) {}).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).directive('selectableDirective', function () {
+_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(_config2['default']).run(['$rootScope', '$location', 'auth', function ($rootScope, $location, auth) {
+  $rootScope.$on('$stateChangeStart', function (event) {
+    if (!auth.isLoggedIn()) {
+      $location.path('/auth');
+    }
+  });
+}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
   return new _directives.selectableDirective();
 }).directive('categoryOptions', function () {
   return new _directives.categoryOptions();
@@ -48645,10 +48670,7 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     templateUrl: './components/categories/categories.html'
   };
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', ['$scope', '$state', 'auth', function ($scope, $state, auth) {
-  $scope.user = {};
-
   $scope.register = function () {
-
     auth.register($scope.user).then(function () {
       $state.go('home');
     }, function (error) {
@@ -48663,8 +48685,10 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
       $scope.error = error;
     });
   };
-}]).factory('auth', ['$http', '$window', function ($http, $window) {
-  var auth = {};
+}]).factory('auth', ['$http', '$window', '$location', function ($http, $window, $location) {
+  var auth = {
+    user: {}
+  };
 
   auth.saveToken = function (token) {
     $window.localStorage['app-auth-token'] = token;
@@ -48674,10 +48698,17 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     return $window.localStorage['app-auth-token'];
   };
 
+  auth.saveUser = function (user) {
+    $window.localStorage.setItem('user-obj', JSON.stringify(user));
+  };
+
+  auth.getUser = function () {
+    return JSON.parse($window.localStorage.getItem('user-obj'));
+  };
+
   auth.isLoggedIn = function () {
     var token = auth.getToken();
-
-    if (token) {
+    if (token && token != 'undefined') {
       var payload = JSON.parse($window.atob(token.split('.')[1]));
       return payload.exp > Date.now() / 1000;
     } else {
@@ -48695,24 +48726,51 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   };
 
   auth.register = function (user) {
-    console.log(user);
-    return $http.post('/register', user).then(function (data) {
-      auth.saveToken(data.token);
+    return $http.post('/register', user).then(function (success) {
+      auth.saveUser(success.data.user.local);
+      auth.saveToken(success.data.token);
+    }, function (error) {
+      console.log(error);
     });
   };
 
   auth.logIn = function (user) {
-    return $http.post('/login', user).then(function (data) {
-      auth.saveToken(data.token);
+    return $http.post('/login', user).then(function (success) {
+      auth.saveUser(success.data.user.local);
+      auth.saveToken(success.data.token);
     });
   };
 
   auth.logOut = function () {
     $window.localStorage.removeItem('app-auth-token');
+    $location.path('/home');
   };
 
   return auth;
 }]);
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = UserController;
+UserController.$inject = ['$scope', 'auth'];
+
+function UserController($scope, auth) {
+  this.user = auth.getUser();
+
+  this.logOut = function () {
+    auth.logOut();
+  };
+}
+
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

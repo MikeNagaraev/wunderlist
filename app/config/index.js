@@ -1,6 +1,6 @@
 MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-export default function MainConfig($stateProvider, $urlRouterProvider) {
+export default function MainConfig($stateProvider, $urlRouterProvider, $location) {
   let home = {
     name: 'home',
     url: '/home',
@@ -8,6 +8,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     controller: 'HomeController',
     controllerAs: 'category',
     resolve: {
+
       categoriesPromise: ['categoriesService', function(categoriesService) {
         return categoriesService.getAll();
       }]
@@ -53,18 +54,33 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     // }]
   }
 
-  let indexAuth = {
+  let authIndex = {
     name: 'authIndex',
     url: '/auth',
     templateUrl: '../components/auth/index.html',
-    controller: 'AuthController'
+    controller: 'AuthController',
+    controllerAs: 'auth'
+  }
+
+  let profile = {
+    name: 'profile',
+    url: '/profile',
+    templateUrl: '../components/user/profile.html',
+    controller: 'UserController',
+    controllerAs: 'user',
+    resolve: {
+      promise: ['auth', (auth) => {
+        return auth.getUser();
+      }]
+    }
   }
 
   $stateProvider
     .state(home)
     .state(categories)
-    .state(indexAuth)
+    .state(authIndex)
     .state(login)
+    .state(profile)
     .state(register)
 
   $urlRouterProvider.otherwise('home');

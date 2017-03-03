@@ -8,6 +8,7 @@ import angularRouter from 'angular-ui-router';
 import HomeController from './components/home/homeController';
 import CategoriesController from './components/categories/categoriesController'
 import AuthController from './components/auth/authController';
+import UserController from './components/user/userController';
 
 ////Services////
 
@@ -40,12 +41,17 @@ import mainConfig from './config';
 
 angular.module('wunderlist', [angularRouter])
   .config(mainConfig)
-  .run(($rootScope, $location) => {
-
-  })
+  .run(['$rootScope', '$location', 'auth', ($rootScope, $location, auth) => {
+    $rootScope.$on('$stateChangeStart', function(event) {
+      if (!auth.isLoggedIn()) {
+        $location.path('/auth');
+      }
+    })
+  }])
   .controller('HomeController', HomeController)
   .controller('CategoriesController', CategoriesController)
   .controller('AuthController', AuthController)
+  .controller('UserController', UserController)
   .directive('selectableDirective', () => new selectableDirective())
   .directive('categoryOptions', () => new categoryOptions())
   .directive('categoryToggle', () => new categoryToggle())
@@ -64,10 +70,7 @@ angular.module('wunderlist', [angularRouter])
     '$state',
     'auth',
     function($scope, $state, auth) {
-      $scope.user = {};
-
       $scope.register = function() {
-
         auth.register($scope.user).then(function() {
           $state.go('home');
         }, function(error) {
@@ -84,8 +87,10 @@ angular.module('wunderlist', [angularRouter])
       };
     }
   ])
-  .factory('auth', ['$http', '$window', function($http, $window) {
-    var auth = {};
+  .factory('auth', ['$http', '$window', '$location', function($http, $window, $location) {
+    var auth = {
+      user: {}
+    };
 
     auth.saveToken = function(token) {
       $window.localStorage['app-auth-token'] = token;
@@ -95,10 +100,18 @@ angular.module('wunderlist', [angularRouter])
       return $window.localStorage['app-auth-token'];
     }
 
+
+    auth.saveUser = (user) => {
+      $window.localStorage.setItem('user-obj', JSON.stringify(user));
+    }
+
+    auth.getUser = function() {
+      return JSON.parse($window.localStorage.getItem('user-obj'));
+    }
+
     auth.isLoggedIn = function() {
       var token = auth.getToken();
-
-      if (token) {
+      if (token && token != 'undefined') {
         var payload = JSON.parse($window.atob(token.split('.')[1]))
         return payload.exp > Date.now() / 1000;
       } else {
@@ -116,20 +129,24 @@ angular.module('wunderlist', [angularRouter])
     }
 
     auth.register = function(user) {
-      console.log(user)
-      return $http.post('/register', user).then(function(data) {
-        auth.saveToken(data.token);
+      return $http.post('/register', user).then(function(success) {
+        auth.saveUser(success.data.user.local)
+        auth.saveToken(success.data.token);
+      }, function(error) {
+        console.log(error)
       });
     };
 
     auth.logIn = function(user) {
-      return $http.post('/login', user).then(function(data) {
-        auth.saveToken(data.token);
+      return $http.post('/login', user).then(function(success) {
+        auth.saveUser(success.data.user.local)
+        auth.saveToken(success.data.token);
       });
     };
 
     auth.logOut = function() {
       $window.localStorage.removeItem('app-auth-token');
+      $location.path('/home')
     };
 
     return auth;

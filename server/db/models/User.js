@@ -22,7 +22,10 @@ UserSchema.methods.generateHash = function(password) {
 }
 
 UserSchema.methods.validPassword = function(password) {
-  return bcrypt.compareSync(password, this.local.password);
+  console.log('passw',password)
+  var truePassword = bcrypt.compare(password, this.local.password);
+  console.log('true',truePassword)
+  return truePassword;
 }
 
 UserSchema.methods.generateJWT = function() {

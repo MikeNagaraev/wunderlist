@@ -4,13 +4,6 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var User = require('../db/models/User');
 
-var jwt = require('express-jwt');
-
-var auth = jwt({
-  secret: 'SECRET',
-  userProperty: 'payload'
-});
-
 //
 // router.post('/login', passport.authenticate('local-login', {
 //   successRedirect: '/profile',
@@ -28,7 +21,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', {
 
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   successRedirect: '/home',
-  failureRedirect: '/login'
+  failureRedirect: '/auth'
 }));
 
 
@@ -40,8 +33,6 @@ router.post('/register', function(req, res, next) {
   }
 
   var user = new User();
-  console.log(req.body)
-
   user.local.username = req.body.username;
 
   user.setPassword(req.body.password)
@@ -50,11 +41,10 @@ router.post('/register', function(req, res, next) {
     if (err) {
       return next(err);
     }
-
-    console.log(user)
-
+    var token = user.generateJWT()
     return res.json({
-      token: user.generateJWT()
+      user: user,
+      token: token
     })
   });
 });
@@ -73,6 +63,7 @@ router.post('/login', function(req, res, next) {
 
     if (user) {
       return res.json({
+        user: user,
         token: user.generateJWT()
       });
     } else {
