@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4759,7 +4759,7 @@ angular.module('ui.router.state')
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(11);
+__webpack_require__(12);
 module.exports = angular;
 
 
@@ -4966,6 +4966,29 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports['default'] = UserController;
+UserController.$inject = ['$scope', 'auth'];
+
+function UserController($scope, auth) {
+  this.user = auth.getUser();
+
+  this.logOut = function () {
+    auth.logOut();
+  };
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 exports['default'] = MainConfig;
 MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 
@@ -5061,7 +5084,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5211,16 +5234,16 @@ function toggleDirective($scope, $element) {
 //   .directive("toggleDirective", () => {
 //
 //   })
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -38359,7 +38382,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -48586,7 +48609,7 @@ return jQuery;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48618,7 +48641,7 @@ var _componentsAuthAuthController = __webpack_require__(2);
 
 var _componentsAuthAuthController2 = _interopRequireDefault(_componentsAuthAuthController);
 
-var _componentsUserUserController = __webpack_require__(14);
+var _componentsUserUserController = __webpack_require__(8);
 
 var _componentsUserUserController2 = _interopRequireDefault(_componentsUserUserController);
 
@@ -48634,7 +48657,7 @@ var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthServ
 
 ////Directives////
 
-var _directives = __webpack_require__(9);
+var _directives = __webpack_require__(10);
 
 var _componentsCategoriesCategoriesDirective = __webpack_require__(5);
 
@@ -48642,13 +48665,13 @@ var _componentsCategoriesCategoriesDirective2 = _interopRequireDefault(_componen
 
 //// Assets /////
 
-var _assetsStylesheetsMainScss = __webpack_require__(10);
+var _assetsStylesheetsMainScss = __webpack_require__(11);
 
 var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainScss);
 
 ////Config//////
 
-var _config = __webpack_require__(8);
+var _config = __webpack_require__(9);
 
 var _config2 = _interopRequireDefault(_config);
 
@@ -48765,29 +48788,6 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
 
   return auth;
 }]);
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = UserController;
-UserController.$inject = ['$scope', 'auth'];
-
-function UserController($scope, auth) {
-  this.user = auth.getUser();
-
-  this.logOut = function () {
-    auth.logOut();
-  };
-}
-
-module.exports = exports['default'];
 
 /***/ })
 /******/ ]);
