@@ -4770,12 +4770,118 @@ module.exports = angular;
 "use strict";
 
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = AuthController;
+AuthController.$inject = ['$scope', '$state', 'auth'];
+
+function AuthController($scope, $state, auth) {
+  this.register = function () {
+    auth.register($scope.user).then(function () {
+      $state.go('home');
+    }, function (error) {
+      $scope.error = error;
+    });
+  };
+
+  this.logFacebook = function () {
+    auth.logFacebook();
+  };
+
+  this.logIn = function () {
+    auth.logIn($scope.user).then(function () {
+      $state.go('home');
+    }, function (error) {
+      $scope.error = error;
+    });
+  };
+}
+
+module.exports = exports['default'];
+
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = authServise;
+authServise.$inject = ['$http', '$window', '$location'];
+
+function authServise($http, $window, $location) {
+  var auth = {
+    user: {}
+  };
+
+  auth.saveToken = function (token) {
+    $window.localStorage['app-auth-token'] = token;
+  };
+
+  auth.getToken = function () {
+    return $window.localStorage['app-auth-token'];
+  };
+
+  auth.saveUser = function (user) {
+    $window.localStorage.setItem('user-obj', JSON.stringify(user));
+  };
+
+  auth.getUser = function () {
+    return JSON.parse($window.localStorage.getItem('user-obj'));
+  };
+
+  auth.isLoggedIn = function () {
+    var token = auth.getToken();
+    if (token && token != 'undefined') {
+      var payload = JSON.parse($window.atob(token.split('.')[1]));
+      return payload.exp > Date.now() / 1000;
+    } else {
+      return false;
+    }
+  };
+
+  auth.currentUser = function () {
+    if (auth.isLoggedIn()) {
+      var token = auth.getToken();
+      var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+      return payload.username;
+    }
+  };
+
+  auth.logFacebook = function () {
+    $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
+  };
+
+  auth.register = function (user) {
+    return $http.post('/register', user).then(function (success) {
+      auth.saveUser(success.data.user.local);
+      auth.saveToken(success.data.token);
+    }, function (error) {
+      console.log(error);
+    });
+  };
+
+  auth.logIn = function (user) {
+    return $http.post('/login', user).then(function (success) {
+      auth.saveUser(success.data.user.local);
+      auth.saveToken(success.data.token);
+    });
+  };
+
+  auth.logOut = function () {
+    $window.localStorage.removeItem('app-auth-token');
+    $location.path('/home');
+  };
+
+  return auth;
+}
+
+module.exports = exports['default'];
 
 /***/ }),
 /* 4 */
@@ -4967,9 +5073,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = UserController;
-UserController.$inject = ['$scope', 'auth'];
+UserController.$inject = ['$scope', 'auth', 'userService'];
 
-function UserController($scope, auth) {
+function UserController($scope, auth, userService) {
   this.user = auth.getUser();
 
   this.logOut = function () {
@@ -4998,7 +5104,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'category',
+    controllerAs: 'home',
     resolve: {
 
       categoriesPromise: ['categoriesService', function (categoriesService) {
@@ -48655,6 +48761,10 @@ var _componentsAuthAuthService = __webpack_require__(3);
 
 var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthService);
 
+var _componentsUserUserService = __webpack_require__(15);
+
+var _componentsUserUserService2 = _interopRequireDefault(_componentsUserUserService);
+
 ////Directives////
 
 var _directives = __webpack_require__(10);
@@ -48683,7 +48793,7 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
       $location.path('/auth');
     }
   });
-}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
+}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
   return new _directives.selectableDirective();
 }).directive('categoryOptions', function () {
   return new _directives.categoryOptions();
@@ -48701,93 +48811,24 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return {
     templateUrl: './components/categories/categories.html'
   };
-}).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', ['$scope', '$state', 'auth', function ($scope, $state, auth) {
-  this.register = function () {
-    auth.register($scope.user).then(function () {
-      $state.go('home');
-    }, function (error) {
-      $scope.error = error;
-    });
-  };
+}).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', _componentsAuthAuthController2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']);
 
-  this.logFacebook = function () {
-    auth.logFacebook();
-  };
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
 
-  this.logIn = function () {
-    auth.logIn($scope.user).then(function () {
-      $state.go('home');
-    }, function (error) {
-      $scope.error = error;
-    });
-  };
-}]).factory('auth', ['$http', '$window', '$location', function ($http, $window, $location) {
-  var auth = {
-    user: {}
-  };
+"use strict";
 
-  auth.saveToken = function (token) {
-    $window.localStorage['app-auth-token'] = token;
-  };
 
-  auth.getToken = function () {
-    return $window.localStorage['app-auth-token'];
-  };
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = userService;
+userService.$inject = ['$http'];
 
-  auth.saveUser = function (user) {
-    $window.localStorage.setItem('user-obj', JSON.stringify(user));
-  };
+function userService($http) {}
 
-  auth.getUser = function () {
-    return JSON.parse($window.localStorage.getItem('user-obj'));
-  };
-
-  auth.isLoggedIn = function () {
-    var token = auth.getToken();
-    if (token && token != 'undefined') {
-      var payload = JSON.parse($window.atob(token.split('.')[1]));
-      return payload.exp > Date.now() / 1000;
-    } else {
-      return false;
-    }
-  };
-
-  auth.currentUser = function () {
-    if (auth.isLoggedIn()) {
-      var token = auth.getToken();
-      var payload = JSON.parse($window.atob(token.split('.')[1]));
-
-      return payload.username;
-    }
-  };
-
-  auth.logFacebook = function () {
-    $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
-  };
-
-  auth.register = function (user) {
-    return $http.post('/register', user).then(function (success) {
-      auth.saveUser(success.data.user.local);
-      auth.saveToken(success.data.token);
-    }, function (error) {
-      console.log(error);
-    });
-  };
-
-  auth.logIn = function (user) {
-    return $http.post('/login', user).then(function (success) {
-      auth.saveUser(success.data.user.local);
-      auth.saveToken(success.data.token);
-    });
-  };
-
-  auth.logOut = function () {
-    $window.localStorage.removeItem('app-auth-token');
-    $location.path('/home');
-  };
-
-  return auth;
-}]);
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

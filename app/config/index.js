@@ -6,7 +6,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'category',
+    controllerAs: 'home',
     resolve: {
 
       categoriesPromise: ['categoriesService', function(categoriesService) {
