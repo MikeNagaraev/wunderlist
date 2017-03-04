@@ -1,6 +1,6 @@
-CategoriesService.$inject = ['$http'];
+categoriesService.$inject = ['$http'];
 
-export default function CategoriesService($http) {
+export default function categoriesService($http) {
   const store = {
     categories: [],
     currentCategory: {}

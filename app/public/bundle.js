@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4759,7 +4759,7 @@ angular.module('ui.router.state')
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(12);
+__webpack_require__(13);
 module.exports = angular;
 
 
@@ -4894,9 +4894,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = CategoriesController;
-CategoriesController.$inject = ['$scope', 'categoriesService'];
+CategoriesController.$inject = ['$scope', 'categoriesService', 'userService'];
 
-function CategoriesController($scope, categoriesService) {
+function CategoriesController($scope, categoriesService, user) {
   var _this = this;
 
   this.scope = $scope;
@@ -4975,10 +4975,10 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports['default'] = CategoriesService;
-CategoriesService.$inject = ['$http'];
+exports['default'] = categoriesService;
+categoriesService.$inject = ['$http'];
 
-function CategoriesService($http) {
+function categoriesService($http) {
   var store = {
     categories: [],
     currentCategory: {}
@@ -5075,8 +5075,8 @@ Object.defineProperty(exports, '__esModule', {
 exports['default'] = UserController;
 UserController.$inject = ['$scope', 'auth', 'userService'];
 
-function UserController($scope, auth, userService) {
-  this.user = auth.getUser();
+function UserController($scope, auth, user) {
+  this.user = user;
 
   this.logOut = function () {
     auth.logOut();
@@ -5087,6 +5087,29 @@ module.exports = exports['default'];
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = userService;
+userService.$inject = ['$http', 'auth'];
+
+function userService($http, auth) {
+  var user = {
+    info: auth.getUser(),
+    categories: {}
+  };
+  return user;
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5190,7 +5213,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5340,16 +5363,16 @@ function toggleDirective($scope, $element) {
 //   .directive("toggleDirective", () => {
 //
 //   })
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -38488,7 +38511,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -48715,7 +48738,7 @@ return jQuery;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48761,13 +48784,13 @@ var _componentsAuthAuthService = __webpack_require__(3);
 
 var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthService);
 
-var _componentsUserUserService = __webpack_require__(15);
+var _componentsUserUserService = __webpack_require__(9);
 
 var _componentsUserUserService2 = _interopRequireDefault(_componentsUserUserService);
 
 ////Directives////
 
-var _directives = __webpack_require__(10);
+var _directives = __webpack_require__(11);
 
 var _componentsCategoriesCategoriesDirective = __webpack_require__(5);
 
@@ -48775,13 +48798,13 @@ var _componentsCategoriesCategoriesDirective2 = _interopRequireDefault(_componen
 
 //// Assets /////
 
-var _assetsStylesheetsMainScss = __webpack_require__(11);
+var _assetsStylesheetsMainScss = __webpack_require__(12);
 
 var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainScss);
 
 ////Config//////
 
-var _config = __webpack_require__(9);
+var _config = __webpack_require__(10);
 
 var _config2 = _interopRequireDefault(_config);
 
@@ -48812,23 +48835,6 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     templateUrl: './components/categories/categories.html'
   };
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', _componentsAuthAuthController2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']);
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = userService;
-userService.$inject = ['$http'];
-
-function userService($http) {}
-
-module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

@@ -1,6 +1,6 @@
-CategoriesController.$inject = ['$scope', 'categoriesService']
+CategoriesController.$inject = ['$scope', 'categoriesService', 'userService']
 
-export default function CategoriesController($scope, categoriesService) {
+export default function CategoriesController($scope, categoriesService, user) {
   this.scope = $scope;
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;

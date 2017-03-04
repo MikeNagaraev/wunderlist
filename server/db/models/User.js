@@ -11,7 +11,11 @@ var UserSchema = mongoose.Schema({
     token: String,
     email: String,
     name: String
-  }
+  },
+  categories: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category'
+  }]
 });
 
 UserSchema.methods.setPassword = function(password) {
