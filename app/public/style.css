@@ -140,9 +140,23 @@ body {
       float: right;
       width: calc(100% - $burger-line-width);
       height: 100%; }
+      .home-aside-header-container .profile-nav-icon {
+        background: #5FBEDB;
+        display: inline-block;
+        width: 50px;
+        height: 100%;
+        position: relative; }
+        .home-aside-header-container .profile-nav-icon span {
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          position: absolute;
+          color: #ffffff;
+          font-size: 3rem; }
   .home-aside-body {
     height: calc(100% - $header-height);
-    width: 100%; }
+    width: 100%;
+    overflow: hidden; }
     .home-aside-body-burger-line {
       width: 50px;
       height: 100%;
@@ -156,7 +170,6 @@ body {
         color: #ffffff;
         background: #668964; }
         .home-aside-body-container .category-block-title h4 {
-          overflow: hidden;
           position: relative;
           top: 50%;
           left: 50%;

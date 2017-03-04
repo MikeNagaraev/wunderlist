@@ -5,6 +5,7 @@ export default function categoriesService($http) {
     categories: [],
     currentCategory: {}
   }
+
   store.getAll = () => {
     return $http.get('/categories')
       .then(function(success) {
@@ -17,6 +18,7 @@ export default function categoriesService($http) {
     return $http.get('/categories/' + id)
       .then(success => angular.copy(success.data, store.currentCategory))
   }
+
   store.create = (category) => {
     return $http.post('categories', category)
       .then(function(success) {
@@ -24,6 +26,7 @@ export default function categoriesService($http) {
         },
         error => console.log(error))
   }
+
   store.delete = id => {
     return $http.delete('/categories/' + id)
       .then(success => {

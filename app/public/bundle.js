@@ -4899,7 +4899,7 @@ CategoriesController.$inject = ['$scope', 'categoriesService', 'userService'];
 function CategoriesController($scope, categoriesService, user) {
   var _this = this;
 
-  this.scope = $scope;
+  // user.categories = categoriesService.getAll();
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
@@ -4983,6 +4983,7 @@ function categoriesService($http) {
     categories: [],
     currentCategory: {}
   };
+
   store.getAll = function () {
     return $http.get('/categories').then(function (success) {
       angular.copy(success.data, store.categories);
@@ -4996,6 +4997,7 @@ function categoriesService($http) {
       return angular.copy(success.data, store.currentCategory);
     });
   };
+
   store.create = function (category) {
     return $http.post('categories', category).then(function (success) {
       store.categories.push(success.data);
@@ -5003,6 +5005,7 @@ function categoriesService($http) {
       return console.log(error);
     });
   };
+
   store['delete'] = function (id) {
     return $http['delete']('/categories/' + id).then(function (success) {
       var deleteId = undefined;
@@ -5127,13 +5130,13 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home',
-    resolve: {
-
-      categoriesPromise: ['categoriesService', function (categoriesService) {
-        return categoriesService.getAll();
-      }]
-    }
+    controllerAs: 'home'
+    // resolve: {
+    //
+    //   categoriesPromise: ['categoriesService', function(categoriesService) {
+    //     return categoriesService.getAll();
+    //   }]
+    // }
     //to Controller get all
     // $.deffer()
   };

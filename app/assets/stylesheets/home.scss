@@ -190,12 +190,32 @@ body {
         float: right;
         width: calc(100% - $burger-line-width);
         height: 100%;
+
+        .profile-nav {
+          &-icon {
+            background: #5FBEDB;
+            display: inline-block;
+            width: $burger-line-width;
+            height: 100%;
+            position: relative;
+
+            span {
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              position: absolute;
+              color: #ffffff;
+              font-size: 3rem;
+            }
+          }
+        }
       }
     }
 
     &-body {
       height: calc(100% - $header-height);
       width: 100%;
+      overflow: hidden;
 
       &-burger-line {
         width: $burger-line-width;
@@ -214,7 +234,6 @@ body {
           background: $main-first-color;
 
           h4 {
-            overflow: hidden;
             position: relative;
             top: 50%;
             left: 50%;

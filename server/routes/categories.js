@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-var categories = require('./categories');
-
 var Category = mongoose.model('Category');
 var Todo = mongoose.model('Todo');
 

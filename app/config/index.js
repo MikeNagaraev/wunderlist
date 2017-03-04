@@ -6,13 +6,13 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home',
-    resolve: {
-
-      categoriesPromise: ['categoriesService', function(categoriesService) {
-        return categoriesService.getAll();
-      }]
-    }
+    controllerAs: 'home'
+    // resolve: {
+    //
+    //   categoriesPromise: ['categoriesService', function(categoriesService) {
+    //     return categoriesService.getAll();
+    //   }]
+    // }
     //to Controller get all
     // $.deffer()
   }
