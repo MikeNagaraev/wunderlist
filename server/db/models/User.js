@@ -2,15 +2,12 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 var UserSchema = mongoose.Schema({
-  local: {
-    username: String,
-    password: String
-  },
+  email: String,
+  password: String,
+  email: String,
+  name: String,
   facebook: {
-    id: String,
-    token: String,
-    email: String,
-    name: String
+    id: String
   },
   categories: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -22,13 +19,12 @@ UserSchema.methods.setPassword = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
 }
 
-UserSchema.methods.generateHash = function(password) {
-}
+UserSchema.methods.generateHash = function(password) {}
 
 UserSchema.methods.validPassword = function(password) {
-  console.log('passw',password)
-  var truePassword = bcrypt.compare(password, this.local.password);
-  console.log('true',truePassword)
+  console.log('passw', password)
+  var truePassword = bcrypt.compare(password, this.password);
+  console.log('true', truePassword)
   return truePassword;
 }
 
@@ -37,11 +33,9 @@ UserSchema.methods.generateJWT = function() {
   var exp = new Date(today);
   exp.setDate(today.getDate() + 60);
 
-  console.log('username', this.local)
-
   return jwt.sign({
     _id: this._id,
-    username: this.local.username,
+    name: this.name,
     exp: parseInt(exp.getTime() / 1000),
   }, 'SECRET');
 };

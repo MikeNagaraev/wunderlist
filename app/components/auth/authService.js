@@ -1,8 +1,6 @@
 authServise.$inject = ['$http', '$window', '$location']
 export default function authServise($http, $window, $location) {
-  var auth = {
-    user: {}
-  };
+  var auth = {};
 
   auth.saveToken = function(token) {
     $window.localStorage['app-auth-token'] = token;
@@ -30,23 +28,23 @@ export default function authServise($http, $window, $location) {
       return false;
     }
   }
-
-  auth.currentUser = function() {
-    if (auth.isLoggedIn()) {
-      var token = auth.getToken();
-      var payload = JSON.parse($window.atob(token.split('.')[1]));
-
-      return payload.username;
-    }
-  }
+  //
+  // auth.currentUser = function() {
+  //   if (auth.isLoggedIn()) {
+  //     var token = auth.getToken();
+  //     var payload = JSON.parse($window.atob(token.split('.')[1]));
+  //
+  //     return payload.name;
+  //   }
+  // }
 
   auth.logFacebook = () => {
-    $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
+    // $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
   }
 
   auth.register = function(user) {
     return $http.post('/register', user).then(function(success) {
-      auth.saveUser(success.data.user.local)
+      auth.saveUser(success.data.user)
       auth.saveToken(success.data.token);
     }, function(error) {
       console.log(error)
@@ -55,7 +53,7 @@ export default function authServise($http, $window, $location) {
 
   auth.logIn = function(user) {
     return $http.post('/login', user).then(function(success) {
-      auth.saveUser(success.data.user.local)
+      auth.saveUser(success.data.user)
       auth.saveToken(success.data.token);
     });
   };

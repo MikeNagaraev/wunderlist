@@ -35,14 +35,15 @@ router.get('/auth/facebook/callback', function(req, res, next) {
 
 
 router.post('/register', function(req, res, next) {
-  if (!req.body.username || !req.body.password) {
+  if (!req.body.name || !req.body.password || !req.body.email) {
     return res.status(400).json({
       message: 'Please fill out all fields'
     });
   }
 
   var user = new User();
-  user.local.username = req.body.username;
+  user.name = req.body.name;
+  user.email = req.body.email;
 
   user.setPassword(req.body.password)
 
@@ -59,7 +60,7 @@ router.post('/register', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  if (!req.body.username || !req.body.password) {
+  if (!req.body.name || !req.body.password || !req.body.email) {
     return res.status(400).json({
       message: 'Please fill out all fields'
     });

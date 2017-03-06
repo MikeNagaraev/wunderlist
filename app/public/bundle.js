@@ -4814,9 +4814,7 @@ exports['default'] = authServise;
 authServise.$inject = ['$http', '$window', '$location'];
 
 function authServise($http, $window, $location) {
-  var auth = {
-    user: {}
-  };
+  var auth = {};
 
   auth.saveToken = function (token) {
     $window.localStorage['app-auth-token'] = token;
@@ -4843,23 +4841,23 @@ function authServise($http, $window, $location) {
       return false;
     }
   };
-
-  auth.currentUser = function () {
-    if (auth.isLoggedIn()) {
-      var token = auth.getToken();
-      var payload = JSON.parse($window.atob(token.split('.')[1]));
-
-      return payload.username;
-    }
-  };
+  //
+  // auth.currentUser = function() {
+  //   if (auth.isLoggedIn()) {
+  //     var token = auth.getToken();
+  //     var payload = JSON.parse($window.atob(token.split('.')[1]));
+  //
+  //     return payload.name;
+  //   }
+  // }
 
   auth.logFacebook = function () {
-    $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
+    // $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
   };
 
   auth.register = function (user) {
     return $http.post('/register', user).then(function (success) {
-      auth.saveUser(success.data.user.local);
+      auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
     }, function (error) {
       console.log(error);
@@ -4868,7 +4866,7 @@ function authServise($http, $window, $location) {
 
   auth.logIn = function (user) {
     return $http.post('/login', user).then(function (success) {
-      auth.saveUser(success.data.user.local);
+      auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
     });
   };
@@ -4899,7 +4897,6 @@ CategoriesController.$inject = ['$scope', 'categoriesService', 'userService'];
 function CategoriesController($scope, categoriesService, user) {
   var _this = this;
 
-  // user.categories = categoriesService.getAll();
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
@@ -5102,10 +5099,9 @@ exports['default'] = userService;
 userService.$inject = ['$http', 'auth'];
 
 function userService($http, auth) {
-  var user = {
-    info: auth.getUser(),
-    categories: {}
-  };
+  var user = auth.getUser();
+  console.log(user);
+
   return user;
 }
 

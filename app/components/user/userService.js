@@ -1,9 +1,8 @@
 userService.$inject = ['$http', 'auth']
 
 export default function userService($http, auth) {
-  const user = {
-    info: auth.getUser(),
-    categories: {}
-  };
+  const user = auth.getUser();
+  console.log(user)
+
   return user;
 }

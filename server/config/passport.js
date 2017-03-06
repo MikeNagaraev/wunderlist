@@ -17,18 +17,18 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
+  function(email, password, done) {
 
     process.nextTick(function() {
       User.findOne({
-        'local.username': username
+        'email': email
       }, function(err, user) {
         if (err) {
           return done(err);
         }
         if (!user) {
           return done(null, false, {
-            message: 'Incorrect username.'
+            message: 'Incorrect email.'
           });
         }
         if (!user.validPassword(password)) {
@@ -57,21 +57,18 @@ passport.use(new FacebookStrategy({
         if (err)
           return done(err);
         if (user) {
-          console.log('profile',user);
-
+          console.log('profile', user);
           return done(null, user);
-        }
-        else {
+        } else {
           var newUser = new User();
           newUser.facebook.id = profile.id;
-          newUser.facebook.token = accessToken;
-          newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
-          newUser.facebook.email = profile.emails[0].value;
+          newUser.name = profile.name.givenName + ' ' + profile.name.familyName;
+          newUser.email = profile.emails[0].value;
 
           newUser.save(function(err) {
             if (err)
               throw err;
-              console.log('profile',newUser);
+            console.log('profile', newUser);
             return done(null, newUser);
           })
         }
