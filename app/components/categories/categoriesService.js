@@ -1,6 +1,6 @@
-categoriesService.$inject = ['$http', 'userService'];
+categoriesService.$inject = ['$http', 'userService', '$location'];
 
-export default function categoriesService($http, user) {
+export default function categoriesService($http, user, $location) {
   const store = {
     categories: [],
     currentCategory: {}
@@ -46,7 +46,7 @@ export default function categoriesService($http, user) {
       store.get(store.categories[0]._id)
     } else {
       angular.copy({}, store.currentCategory);
-      window.location = '/#/home';
+      $location.path('/home');
     }
   }
 

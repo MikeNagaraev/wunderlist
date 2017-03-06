@@ -4851,9 +4851,7 @@ function authServise($http, $window, $location, $state) {
     return $http.post('/register', user).then(function (success) {
       auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
-      $state.go('home', {}, {
-        reload: true
-      });
+      $state.go('home');
     }, function (error) {
       console.log(error);
     });
@@ -4868,7 +4866,6 @@ function authServise($http, $window, $location, $state) {
   };
 
   auth.logOut = function () {
-    console.log('log out');
     $window.localStorage.removeItem('app-auth-token');
     $location.path('/home');
   };
@@ -4894,7 +4891,6 @@ CategoriesController.$inject = ['$scope', 'categoriesService'];
 function CategoriesController($scope, categoriesService) {
   var _this = this;
 
-  console.log('categories');
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
@@ -4971,9 +4967,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = categoriesService;
-categoriesService.$inject = ['$http', 'userService'];
+categoriesService.$inject = ['$http', 'userService', '$location'];
 
-function categoriesService($http, user) {
+function categoriesService($http, user, $location) {
   var store = {
     categories: [],
     currentCategory: {}
@@ -5019,7 +5015,7 @@ function categoriesService($http, user) {
       store.get(store.categories[0]._id);
     } else {
       angular.copy({}, store.currentCategory);
-      window.location = '/#/home';
+      $location.path('/home');
     }
   };
 
@@ -5057,7 +5053,7 @@ exports['default'] = HomeController;
 HomeController.$inject = ['$scope', 'userService', 'categoriesService'];
 
 function HomeController($scope, user, categories) {
-  console.log('home');
+  user.set();
   categories.getAll();
 }
 
@@ -5133,14 +5129,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home',
-    resolve: {
-      setUser: ['userService', function (user) {
-        return user.set();
-      }]
-    }
-    //to Controller get all
-    // $.deffer()
+    controllerAs: 'home'
   };
 
   var categories = {
@@ -5162,11 +5151,6 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     templateUrl: '../components/auth/login.html',
     controller: 'AuthController',
     controllerAs: 'auth'
-    // onEnter: ['$state', 'auth', function($state, auth) {
-    //   if (auth.isLoggedIn()) {
-    //     $state.go('home');
-    //   }
-    // }]
   };
 
   var register = {
@@ -5175,11 +5159,6 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     templateUrl: '../components/auth/register.html',
     controller: 'AuthController',
     controllerAs: 'auth'
-    // onEnter: ['$state', 'auth', function($state, auth) {
-    //   if (auth.isLoggedIn()) {
-    //     $state.go('home');
-    //   }
-    // }]
   };
 
   var logFacebook = {

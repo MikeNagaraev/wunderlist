@@ -1,7 +1,6 @@
 CategoriesController.$inject = ['$scope', 'categoriesService']
 
 export default function CategoriesController($scope, categoriesService) {
-  console.log('categories')
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 

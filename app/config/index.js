@@ -6,14 +6,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home',
-    resolve: {
-     setUser: ['userService', function(user) {
-       return user.set();
-     }]
-   }
-    //to Controller get all
-    // $.deffer()
+    controllerAs: 'home'
   }
 
   let categories = {
@@ -35,11 +28,6 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     templateUrl: '../components/auth/login.html',
     controller: 'AuthController',
     controllerAs: 'auth'
-    // onEnter: ['$state', 'auth', function($state, auth) {
-    //   if (auth.isLoggedIn()) {
-    //     $state.go('home');
-    //   }
-    // }]
   }
 
   let register = {
@@ -48,11 +36,6 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     templateUrl: '../components/auth/register.html',
     controller: 'AuthController',
     controllerAs: 'auth'
-    // onEnter: ['$state', 'auth', function($state, auth) {
-    //   if (auth.isLoggedIn()) {
-    //     $state.go('home');
-    //   }
-    // }]
   }
 
   let logFacebook = {
