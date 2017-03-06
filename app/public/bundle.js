@@ -4778,11 +4778,7 @@ AuthController.$inject = ['$scope', '$state', 'auth'];
 
 function AuthController($scope, $state, auth) {
   this.register = function () {
-    auth.register($scope.user).then(function () {
-      $state.go('home');
-    }, function (error) {
-      $scope.error = error;
-    });
+    auth.register($scope.user);
   };
 
   this.logFacebook = function () {
@@ -4790,11 +4786,7 @@ function AuthController($scope, $state, auth) {
   };
 
   this.logIn = function () {
-    auth.logIn($scope.user).then(function () {
-      $state.go('home');
-    }, function (error) {
-      $scope.error = error;
-    });
+    auth.logIn($scope.user);
   };
 }
 
@@ -4811,9 +4803,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = authServise;
-authServise.$inject = ['$http', '$window', '$location'];
+authServise.$inject = ['$http', '$window', '$location', '$state'];
 
-function authServise($http, $window, $location) {
+function authServise($http, $window, $location, $state) {
   var auth = {};
 
   auth.saveToken = function (token) {
@@ -4859,6 +4851,9 @@ function authServise($http, $window, $location) {
     return $http.post('/register', user).then(function (success) {
       auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
+      $state.go('home', {}, {
+        reload: true
+      });
     }, function (error) {
       console.log(error);
     });
@@ -4868,10 +4863,12 @@ function authServise($http, $window, $location) {
     return $http.post('/login', user).then(function (success) {
       auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
+      $state.go('home');
     });
   };
 
   auth.logOut = function () {
+    console.log('log out');
     $window.localStorage.removeItem('app-auth-token');
     $location.path('/home');
   };
@@ -4892,11 +4889,12 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = CategoriesController;
-CategoriesController.$inject = ['$scope', 'categoriesService', 'userService'];
+CategoriesController.$inject = ['$scope', 'categoriesService'];
 
-function CategoriesController($scope, categoriesService, user) {
+function CategoriesController($scope, categoriesService) {
   var _this = this;
 
+  console.log('categories');
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
@@ -4973,17 +4971,17 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = categoriesService;
-categoriesService.$inject = ['$http'];
+categoriesService.$inject = ['$http', 'userService'];
 
-function categoriesService($http) {
+function categoriesService($http, user) {
   var store = {
     categories: [],
     currentCategory: {}
   };
 
   store.getAll = function () {
-    return $http.get('/categories').then(function (success) {
-      angular.copy(success.data, store.categories);
+    return $http.get('users/' + user.info._id).then(function (success) {
+      angular.copy(success.data.categories, store.categories);
     }, function (error) {
       return console.log(error);
     });
@@ -4996,7 +4994,7 @@ function categoriesService($http) {
   };
 
   store.create = function (category) {
-    return $http.post('categories', category).then(function (success) {
+    return $http.post('users/' + user.info._id + '/categories', category).then(function (success) {
       store.categories.push(success.data);
     }, function (error) {
       return console.log(error);
@@ -5056,9 +5054,12 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = HomeController;
-HomeController.$inject = ['$scope'];
+HomeController.$inject = ['$scope', 'userService', 'categoriesService'];
 
-function HomeController($scope) {}
+function HomeController($scope, user, categories) {
+  console.log('home');
+  categories.getAll();
+}
 
 module.exports = exports['default'];
 
@@ -5076,7 +5077,8 @@ exports['default'] = UserController;
 UserController.$inject = ['$scope', 'auth', 'userService'];
 
 function UserController($scope, auth, user) {
-  this.user = user;
+  user.set();
+  this.user = user.info;
 
   this.logOut = function () {
     auth.logOut();
@@ -5099,8 +5101,13 @@ exports['default'] = userService;
 userService.$inject = ['$http', 'auth'];
 
 function userService($http, auth) {
-  var user = auth.getUser();
-  console.log(user);
+  var user = {
+    info: {}
+  };
+
+  user.set = function () {
+    angular.copy(auth.getUser(), user.info);
+  };
 
   return user;
 }
@@ -5126,13 +5133,12 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home'
-    // resolve: {
-    //
-    //   categoriesPromise: ['categoriesService', function(categoriesService) {
-    //     return categoriesService.getAll();
-    //   }]
-    // }
+    controllerAs: 'home',
+    resolve: {
+      setUser: ['userService', function (user) {
+        return user.set();
+      }]
+    }
     //to Controller get all
     // $.deffer()
   };
@@ -5196,12 +5202,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     url: '/profile',
     templateUrl: '../components/user/profile.html',
     controller: 'UserController',
-    controllerAs: 'user',
-    resolve: {
-      promise: ['auth', function (auth) {
-        return auth.getUser();
-      }]
-    }
+    controllerAs: 'user'
   };
 
   $stateProvider.state(home).state(categories).state(authIndex).state(login).state(logFacebook).state(profile).state(register);

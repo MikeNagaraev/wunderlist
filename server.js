@@ -14,6 +14,7 @@ var index = require('./server/routes/index');
 var todos = require('./server/routes/todos');
 var categories = require('./server/routes/categories');
 var auth = require('./server/routes/auth');
+var user = require('./server/routes/user');
 
 mongoose.connect('mongodb://mikhail:123456789@ds151289.mlab.com:51289/wunderlist');
 
@@ -35,6 +36,7 @@ app.use('/', index);
 app.use('/', todos);
 app.use('/', auth);
 app.use('/', categories);
+app.use('/', user);
 
 app.set('port', (process.env.PORT || 5000));
 

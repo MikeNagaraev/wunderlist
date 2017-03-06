@@ -32,7 +32,7 @@ router.get('/users/:user', function(req, res, next) {
   })
 })
 
-router.delete('/user/:user', function(req, res, next) {
+router.delete('/users/:user', function(req, res, next) {
   User.remove(req.user, function(err, user) {
     if (err) {
       res.send(err);
@@ -41,7 +41,8 @@ router.delete('/user/:user', function(req, res, next) {
   })
 })
 
-router.get('user/:user/categories', function(req, res, next) {
+router.get('/users/:user/categories', function(req, res, next) {
+
   Category.find(function(err, category) {
     if (err) {
       return next(err);
@@ -66,3 +67,5 @@ router.post('/users/:user/categories', function(req, res, next) {
     })
   })
 })
+
+module.exports = router;

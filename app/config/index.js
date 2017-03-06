@@ -6,13 +6,12 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home'
-    // resolve: {
-    //
-    //   categoriesPromise: ['categoriesService', function(categoriesService) {
-    //     return categoriesService.getAll();
-    //   }]
-    // }
+    controllerAs: 'home',
+    resolve: {
+     setUser: ['userService', function(user) {
+       return user.set();
+     }]
+   }
     //to Controller get all
     // $.deffer()
   }
@@ -76,12 +75,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     url: '/profile',
     templateUrl: '../components/user/profile.html',
     controller: 'UserController',
-    controllerAs: 'user',
-    resolve: {
-      promise: ['auth', (auth) => {
-        return auth.getUser();
-      }]
-    }
+    controllerAs: 'user'
   }
 
   $stateProvider

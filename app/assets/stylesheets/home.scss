@@ -215,7 +215,6 @@ body {
     &-body {
       height: calc(100% - $header-height);
       width: 100%;
-      overflow: hidden;
 
       &-burger-line {
         width: $burger-line-width;
@@ -232,9 +231,11 @@ body {
           height: 40px;
           color: #ffffff;
           background: $main-first-color;
+          position: relative;
+
 
           h4 {
-            position: relative;
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);

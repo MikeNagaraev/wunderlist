@@ -1,15 +1,15 @@
-categoriesService.$inject = ['$http'];
+categoriesService.$inject = ['$http', 'userService'];
 
-export default function categoriesService($http) {
+export default function categoriesService($http, user) {
   const store = {
     categories: [],
     currentCategory: {}
   }
 
   store.getAll = () => {
-    return $http.get('/categories')
+    return $http.get('users/' + user.info._id)
       .then(function(success) {
-          angular.copy(success.data, store.categories)
+          angular.copy(success.data.categories, store.categories)
         },
         error => console.log(error))
   }
@@ -20,7 +20,7 @@ export default function categoriesService($http) {
   }
 
   store.create = (category) => {
-    return $http.post('categories', category)
+    return $http.post('users/' + user.info._id + '/categories', category)
       .then(function(success) {
           store.categories.push(success.data)
         },

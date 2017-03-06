@@ -1,5 +1,5 @@
-authServise.$inject = ['$http', '$window', '$location']
-export default function authServise($http, $window, $location) {
+authServise.$inject = ['$http', '$window', '$location', '$state']
+export default function authServise($http, $window, $location, $state) {
   var auth = {};
 
   auth.saveToken = function(token) {
@@ -46,6 +46,9 @@ export default function authServise($http, $window, $location) {
     return $http.post('/register', user).then(function(success) {
       auth.saveUser(success.data.user)
       auth.saveToken(success.data.token);
+      $state.go('home', {}, {
+        reload: true
+      })
     }, function(error) {
       console.log(error)
     });
@@ -55,10 +58,13 @@ export default function authServise($http, $window, $location) {
     return $http.post('/login', user).then(function(success) {
       auth.saveUser(success.data.user)
       auth.saveToken(success.data.token);
+      $state.go('home')
+
     });
   };
 
   auth.logOut = function() {
+    console.log('log out')
     $window.localStorage.removeItem('app-auth-token');
     $location.path('/home')
   };
