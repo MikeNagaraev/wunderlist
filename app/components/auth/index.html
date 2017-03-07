@@ -1,12 +1,9 @@
-<div class="container">
+<div class="auth-container container">
 
-  <div class="jumbotron text-center">
-    <h1><span class="fa fa-lock"></span> Node Authentication</h1>
+    <h1>Wunderlist Authentication</h1>
 
     <p>Login or Register with:</p>
-    <a ui-sref="login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
-    <a ui-sref="register" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
-    <li ng-click="auth.logFacebook()" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</li>
-  </div>
-
+    <a ui-sref="login" class="btn btn-default"><span class="fa fa-user"></span>Sign in</a>
+    <a ui-sref="register" class="btn btn-default"><span class="fa fa-user"></span>Sign up</a>
+    <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
 </div>

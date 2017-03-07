@@ -6,26 +6,24 @@ var User = require('../db/models/User');
 var configAuth = require('./configAuth');
 
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  },
   function(email, password, done) {
+    console.log('xuo')
+    console.log(email, password)
 
     process.nextTick(function() {
       User.findOne({
         'email': email
       }, function(err, user) {
+        console.log('passp2', user)
         if (err) {
           return done(err);
         }
+        console.log('passp3', user)
+
         if (!user) {
           return done(null, false, {
             message: 'Incorrect email.'
@@ -36,6 +34,7 @@ passport.use(new LocalStrategy(
             message: 'Incorrect password.'
           });
         }
+        console.log('passp4', user)
 
         return done(null, user);
       });

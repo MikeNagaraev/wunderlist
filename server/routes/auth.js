@@ -40,6 +40,15 @@ router.post('/register', function(req, res, next) {
       message: 'Please fill out all fields'
     });
   }
+  User.findOne({
+    email: req.body.email
+  }, function(err, user) {
+    if (user) {
+      return res.status(400).json({
+        message: 'Email is already been taken'
+      });
+    }
+  })
 
   var user = new User();
   user.name = req.body.name;
@@ -60,13 +69,16 @@ router.post('/register', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  if (!req.body.name || !req.body.password || !req.body.email) {
+  if (!req.body.password || !req.body.email) {
     return res.status(400).json({
       message: 'Please fill out all fields'
     });
   }
+  console.log('preauth', req.body)
 
   passport.authenticate('local', function(err, user, info) {
+    console.log('auth user',user)
+
     if (err) {
       return next(err);
     }

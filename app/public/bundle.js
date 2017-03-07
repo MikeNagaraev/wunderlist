@@ -4849,6 +4849,10 @@ function authServise($http, $window, $location, $state) {
 
   auth.register = function (user) {
     return $http.post('/register', user).then(function (success) {
+      if (success.data.message) {
+
+        return;
+      }
       auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
       $state.go('home');
@@ -4858,6 +4862,7 @@ function authServise($http, $window, $location, $state) {
   };
 
   auth.logIn = function (user) {
+    console.log(user);
     return $http.post('/login', user).then(function (success) {
       auth.saveUser(success.data.user);
       auth.saveToken(success.data.token);
@@ -48792,7 +48797,7 @@ var _config2 = _interopRequireDefault(_config);
 _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(_config2['default']).run(['$rootScope', '$location', 'auth', function ($rootScope, $location, auth) {
   $rootScope.$on('$stateChangeStart', function (event) {
     if (!auth.isLoggedIn()) {
-      $location.path('/auth');
+      $location.path('/login');
     }
   });
 }]).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {

@@ -230,4 +230,53 @@ body {
   .categories-list .selected {
     background: #C0E7F3; }
 
+.auth-container {
+  margin: 10% auto;
+  width: 30%;
+  box-shadow: 2px 2px 6px #000000;
+  box-sizing: border-box;
+  padding-bottom: 1rem;
+  border-radius: 5px;
+  background: rgba(84, 86, 88, 0.8); }
+  .auth-container-head {
+    width: 100%;
+    height: 5rem;
+    background: rgba(102, 137, 100, 0.7);
+    color: #ffffff;
+    line-height: 5rem;
+    font-size: 2rem;
+    font-family: Lato;
+    text-align: center; }
+  .auth-container-body .form-group {
+    width: 80%;
+    margin: 2rem auto; }
+    .auth-container-body .form-group .auth-input {
+      width: 100%;
+      border: none;
+      height: 3.4rem;
+      box-sizing: border-box;
+      padding: 1rem;
+      font-size: 1.6rem;
+      font-family: Lato;
+      outline: none;
+      border-radius: 3px;
+      color: #000000; }
+  .auth-container-body .submit-panel {
+    text-align: center; }
+  .auth-container-body .btn-login {
+    font-size: 1.5rem;
+    border: none;
+    width: 8rem;
+    background: #5FBEDB;
+    height: 3rem;
+    outline: none; }
+    .auth-container-body .btn-login:hover {
+      background: #4ab6d6; }
+  .auth-container-footer {
+    text-align: right; }
+    .auth-container-footer p {
+      margin: 2rem 1rem 0 0; }
+      .auth-container-footer p a {
+        font-weight: bold; }
+
 /*# sourceMappingURL=style.css.map*/

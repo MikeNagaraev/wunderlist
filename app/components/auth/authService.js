@@ -44,6 +44,10 @@ export default function authServise($http, $window, $location, $state) {
 
   auth.register = function(user) {
     return $http.post('/register', user).then(function(success) {
+      if(success.data.message) {
+
+        return;
+      }
       auth.saveUser(success.data.user)
       auth.saveToken(success.data.token);
       $state.go('home')
@@ -53,6 +57,7 @@ export default function authServise($http, $window, $location, $state) {
   };
 
   auth.logIn = function(user) {
+    console.log(user)
     return $http.post('/login', user).then(function(success) {
       auth.saveUser(success.data.user)
       auth.saveToken(success.data.token);

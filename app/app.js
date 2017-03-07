@@ -45,7 +45,7 @@ angular.module('wunderlist', [angularRouter])
   .run(['$rootScope', '$location', 'auth', ($rootScope, $location, auth) => {
     $rootScope.$on('$stateChangeStart', function(event) {
       if (!auth.isLoggedIn()) {
-        $location.path('/auth');
+        $location.path('/login');
       }
     })
   }])

@@ -1,17 +1,26 @@
-<div ng-show="error" class="alert alert-danger row">
-  <span>{{ error.message }}</span>
+<div class="container">
+  <div class="auth-container">
+    <div class="auth-container-head">
+      Sign up
+    </div>
+    <div class="auth-container-body">
+      <form ng-submit="auth.register()">
+        <div class="form-group">
+          <input type="text" class="auth-input" autofocus autocomplete="on" placeholder="Name" ng-model="user.name"></input>
+        </div>
+        <div class="form-group">
+          <input type="email" class="auth-input" placeholder="Email" autocomplete="on" ng-model="user.email"></input>
+        </div>
+        <div class="form-group">
+          <input type="password" class="auth-input" placeholder="Password" ng-model="user.password"></input>
+        </div>
+        <div class="submit-panel">
+          <button type="submit" class="btn-login">Register</button>
+        </div>
+      </form>
+    </div>
+    <div class="auth-container-footer">
+      <p>Already have an account! <a ui-sref="login">Sign in</a></p>
+    </div>
+  </div>
 </div>
-
-<form ng-submit="auth.register()" style="margin-top:30px;">
-  <h3>Register</h3>
-  <div class="form-group">
-    <input type="email" class="form-control" placeholder="Email" ng-model="user.email"></input>
-  </div>
-  <div class="form-group">
-    <input type="text" class="form-control" placeholder="Username" ng-model="user.name"></input>
-  </div>
-  <div class="form-group">
-    <input type="password" class="form-control" placeholder="Password" ng-model="user.password"></input>
-  </div>
-  <button type="submit" class="btn btn-primary">Register</button>
-</form>
