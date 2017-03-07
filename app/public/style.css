@@ -279,4 +279,42 @@ body {
       .auth-container-footer p a {
         font-weight: bold; }
 
+.profile-container {
+  padding: 0; }
+  .profile-container .profile-navbar {
+    height: 8rem;
+    width: 100%;
+    box-shadow: 3px 3px 7px #000000;
+    background: rgba(81, 156, 255, 0.6);
+    font-size: 0; }
+    .profile-container .profile-navbar-item {
+      display: inline-block;
+      width: 12rem;
+      height: 99.9%;
+      text-align: center;
+      line-height: 7rem;
+      font-size: 2rem;
+      color: #ffffff;
+      background: rgba(84, 86, 88, 0.8);
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid #545658; }
+      .profile-container .profile-navbar-item:hover {
+        background: #545658; }
+  .profile-container .profile-body {
+    box-shadow: 3px 3px 7px #000000;
+    margin-top: 2rem;
+    height: 40rem;
+    background: rgba(84, 86, 88, 0.8);
+    color: #ffffff; }
+    .profile-container .profile-body-content {
+      margin-left: 4rem; }
+    .profile-container .profile-body .profile-key {
+      font-size: 3rem;
+      font-family: Lato; }
+    .profile-container .profile-body .profile-value {
+      text-shadow: 2px 2px 2px #000000;
+      font-size: 2rem;
+      font-family: Lato cursive; }
+
 /*# sourceMappingURL=style.css.map*/

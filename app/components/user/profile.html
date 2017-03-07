@@ -1,3 +1,21 @@
-<li ng-click="user.logOut()">logOut</li>
-<h1>Username: {{user.user.name}}</h1>
-<h1>Email: {{user.user.email}}</h1>
+<div class="container profile-container">
+  <div class="profile-navbar">
+    <a class="profile-navbar-item" ui-sref="home">Home</a>
+    <div class="pull-right">
+      <div class="profile-navbar-item" ui-sref="editProfile">
+        Edit profile
+      </div>
+      <div class="profile-navbar-item" ng-click="user.logOut()">
+        Log out
+      </div>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="profile-body-content">
+      <div><span class="profile-key">Username</span>
+        <span class="profile-value">: {{user.user.name}}</span></div>
+      <div><span class="profile-key">Email</span>
+        <span class="profile-value">: {{user.user.email}}</span></div>
+    </div>
+  </div>
+</div>

@@ -70,3 +70,56 @@
     }
   }
 }
+
+.profile-container {
+  padding: 0;
+
+  .profile-navbar {
+    height: 8rem;
+    width: 100%;
+    box-shadow: 3px 3px 7px #000000;
+    background: rgba(#519cff,.6);
+    font-size: 0;
+
+    &-item {
+      display: inline-block;
+      width: 12rem;
+      height: 99.9%;
+      text-align: center;
+      line-height: 7rem;
+      font-size: 2rem;
+      color: #ffffff;
+      background: rgba(#545658,.8);
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid #545658;
+
+      &:hover {
+        background: rgba(#545658,1);
+      }
+    }
+  }
+
+  .profile-body {
+    box-shadow: 3px 3px 7px #000000;
+    margin-top: 2rem;
+    height: 40rem;
+    background: rgba(#545658,.8);
+    color: #ffffff;
+
+    &-content {
+      margin-left: 4rem;
+    }
+
+    .profile-key {
+      font-size: 3rem;
+      font-family: Lato;
+    }
+
+    .profile-value {
+      text-shadow: 2px 2px 2px #000000;
+      font-size: 2rem;
+      font-family: Lato cursive;
+    }
+  }
+}
