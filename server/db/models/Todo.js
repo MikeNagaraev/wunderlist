@@ -2,7 +2,13 @@ var mongoose = require('mongoose');
 
 var TodoSchema = new mongoose.Schema({
   title: String,
-  priority: Number,
+  priority: String,
+  createdAt: Date,
+  expiredAt: Date,
+  done: {
+    type: Boolean,
+    default: false
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category'

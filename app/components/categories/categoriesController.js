@@ -10,7 +10,6 @@ export default function CategoriesController($scope, categoriesService) {
         title: this.title
       })
       this.title = '';
-      this.priority = '';
     } else {
       return;
     }
@@ -25,24 +24,19 @@ export default function CategoriesController($scope, categoriesService) {
   }
 
   this.addTodo = () => {
+    console.log(this.todoPriority)
     categoriesService.addTodo(this.currentCategory._id, {
       title: this.todoTitle,
-      priority: this.priority
+      priority: this.todoPriority,
+      createdAt: this.todoCreatedAt,
+      expiredAt: this.todoExpiredAt
     }).then(success => {
       this.currentCategory.todos.push(success.data)
     }, error => console.log(error))
     this.todoTitle = '';
-    this.priority = '';
   }
 
   this.deleteTodo = (todo) => {
     categoriesService.deleteTodo(this.currentCategory, todo);
   }
-
-
-
-  //
-  // this.removeCategory = function(category) {
-  //   categoriesService.remove(category);
-  // }.bind(this)
 }

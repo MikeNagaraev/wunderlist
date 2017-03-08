@@ -4905,7 +4905,6 @@ function CategoriesController($scope, categoriesService) {
         title: _this.title
       });
       _this.title = '';
-      _this.priority = '';
     } else {
       return;
     }
@@ -4918,26 +4917,23 @@ function CategoriesController($scope, categoriesService) {
   this.editCategory = function (category) {};
 
   this.addTodo = function () {
+    console.log(_this.todoPriority);
     categoriesService.addTodo(_this.currentCategory._id, {
       title: _this.todoTitle,
-      priority: _this.priority
+      priority: _this.todoPriority,
+      createdAt: _this.todoCreatedAt,
+      expiredAt: _this.todoExpiredAt
     }).then(function (success) {
       _this.currentCategory.todos.push(success.data);
     }, function (error) {
       return console.log(error);
     });
     _this.todoTitle = '';
-    _this.priority = '';
   };
 
   this.deleteTodo = function (todo) {
     categoriesService.deleteTodo(_this.currentCategory, todo);
   };
-
-  //
-  // this.removeCategory = function(category) {
-  //   categoriesService.remove(category);
-  // }.bind(this)
 }
 
 module.exports = exports['default'];
@@ -5206,6 +5202,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+exports.prioritySelect = prioritySelect;
 exports.sortableList = sortableList;
 exports.selectableDirective = selectableDirective;
 exports.categoryOptions = categoryOptions;
@@ -5213,6 +5210,25 @@ exports.categoryToggle = categoryToggle;
 exports.modalShow = modalShow;
 exports.modalHide = modalHide;
 exports.toggleDirective = toggleDirective;
+
+function prioritySelect($element) {
+  return {
+    controller: function controller($element) {
+      var options = $element.find('option');
+      $element.change(function (e) {
+        var selecetdOption = $(e.target);
+        options.removeAttr('selected');
+        selecetdOption.attr('selected', 'selected');
+        $('#priority').val(selecetdOption.val());
+        if ($('#priority').hasClass('ng-empty')) {
+          $('#priority').toggleClass('ng-empty ng-not-empty');
+          $('#priority').toggleClass('ng-untouched ng-touched');
+          $('#priority').toggleClass('ng-pristine ');
+        }
+      });
+    }
+  };
+}
 
 function sortableList($scope, $elemet) {
   return {
@@ -48814,6 +48830,8 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return new _directives.toggleDirective();
 }).directive('sortableList', function () {
   return new _directives.sortableList();
+}).directive('prioritySelect', function () {
+  return new _directives.prioritySelect();
 }).directive('categoriesDirective', function () {
   return {
     templateUrl: './components/categories/categories.html'

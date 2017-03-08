@@ -59,8 +59,9 @@ body {
     position: relative;
     width: 100%;
     background: rgba(102, 137, 100, 0.75);
-    height: 45px;
+    height: 4.5rem;
     border-radius: 4px;
+    position: relative;
     margin-bottom: 20px; }
     .home-container .add-todo-icon {
       background: none;
@@ -74,7 +75,7 @@ body {
       cursor: pointer; }
     .home-container .add-todo-input {
       display: inline-block;
-      width: 85%;
+      width: 100%;
       height: 40px;
       top: 50%;
       transform: translateY(-50%);
@@ -187,6 +188,21 @@ body {
     text-align: center;
     color: #000000;
     font-size: 1.5rem; }
+
+.priority-content {
+  height: 100%; }
+  .priority-content .priority-title {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); }
+  .priority-content .priority-select {
+    background: #000000;
+    color: #ffffff;
+    width: 4rem;
+    height: 3rem;
+    outline: none;
+    display: inline-block; }
 
 .categories-list {
   width: 100%; }

@@ -60,6 +60,7 @@ router.post('/categories', function(req, res, next) {
 
 router.post('/categories/:category/todos', function(req, res, next) {
   var todo = new Todo(req.body);
+  console.log(todo)
   todo.category = req.category;
   todo.save(function(err, todo) {
     if (err) {

@@ -25,7 +25,8 @@ import {
   modalShow,
   modalHide,
   toggleDirective,
-  sortableList
+  sortableList,
+  prioritySelect
 } from './directives'
 
 import categoriesDirective from './components/categories/categoriesDirective'
@@ -59,9 +60,10 @@ angular.module('wunderlist', [angularRouter])
   .directive('modalHide', () => new modalHide())
   .directive('toggleDirective', () => new toggleDirective())
   .directive('sortableList', () => new sortableList())
-  .directive('categoriesDirective', function() {
+  .directive('prioritySelect', () => new prioritySelect())
+  .directive('categoriesDirective', () => {
     return {
-      templateUrl: './components/categories/categories.html',
+      templateUrl: './components/categories/categories.html'
     }
   })
   .factory('categoriesService', categoriesService)

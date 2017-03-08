@@ -22,6 +22,26 @@ $selected-item-color: #C0E7F3;
   .modal-footer {}
 }
 
+.priority-content {
+  height: 100%;
+
+  .priority-title {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .priority-select {
+    background: #000000;
+    color: #ffffff;
+    width: 4rem;
+    height: 3rem;
+    outline: none;
+    display: inline-block;
+  }
+}
+
 .categories-list {
   width: 100%;
 

@@ -6,18 +6,34 @@
 <div class="home-container-body">
   <form class="add-todo" ng-submit="category.addTodo()">
     <button type="submit" class="add-todo-icon">
-        +
-      </button>
+      +
+    </button>
     <div class="add-todo-input">
       <div class="form-group">
-        <input type="text" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
+        <div class="col-md-8">
+          <input type="text" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
+        </div>
+        <div class="col-md-2 priority-content">
+          <h5 class="priority-title">Priority
+            <select class="priority-select" priority-select>
+              <option selected="selected">1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+          </h5>
+        </div>
+        <input type="hidden" id="priority" ng-value="category.todoPriority" ng-model="category.todoPriority" value="1">
+        <input type="hidden" id="createdAt" ng-model="category.todoCreatedAt">
+        <input type="hidden" id="expire" ng-model="category.todoExpiredAt">
       </div>
     </div>
   </form>
   <div>
     <ul sortable-list class="todos-container">
       <li class="todo-item" ng-repeat="todo in category.currentCategory.todos track by $index">
-        <span class="glyphicon glyphicon-remove remove-icon" ng-click="category.deleteTodo(todo)"></span> {{todo.title}}
+        <span class="glyphicon glyphicon-remove remove-icon" ng-click="category.deleteTodo(todo)"></span>
+        <span class="todo-title">{{todo.title}}</span>
+        <span class="todo-priority">Priority: {{todo.priority}}</span>
       </li>
     </ul>
   </div>

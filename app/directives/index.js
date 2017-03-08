@@ -1,3 +1,22 @@
+export function prioritySelect($element) {
+  return {
+    controller: ($element) => {
+      let options = $element.find('option');
+      $element.change(function(e) {
+        let selecetdOption = $(e.target);
+        options.removeAttr('selected');
+        selecetdOption.attr('selected', 'selected');
+        $('#priority').val(selecetdOption.val())
+        if ($('#priority').hasClass('ng-empty')) {
+          $('#priority').toggleClass('ng-empty ng-not-empty')
+          $('#priority').toggleClass('ng-untouched ng-touched')
+          $('#priority').toggleClass('ng-pristine ')
+        }
+      })
+    }
+  }
+}
+
 export function sortableList($scope, $elemet) {
   return {
     controller: ($scope, $element) => {
