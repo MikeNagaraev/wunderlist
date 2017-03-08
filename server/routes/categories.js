@@ -21,12 +21,7 @@ router.param('category', function(req, res, next, id) {
 })
 
 router.get('/categories/:category', function(req, res, next) {
-  req.category.populate('todos', function(err, category) {
-    if (err) {
-      return next(err);
-    }
-    res.json(category);
-  })
+  res.json(req.category);
 })
 
 router.get('/categories', function(req, res, next) {
@@ -35,6 +30,24 @@ router.get('/categories', function(req, res, next) {
       return next(err);
     }
     res.json(category);
+  })
+})
+
+router.put('/categories/:category', function(req, res, next) {
+  Category.findById(req.category._id, function(err, category) {
+    if (err) {
+      res.send(err);
+    }
+
+    category.title = req.body.title || category.title;
+    category.todos = req.body.todos || category.todos;
+
+    category.save(function(err, category) {
+      if (err) {
+        res.status(500).send(err)
+      }
+      res.send(category);
+    })
   })
 })
 
@@ -60,7 +73,6 @@ router.post('/categories', function(req, res, next) {
 
 router.post('/categories/:category/todos', function(req, res, next) {
   var todo = new Todo(req.body);
-  console.log(todo)
   todo.category = req.category;
   todo.save(function(err, todo) {
     if (err) {

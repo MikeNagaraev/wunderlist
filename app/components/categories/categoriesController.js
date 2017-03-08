@@ -24,15 +24,15 @@ export default function CategoriesController($scope, categoriesService) {
   }
 
   this.addTodo = () => {
-    console.log(this.todoPriority)
+    if(!this.todoTitle || this.todoTitle == '') {
+      return;
+    }
     categoriesService.addTodo(this.currentCategory._id, {
       title: this.todoTitle,
-      priority: this.todoPriority,
+      priority: this.todoPriority || 1,
       createdAt: this.todoCreatedAt,
       expiredAt: this.todoExpiredAt
-    }).then(success => {
-      this.currentCategory.todos.push(success.data)
-    }, error => console.log(error))
+    })
     this.todoTitle = '';
   }
 

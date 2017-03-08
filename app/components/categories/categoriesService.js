@@ -50,21 +50,30 @@ export default function categoriesService($http, user, $location) {
     }
   }
 
+  store.updateCategory = (id) => {
+    return $http.put('/categories/' + id, store.currentCategory)
+      .then(success => {}, error => console.log(error))
+  }
+
   store.addTodo = (id, todo) => {
-    return $http.post('categories/' + id + '/todos', todo)
+    store.currentCategory.todos.push(todo)
+    return store.updateCategory(store.currentCategory._id)
   }
 
   store.deleteTodo = (category, todo) => {
-    return $http.delete('/categories/' + category._id + '/todos/' + todo._id)
-      .then(success => {
-        let deleteId;
-        category.todos.forEach((el, index) => {
-          if (el._id === todo._id) {
-            deleteId = index;
-          }
-        })
-        category.todos.splice(deleteId, 1)
-      })
+    let deleteId;
+    category.todos.forEach((el, index) => {
+      if (el._id === todo._id) {
+        deleteId = index;
+      }
+    })
+    category.todos.splice(deleteId, 1)
+    return store.updateCategory(category._id)
+    //
+    // return $http.delete('/categories/' + category._id + '/todos/' + todo._id)
+    //   .then(success => {
+    //     console.log('success', success)
+    //   }, error => console.log('error', error))
   }
   return store;
 }

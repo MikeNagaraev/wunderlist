@@ -9,12 +9,14 @@ import HomeController from './components/home/homeController';
 import CategoriesController from './components/categories/categoriesController'
 import AuthController from './components/auth/authController';
 import UserController from './components/user/userController';
+import StorageController from './components/storage/storageController';
 
 ////Services////
 
 import categoriesService from './components/categories/categoriesService';
 import authService from './components/auth/authService';
 import userService from './components/user/userService';
+import storageService from './components/storage/storageService';
 
 ////Directives////
 
@@ -25,8 +27,7 @@ import {
   modalShow,
   modalHide,
   toggleDirective,
-  sortableList,
-  prioritySelect
+  sortableList
 } from './directives'
 
 import categoriesDirective from './components/categories/categoriesDirective'
@@ -53,6 +54,8 @@ angular.module('wunderlist', [angularRouter])
   .controller('HomeController', HomeController)
   .controller('CategoriesController', CategoriesController)
   .controller('UserController', UserController)
+  .controller('AuthController', AuthController)
+  .controller('StorageController', StorageController)
   .directive('selectableDirective', () => new selectableDirective())
   .directive('categoryOptions', () => new categoryOptions())
   .directive('categoryToggle', () => new categoryToggle())
@@ -60,13 +63,12 @@ angular.module('wunderlist', [angularRouter])
   .directive('modalHide', () => new modalHide())
   .directive('toggleDirective', () => new toggleDirective())
   .directive('sortableList', () => new sortableList())
-  .directive('prioritySelect', () => new prioritySelect())
   .directive('categoriesDirective', () => {
     return {
       templateUrl: './components/categories/categories.html'
     }
   })
   .factory('categoriesService', categoriesService)
-  .controller('AuthController', AuthController)
   .factory('auth', authService)
   .factory('userService', userService)
+  .factory('storageService', storageService)

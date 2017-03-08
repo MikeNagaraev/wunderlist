@@ -4917,16 +4917,14 @@ function CategoriesController($scope, categoriesService) {
   this.editCategory = function (category) {};
 
   this.addTodo = function () {
-    console.log(_this.todoPriority);
+    if (!_this.todoTitle || _this.todoTitle == '') {
+      return;
+    }
     categoriesService.addTodo(_this.currentCategory._id, {
       title: _this.todoTitle,
-      priority: _this.todoPriority,
+      priority: _this.todoPriority || 1,
       createdAt: _this.todoCreatedAt,
       expiredAt: _this.todoExpiredAt
-    }).then(function (success) {
-      _this.currentCategory.todos.push(success.data);
-    }, function (error) {
-      return console.log(error);
     });
     _this.todoTitle = '';
   };
@@ -5020,20 +5018,31 @@ function categoriesService($http, user, $location) {
     }
   };
 
+  store.updateCategory = function (id) {
+    return $http.put('/categories/' + id, store.currentCategory).then(function (success) {}, function (error) {
+      return console.log(error);
+    });
+  };
+
   store.addTodo = function (id, todo) {
-    return $http.post('categories/' + id + '/todos', todo);
+    store.currentCategory.todos.push(todo);
+    return store.updateCategory(store.currentCategory._id);
   };
 
   store.deleteTodo = function (category, todo) {
-    return $http['delete']('/categories/' + category._id + '/todos/' + todo._id).then(function (success) {
-      var deleteId = undefined;
-      category.todos.forEach(function (el, index) {
-        if (el._id === todo._id) {
-          deleteId = index;
-        }
-      });
-      category.todos.splice(deleteId, 1);
+    var deleteId = undefined;
+    category.todos.forEach(function (el, index) {
+      if (el._id === todo._id) {
+        deleteId = index;
+      }
     });
+    category.todos.splice(deleteId, 1);
+    return store.updateCategory(category._id);
+    //
+    // return $http.delete('/categories/' + category._id + '/todos/' + todo._id)
+    //   .then(success => {
+    //     console.log('success', success)
+    //   }, error => console.log('error', error))
   };
   return store;
 }
@@ -5202,7 +5211,6 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.prioritySelect = prioritySelect;
 exports.sortableList = sortableList;
 exports.selectableDirective = selectableDirective;
 exports.categoryOptions = categoryOptions;
@@ -5210,25 +5218,6 @@ exports.categoryToggle = categoryToggle;
 exports.modalShow = modalShow;
 exports.modalHide = modalHide;
 exports.toggleDirective = toggleDirective;
-
-function prioritySelect($element) {
-  return {
-    controller: function controller($element) {
-      var options = $element.find('option');
-      $element.change(function (e) {
-        var selecetdOption = $(e.target);
-        options.removeAttr('selected');
-        selecetdOption.attr('selected', 'selected');
-        $('#priority').val(selecetdOption.val());
-        if ($('#priority').hasClass('ng-empty')) {
-          $('#priority').toggleClass('ng-empty ng-not-empty');
-          $('#priority').toggleClass('ng-untouched ng-touched');
-          $('#priority').toggleClass('ng-pristine ');
-        }
-      });
-    }
-  };
-}
 
 function sortableList($scope, $elemet) {
   return {
@@ -48774,6 +48763,10 @@ var _componentsUserUserController = __webpack_require__(8);
 
 var _componentsUserUserController2 = _interopRequireDefault(_componentsUserUserController);
 
+var _componentsStorageStorageController = __webpack_require__(17);
+
+var _componentsStorageStorageController2 = _interopRequireDefault(_componentsStorageStorageController);
+
 ////Services////
 
 var _componentsCategoriesCategoriesService = __webpack_require__(6);
@@ -48787,6 +48780,10 @@ var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthServ
 var _componentsUserUserService = __webpack_require__(9);
 
 var _componentsUserUserService2 = _interopRequireDefault(_componentsUserUserService);
+
+var _componentsStorageStorageService = __webpack_require__(16);
+
+var _componentsStorageStorageService2 = _interopRequireDefault(_componentsStorageStorageService);
 
 ////Directives////
 
@@ -48816,7 +48813,7 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
       $location.path('/login');
     }
   });
-}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
+}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('StorageController', _componentsStorageStorageController2['default']).directive('selectableDirective', function () {
   return new _directives.selectableDirective();
 }).directive('categoryOptions', function () {
   return new _directives.categoryOptions();
@@ -48830,13 +48827,43 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return new _directives.toggleDirective();
 }).directive('sortableList', function () {
   return new _directives.sortableList();
-}).directive('prioritySelect', function () {
-  return new _directives.prioritySelect();
 }).directive('categoriesDirective', function () {
   return {
     templateUrl: './components/categories/categories.html'
   };
-}).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).controller('AuthController', _componentsAuthAuthController2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']);
+}).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']).factory('storageService', _componentsStorageStorageService2['default']);
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = storageService;
+
+function storageService() {}
+
+module.exports = exports["default"];
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = StorageController;
+
+function StorageController() {}
+
+module.exports = exports["default"];
 
 /***/ })
 /******/ ]);

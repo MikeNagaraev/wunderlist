@@ -11,18 +11,14 @@
     <div class="add-todo-input">
       <div class="form-group">
         <div class="col-md-8">
-          <input type="text" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
+          <input type="text" class="title-input" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
         </div>
         <div class="col-md-2 priority-content">
-          <h5 class="priority-title">Priority
-            <select class="priority-select" priority-select>
-              <option selected="selected">1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
+          <h5 class="priority-title">
+            Priority
+            <input type="number" min="1" max="5" class="form-control priority-select" ng-model="category.todoPriority">
           </h5>
         </div>
-        <input type="hidden" id="priority" ng-value="category.todoPriority" ng-model="category.todoPriority" value="1">
         <input type="hidden" id="createdAt" ng-model="category.todoCreatedAt">
         <input type="hidden" id="expire" ng-model="category.todoExpiredAt">
       </div>
