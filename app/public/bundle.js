@@ -4966,85 +4966,96 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = categoriesService;
-categoriesService.$inject = ['$http', 'userService', '$location'];
+categoriesService.$inject = ['$http', 'userService', '$location', 'storageService'];
 
-function categoriesService($http, user, $location) {
-  var store = {
+function categoriesService($http, user, $location, storage) {
+  var storeCategories = {
     categories: [],
     currentCategory: {}
   };
 
-  store.getAll = function () {
+  storeCategories.getAll = function () {
     return $http.get('users/' + user.info._id).then(function (success) {
-      angular.copy(success.data.categories, store.categories);
+      angular.copy(success.data.categories, storeCategories.categories);
     }, function (error) {
       return console.log(error);
     });
   };
 
-  store.get = function (id) {
+  storeCategories.setCurrentCategory = function (id) {
+    ////storage////
+
+    ////db////
     return $http.get('/categories/' + id).then(function (success) {
-      return angular.copy(success.data, store.currentCategory);
+      return angular.copy(success.data, storeCategories.currentCategory);
+    }, function (error) {
+      return $location.path('/home');
     });
   };
 
-  store.create = function (category) {
+  storeCategories.get = function (id) {
+    return $http.get('/categories/' + id).then(function (success) {
+      return angular.copy(success.data, storeCategories.currentCategory);
+    });
+  };
+
+  storeCategories.create = function (category) {
     return $http.post('users/' + user.info._id + '/categories', category).then(function (success) {
-      store.categories.push(success.data);
+      storeCategories.categories.push(success.data);
     }, function (error) {
       return console.log(error);
     });
   };
 
-  store['delete'] = function (id) {
+  storeCategories['delete'] = function (id) {
     return $http['delete']('/categories/' + id).then(function (success) {
-      var deleteId = undefined;
-      store.categories.forEach(function (el, index) {
-        if (el._id === id) {
-          deleteId = index;
-        }
-      });
-      store.categories.splice(deleteId, 1);
-      store.setDefaultCurrentCategory();
+      storeCategories.deleteElement(storeCategories.categories, id);
+      // storeCategories.setDefaultCurrentCategory();
+      $location.path('/home');
     });
   };
+  //
+  // storeCategories.setDefaultCurrentCategory = () => {
+  //   if (storeCategories.categories.length) {
+  //     storeCategories.setCurrentCategory(storeCategories.categories[0]._id)
+  //   } else {
+  //     angular.copy({}, storeCategories.currentCategory);
+  //     $location.path('/home');
+  //   }
+  // }
 
-  store.setDefaultCurrentCategory = function () {
-    if (store.categories.length) {
-      store.get(store.categories[0]._id);
-    } else {
-      angular.copy({}, store.currentCategory);
-      $location.path('/home');
-    }
-  };
-
-  store.updateCategory = function (id) {
-    return $http.put('/categories/' + id, store.currentCategory).then(function (success) {}, function (error) {
+  storeCategories.updateCategory = function (id) {
+    return $http.put('/categories/' + id, storeCategories.currentCategory).then(function (success) {}, function (error) {
       return console.log(error);
     });
   };
 
-  store.addTodo = function (id, todo) {
-    store.currentCategory.todos.push(todo);
-    return store.updateCategory(store.currentCategory._id);
+  storeCategories.addTodo = function (id, todo) {
+    storeCategories.currentCategory.todos.push(todo);
+    return storeCategories.updateCategory(storeCategories.currentCategory._id);
   };
 
-  store.deleteTodo = function (category, todo) {
-    var deleteId = undefined;
-    category.todos.forEach(function (el, index) {
-      if (el._id === todo._id) {
-        deleteId = index;
-      }
-    });
-    category.todos.splice(deleteId, 1);
-    return store.updateCategory(category._id);
+  storeCategories.deleteTodo = function (category, todo) {
+    storeCategories.deleteElement(category.todos, todo._id);
+    return storeCategories.updateCategory(category._id);
     //
     // return $http.delete('/categories/' + category._id + '/todos/' + todo._id)
     //   .then(success => {
     //     console.log('success', success)
     //   }, error => console.log('error', error))
   };
-  return store;
+
+  storeCategories.deleteElement = function (list, id) {
+    var deleteId = undefined;
+    list.forEach(function (el, index) {
+      if (el._id === id) {
+        deleteId = index;
+      }
+    });
+    list.splice(deleteId, 1);
+  };
+
+  return storeCategories;
 }
 
 module.exports = exports['default'];
@@ -5100,7 +5111,8 @@ storageService.$inject = ['$window'];
 
 function storageService($window) {
   var storage = {
-    categories: []
+    categories: [],
+    user: {}
   };
 
   storage.setLocalStorage = function (key, item) {
@@ -5247,7 +5259,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     templateUrl: '../components/categories/category.html',
     resolve: {
       promise: ['$stateParams', 'categoriesService', function ($stateParams, categoriesService) {
-        return categoriesService.get($stateParams.id);
+        return categoriesService.setCurrentCategory($stateParams.id);
       }]
     }
   };

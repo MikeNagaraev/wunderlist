@@ -24,7 +24,6 @@ router.get('/auth/facebook/callback', function(req, res, next) {
     if (err) {
       return next(err);
     }
-    console.log('user', user)
     if (user) {
       return res.json({
         user: user

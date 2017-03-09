@@ -2,7 +2,8 @@ storageService.$inject = ['$window']
 
 export default function storageService($window) {
   const storage = {
-    categories: []
+    categories: [],
+    user: {}
   };
 
   storage.setLocalStorage = (key, item) => {

@@ -1,5 +1,5 @@
 <div class="categories-list" ng-controller="CategoriesController as category">
-  <a ui-sref="home.categories({id:cat._id})" ng-repeat="cat in category.categories" class="category-item" selectable-directive>
+  <a ui-sref="home.categories({id:cat._id})" ng-click="category.setCurrentCategory(cat)" ng-repeat="cat in category.categories" class="category-item" selectable-directive>
     {{cat.title}}
     <span class="glyphicon glyphicon-option-vertical category-options" category-options></span>
     <ul class="category-options-container">

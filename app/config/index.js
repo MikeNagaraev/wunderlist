@@ -17,7 +17,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     templateUrl: '../components/categories/category.html',
     resolve: {
       promise: ['$stateParams', 'categoriesService', function($stateParams, categoriesService) {
-        return categoriesService.get($stateParams.id);
+        return categoriesService.setCurrentCategory($stateParams.id);
       }]
     }
   }

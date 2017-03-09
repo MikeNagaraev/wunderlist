@@ -4,6 +4,8 @@ export default function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
+
+
   this.addCategory = () => {
     if (this.title != "" || this.title) {
       categoriesService.create({

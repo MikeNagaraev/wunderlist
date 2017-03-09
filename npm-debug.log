@@ -1,6 +1,7 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/home/mikhail/.nvm/versions/node/v6.9.0/bin/node',
 1 verbose cli   '/home/mikhail/.nvm/versions/node/v6.9.0/bin/npm',
+1 verbose cli   'run',
 1 verbose cli   'start' ]
 2 info using npm@3.10.8
 3 info using node@v6.9.0
@@ -27,7 +28,7 @@
 15 verbose pkgid node-js-getting-started@0.2.5
 16 verbose cwd /home/mikhail/Projects/wunderlist-github
 17 error Linux 4.9.13-1-MANJARO
-18 error argv "/home/mikhail/.nvm/versions/node/v6.9.0/bin/node" "/home/mikhail/.nvm/versions/node/v6.9.0/bin/npm" "start"
+18 error argv "/home/mikhail/.nvm/versions/node/v6.9.0/bin/node" "/home/mikhail/.nvm/versions/node/v6.9.0/bin/npm" "run" "start"
 19 error node v6.9.0
 20 error npm  v3.10.8
 21 error code ELIFECYCLE
