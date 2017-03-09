@@ -4975,41 +4975,56 @@ function categoriesService($http, user, $location, storage) {
   };
 
   storeCategories.getAll = function () {
-    return $http.get('users/' + user.info._id).then(function (success) {
-      angular.copy(success.data.categories, storeCategories.categories);
-    }, function (error) {
-      return console.log(error);
-    });
+    var categories = storage.getAllCategories();
+    if (categories.length) {
+      console.log('cat', categories);
+      angular.copy(categories, storeCategories.categories);
+    } else {
+      return $http.get('users/' + user.info._id).then(function (success) {
+        angular.copy(success.data.categories, storeCategories.categories);
+        storage.saveCategories(storeCategories.categories);
+      }, function (error) {
+        return console.log(error);
+      });
+    }
   };
 
   storeCategories.setCurrentCategory = function (id) {
-    ////storage////
-
-    ////db////
+    angular.copy(storage.getCategory(id), storeCategories.currentCategory);
     return $http.get('/categories/' + id).then(function (success) {
       return angular.copy(success.data, storeCategories.currentCategory);
     }, function (error) {
-      return $location.path('/home');
+      if (!error.data) {
+        var category = storage.getCategory(id);
+        if (category) {
+          angular.copy(category, storeCategories.currentCategory);
+        }
+      }
+      $location.path('/home');
     });
   };
 
   storeCategories.get = function (id) {
-    return $http.get('/categories/' + id).then(function (success) {
-      return angular.copy(success.data, storeCategories.currentCategory);
-    });
+    angular.copy(storage.getCategory(id), storeCategories.currentCategory);
+    // return $http.get('/categories/' + id)
+    //   .then(success => angular.copy(success.data, storeCategories.currentCategory))
   };
 
   storeCategories.create = function (category) {
-    return $http.post('users/' + user.info._id + '/categories', category).then(function (success) {
-      storeCategories.categories.push(success.data);
-    }, function (error) {
-      return console.log(error);
-    });
+    storage.saveCategory(category);
+    storeCategories.categories.push(category);
+    // return $http.post('users/' + user.info._id + '/categories', category)
+    //   .then(function(success) {
+    //       storeCategories.categories.push(success.data)
+    //     },
+    //     error => console.log(error))
   };
 
   storeCategories['delete'] = function (id) {
+    storage.deleteCategory(storeCategories.currentCategory._id);
+    storeCategories.deleteElement(storeCategories.categories, id);
+    $location.path('/home');
     return $http['delete']('/categories/' + id).then(function (success) {
-      storeCategories.deleteElement(storeCategories.categories, id);
       // storeCategories.setDefaultCurrentCategory();
       $location.path('/home');
     });
@@ -5025,7 +5040,10 @@ function categoriesService($http, user, $location, storage) {
   // }
 
   storeCategories.updateCategory = function (id) {
-    return $http.put('/categories/' + id, storeCategories.currentCategory).then(function (success) {}, function (error) {
+    storage.saveCategory(storeCategories.currentCategory);
+    return $http.put('/categories/' + id, storeCategories.currentCategory).then(function (success) {
+      storage.deleteCategory(storeCategories.currentCategory._id);
+    }, function (error) {
       return console.log(error);
     });
   };
@@ -5123,6 +5141,12 @@ function storageService($window) {
     return JSON.parse($window.localStorage.getItem(key));
   };
 
+  storage.saveCategories = function (categories) {
+    angular.copy(categories, storage.categories);
+    storage.setLocalStorage('categories', storage.categories);
+    console.log(categories);
+  };
+
   storage.saveCategory = function (category) {
     var pos = storage.getIdInList(storage.categories, category._id);
     if (pos >= 0) {
@@ -5174,6 +5198,7 @@ function storageService($window) {
   storage.clearList = function (list) {
     list.splice(0, list.length);
   };
+  return storage;
 }
 
 module.exports = exports['default'];
@@ -5248,7 +5273,13 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home'
+    controllerAs: 'home',
+    resolve: {
+      promise: ['$stateParams', 'categoriesService', 'userService', function ($stateParams, categoriesService, user) {
+        user.set();
+        return categoriesService.getAll();
+      }]
+    }
   };
 
   var categories = {

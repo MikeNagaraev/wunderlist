@@ -14,6 +14,12 @@ export default function storageService($window) {
     return JSON.parse($window.localStorage.getItem(key));
   }
 
+  storage.saveCategories = (categories) => {
+    angular.copy(categories, storage.categories)
+    storage.setLocalStorage('categories', storage.categories);
+    console.log(categories)
+  }
+
   storage.saveCategory = (category) => {
     let pos = storage.getIdInList(storage.categories, category._id);
     if (pos >= 0) {
@@ -66,4 +72,5 @@ export default function storageService($window) {
   storage.clearList = (list) => {
     list.splice(0, list.length);
   }
+  return storage;
 }

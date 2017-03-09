@@ -6,7 +6,13 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     url: '/home',
     templateUrl: '../components/home/home.html',
     controller: 'HomeController',
-    controllerAs: 'home'
+    controllerAs: 'home',
+    resolve: {
+      promise: ['$stateParams', 'categoriesService', 'userService', function($stateParams, categoriesService, user) {
+        user.set();
+        return categoriesService.getAll();
+      }]
+    }
   }
 
   let categories = {

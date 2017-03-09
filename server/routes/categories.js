@@ -7,7 +7,6 @@ var Todo = mongoose.model('Todo');
 
 router.param('category', function(req, res, next, id) {
   var query = Category.findById(id);
-
   query.exec(function(err, category) {
     if (err) {
       return next(err);
