@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4759,7 +4759,7 @@ angular.module('ui.router.state')
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(13);
+__webpack_require__(15);
 module.exports = angular;
 
 
@@ -5076,6 +5076,103 @@ module.exports = exports['default'];
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = StorageController;
+
+function StorageController() {}
+
+module.exports = exports["default"];
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = storageService;
+storageService.$inject = ['$window'];
+
+function storageService($window) {
+  var storage = {
+    categories: []
+  };
+
+  storage.setLocalStorage = function (key, item) {
+    $window.localStorage.setItem(key, JSON.stringify(item));
+  };
+
+  storage.getLocalStorage = function (key) {
+    return JSON.parse($window.localStorage.getItem(key));
+  };
+
+  storage.saveCategory = function (category) {
+    var pos = storage.getIdInList(storage.categories, category._id);
+    if (pos >= 0) {
+      storage.categories[pos] = category;
+    } else {
+      storage.categories.push(category);
+    }
+    storage.setLocalStorage('categories', storage.categories);
+  };
+
+  storage.getCategory = function (id) {
+    var pos = storage.getIdInList(storage.categories, id);
+    if (pos >= 0) {
+      return storage.categories[pos];
+    } else {
+      return -1;
+    }
+  };
+
+  storage.deleteCategory = function (id) {
+    var pos = storage.getIdInList(storage.categories, id);
+    if (pos >= 0) {
+      storage.categories.splice(pos, 1);
+    } else {
+      return -1;
+    }
+    storage.setLocalStorage('categories', storage.categories);
+  };
+
+  storage.deleteAllCategories = function () {
+    storage.clearList(storage.categories);
+    storage.setLocalStorage('categories', storage.categories);
+  };
+
+  storage.getAllCategories = function () {
+    angular.copy(storage.getLocalStorage('categories'), storage.categories);
+    return storage.categories;
+  };
+
+  storage.getIdInList = function (list, id) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i]._id === id) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  storage.clearList = function (list) {
+    list.splice(0, list.length);
+  };
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -5094,7 +5191,7 @@ function UserController($scope, auth, user) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5121,7 +5218,7 @@ function userService($http, auth) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5202,7 +5299,7 @@ function MainConfig($stateProvider, $urlRouterProvider, $location) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5352,16 +5449,16 @@ function toggleDirective($scope, $element) {
 //   .directive("toggleDirective", () => {
 //
 //   })
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -38500,7 +38597,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -48727,7 +48824,7 @@ return jQuery;
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48759,11 +48856,11 @@ var _componentsAuthAuthController = __webpack_require__(2);
 
 var _componentsAuthAuthController2 = _interopRequireDefault(_componentsAuthAuthController);
 
-var _componentsUserUserController = __webpack_require__(8);
+var _componentsUserUserController = __webpack_require__(10);
 
 var _componentsUserUserController2 = _interopRequireDefault(_componentsUserUserController);
 
-var _componentsStorageStorageController = __webpack_require__(17);
+var _componentsStorageStorageController = __webpack_require__(8);
 
 var _componentsStorageStorageController2 = _interopRequireDefault(_componentsStorageStorageController);
 
@@ -48777,17 +48874,17 @@ var _componentsAuthAuthService = __webpack_require__(3);
 
 var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthService);
 
-var _componentsUserUserService = __webpack_require__(9);
+var _componentsUserUserService = __webpack_require__(11);
 
 var _componentsUserUserService2 = _interopRequireDefault(_componentsUserUserService);
 
-var _componentsStorageStorageService = __webpack_require__(16);
+var _componentsStorageStorageService = __webpack_require__(9);
 
 var _componentsStorageStorageService2 = _interopRequireDefault(_componentsStorageStorageService);
 
 ////Directives////
 
-var _directives = __webpack_require__(11);
+var _directives = __webpack_require__(13);
 
 var _componentsCategoriesCategoriesDirective = __webpack_require__(5);
 
@@ -48795,13 +48892,13 @@ var _componentsCategoriesCategoriesDirective2 = _interopRequireDefault(_componen
 
 //// Assets /////
 
-var _assetsStylesheetsMainScss = __webpack_require__(12);
+var _assetsStylesheetsMainScss = __webpack_require__(14);
 
 var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainScss);
 
 ////Config//////
 
-var _config = __webpack_require__(10);
+var _config = __webpack_require__(12);
 
 var _config2 = _interopRequireDefault(_config);
 
@@ -48832,38 +48929,6 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
     templateUrl: './components/categories/categories.html'
   };
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']).factory('storageService', _componentsStorageStorageService2['default']);
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = storageService;
-
-function storageService() {}
-
-module.exports = exports["default"];
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = StorageController;
-
-function StorageController() {}
-
-module.exports = exports["default"];
 
 /***/ })
 /******/ ]);
