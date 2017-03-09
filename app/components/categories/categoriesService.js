@@ -7,56 +7,62 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   storeCategories.getAll = () => {
-    let categories = storage.getAllCategories();
-    if (!categories.length) {
-      console.log('cat', categories)
-      angular.copy(categories, storeCategories.categories);
-    } else {
-      return $http.get('users/' + user.info._id)
-        .then(success => {
-          angular.copy(success.data.categories, storeCategories.categories);
-          storage.saveCategories(storeCategories.categories);
-        }, error => console.log(error))
-    }
+    // let categories = storage.getAllCategories();
+    // if (categories.length) {
+    //   console.log('cat', categories)
+    //   angular.copy(categories, storeCategories.categories);
+    // } else {
+    $http.get('users/' + user.info._id)
+      .then(success => {
+        angular.copy(success.data.categories, storeCategories.categories);
+        storage.saveCategories(storeCategories.categories);
+      }, error => console.log(error))
+    // }
   }
 
   storeCategories.setCurrentCategory = (id) => {
-    // angular.copy(storage.getCategory(id), storeCategories.currentCategory)
-    return $http.get('/categories/' + id)
-      .then(success => angular.copy(success.data, storeCategories.currentCategory),
-        error => {
-          if (!error.data) {
-            let category = storage.getCategory(id);
-            if (category) {
-              angular.copy(category, storeCategories.currentCategory)
-            }
-          }
-          $location.path('/home')
-        })
+    angular.copy(storage.getCategory(id), storeCategories.currentCategory)
+
+
+    //no need
+
+    // return $http.get('/categories/' + id)
+    //   .then(success => angular.copy(success.data, storeCategories.currentCategory),
+    //     error => {
+    //       if (!error.data) {
+    //         let category = storage.getCategory(id);
+    //         if (category) {
+    //           angular.copy(category, storeCategories.currentCategory)
+    //         }
+    //       }
+    //       $location.path('/home')
+    //     })
   }
 
-  storeCategories.get = (id) => {
-    // angular.copy(storage.getCategory(id), storeCategories.currentCategory)
-    return $http.get('/categories/' + id)
-      .then(success => angular.copy(success.data, storeCategories.currentCategory))
-  }
+  //no need
+  // storeCategories.get = (id) => {
+  //   // angular.copy(storage.getCategory(id), storeCategories.currentCategory)
+  //   return $http.get('/categories/' + id)
+  //     .then(success => angular.copy(success.data, storeCategories.currentCategory))
+  // }
 
   storeCategories.create = (category) => {
     category.id = storeCategories.generateId();
-    // storage.saveCategory(category);
-    // storeCategories.categories.push(category)
-    return $http.post('users/' + user.info._id + '/categories', category)
-      .then(function(success) {
-          storeCategories.categories.push(success.data)
-        },
-        error => console.log(error))
+
+    storage.saveCategory(category);
+    storeCategories.categories.push(category)
+
+    $http.post('users/' + user.info._id + '/categories', category)
+      .then(success => {
+        storeCategories.categories.push(success.data)
+      }, error => console.log(error))
   }
 
   storeCategories.delete = id => {
     storage.deleteCategory(storeCategories.currentCategory.id);
-    // storeCategories.deleteElement(storeCategories.categories, id);
+    storeCategories.deleteElement(storeCategories.categories, id);
     // $location.path('/home');
-    return $http.delete('/categories/' + id)
+    $http.delete('/categories/' + id)
       .then(success => {
         storeCategories.deleteElement(storeCategories.categories, id);
 
@@ -78,14 +84,14 @@ export default function categoriesService($http, user, $location, storage) {
   storeCategories.generateId = () => {
     var currentDate = (new Date()).valueOf().toString();
     var random = Math.random().toString().slice(2);
-    console.log(currentDate, random)
     return currentDate + random;
   }
 
 
   storeCategories.updateCategory = (id) => {
     storage.saveCategory(storeCategories.currentCategory);
-    return $http.put('/categories/' + id, storeCategories.currentCategory)
+
+    $http.put('/categories/' + id, storeCategories.currentCategory)
       .then(success => {
         storage.deleteCategory(storeCategories.currentCategory.id)
       }, error => console.log(error))

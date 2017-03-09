@@ -41,6 +41,25 @@ router.delete('/users/:user', function(req, res, next) {
   })
 })
 
+router.put('/users/:user', function(req, res, next) {
+  User.findById(req.user._id, function(err, user) {
+    if (err) {
+      res.send(err);
+    }
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.categories = req.body.categories || user.categories;
+
+    category.save(function(err, category) {
+      if (err) {
+        res.status(500).send(err)
+      }
+      res.send(category);
+    })
+  })
+})
+
 router.get('/users/:user/categories', function(req, res, next) {
 
   Category.find(function(err, category) {

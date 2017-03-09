@@ -2,8 +2,7 @@ storageService.$inject = ['$window']
 
 export default function storageService($window) {
   const storage = {
-    categories: [],
-    user: {}
+    categories: []
   };
 
   storage.setLocalStorage = (key, item) => {
@@ -15,8 +14,9 @@ export default function storageService($window) {
   }
 
   storage.saveCategories = (categories) => {
-    angular.copy(categories, storage.categories)
-    storage.setLocalStorage('categories', storage.categories);
+    categories.forEach(category => {
+      storage.saveCategory(categorory);
+    })
   }
 
   storage.saveCategory = (category) => {
