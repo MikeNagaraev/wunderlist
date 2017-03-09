@@ -4,8 +4,6 @@ export default function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
-
-
   this.addCategory = () => {
     if (this.title != "" || this.title) {
       categoriesService.create({
@@ -18,7 +16,7 @@ export default function CategoriesController($scope, categoriesService) {
   };
 
   this.deleteCategory = (category) => {
-    categoriesService.delete(category._id);
+    categoriesService.delete(category.id);
   }
 
   this.editCategory = (category) => {
@@ -29,7 +27,7 @@ export default function CategoriesController($scope, categoriesService) {
     if(!this.todoTitle || this.todoTitle == '') {
       return;
     }
-    categoriesService.addTodo(this.currentCategory._id, {
+    categoriesService.addTodo(this.currentCategory.id, {
       title: this.todoTitle,
       priority: this.todoPriority || 1,
       createdAt: this.todoCreatedAt,

@@ -11,18 +11,14 @@ passport.use(new LocalStrategy({
     passwordField: 'password'
   },
   function(email, password, done) {
-    console.log('xuo')
-    console.log(email, password)
-
     process.nextTick(function() {
       User.findOne({
         'email': email
       }, function(err, user) {
-        console.log('passp2', user)
+
         if (err) {
           return done(err);
         }
-        console.log('passp3', user)
 
         if (!user) {
           return done(null, false, {
@@ -34,7 +30,6 @@ passport.use(new LocalStrategy({
             message: 'Incorrect password.'
           });
         }
-        console.log('passp4', user)
 
         return done(null, user);
       });

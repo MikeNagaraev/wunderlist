@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var CategorySchema = new mongoose.Schema({
   title: String,
-  id:String,
+  id: String,
   todos: [{
     title: String,
     priority: String,

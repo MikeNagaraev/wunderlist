@@ -17,11 +17,10 @@ export default function storageService($window) {
   storage.saveCategories = (categories) => {
     angular.copy(categories, storage.categories)
     storage.setLocalStorage('categories', storage.categories);
-    console.log(categories)
   }
 
   storage.saveCategory = (category) => {
-    let pos = storage.getIdInList(storage.categories, category._id);
+    let pos = storage.getIdInList(storage.categories, category.id);
     if (pos >= 0) {
       storage.categories[pos] = category;
     } else {
@@ -62,7 +61,7 @@ export default function storageService($window) {
 
   storage.getIdInList = (list, id) => {
     for (let i = 0; i < list.length; i++) {
-      if (list[i]._id === id) {
+      if (list[i].id === id) {
         return i;
       }
     }

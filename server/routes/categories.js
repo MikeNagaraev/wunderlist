@@ -6,7 +6,9 @@ var Category = mongoose.model('Category');
 var Todo = mongoose.model('Todo');
 
 router.param('category', function(req, res, next, id) {
-  var query = Category.findById(id);
+  var query = Category.findOne({
+    id: id
+  });
   query.exec(function(err, category) {
     if (err) {
       return next(err);
@@ -33,7 +35,9 @@ router.get('/categories', function(req, res, next) {
 })
 
 router.put('/categories/:category', function(req, res, next) {
-  Category.findById(req.category._id, function(err, category) {
+  Category.findOne({
+    id: req.category.id
+  }, function(err, category) {
     if (err) {
       res.send(err);
     }
@@ -59,8 +63,11 @@ router.delete('/categories/:category', function(req, res, next) {
   })
 })
 
+
+
 router.post('/categories', function(req, res, next) {
   var category = new Category(req.body);
+
   category.save(function(err, category) {
     if (err) {
       return next(err);
@@ -88,7 +95,9 @@ router.post('/categories/:category/todos', function(req, res, next) {
 })
 
 router.param('todo', function(req, res, next, id) {
-  var query = Todo.findById(id);
+  var query = Todo.findOne({
+    id: id
+  });
 
   query.exec(function(err, todo) {
     if (err) {
@@ -102,24 +111,24 @@ router.param('todo', function(req, res, next, id) {
   })
 })
 
-router.delete('/categories/:category/todos/:todo', function(req, res, next) {
-  Todo.remove(req.todo, function(err, todo) {
-    if (err) {
-      res.send(err)
-    }
-    var deleteId;
-    req.category.todos.forEach((el, index) => {
-      if (el._id === req.todo._id) {
-        deleteId = index;
-      }
-    })
-    req.category.todos.splice(deleteId, 1)
-    res.json({
-      message: 'Successfully deleted',
-      id: req.todo._id
-    })
-  })
-})
+// router.delete('/categories/:category/todos/:todo', function(req, res, next) {
+//   Todo.remove(req.todo, function(err, todo) {
+//     if (err) {
+//       res.send(err)
+//     }
+//     var deleteId;
+//     req.category.todos.forEach((el, index) => {
+//       if (el.id === req.todo.id) {
+//         deleteId = index;
+//       }
+//     })
+//     req.category.todos.splice(deleteId, 1)
+//     res.json({
+//       message: 'Successfully deleted',
+//       id: req.todo.id
+//     })
+//   })
+// })
 
 
 
