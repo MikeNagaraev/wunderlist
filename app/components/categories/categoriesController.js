@@ -15,6 +15,10 @@ export default function CategoriesController($scope, categoriesService) {
     }
   };
 
+  this.setCurrentCategory = (category) => {
+    categoriesService.setCurrentCategory(category.id)
+  }
+
   this.deleteCategory = (category) => {
     categoriesService.delete(category.id);
   }
@@ -24,7 +28,7 @@ export default function CategoriesController($scope, categoriesService) {
   }
 
   this.addTodo = () => {
-    if(!this.todoTitle || this.todoTitle == '') {
+    if (!this.todoTitle || this.todoTitle == '') {
       return;
     }
     categoriesService.addTodo(this.currentCategory.id, {

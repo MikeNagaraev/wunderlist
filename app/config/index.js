@@ -1,6 +1,6 @@
 MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-export default function MainConfig($stateProvider, $urlRouterProvider, $location) {
+export default function MainConfig($stateProvider, $urlRouterProvider) {
   let home = {
     name: 'home',
     url: '/home',
@@ -8,9 +8,8 @@ export default function MainConfig($stateProvider, $urlRouterProvider, $location
     controller: 'HomeController',
     controllerAs: 'home',
     resolve: {
-      promise: ['$stateParams', 'categoriesService', 'userService', function($stateParams, categoriesService, user) {
-        user.set();
-        return categoriesService.getAll();
+      promise: ['categoriesService', (categoriesService) => {
+        categoriesService.setAll();
       }]
     }
   }

@@ -44,17 +44,19 @@ import mainConfig from './config';
 
 angular.module('wunderlist', [angularRouter])
   .config(mainConfig)
-  .run(['$rootScope', '$location', 'auth', ($rootScope, $location, auth) => {
+  .run(['$rootScope', '$location', 'auth', 'userService', ($rootScope, $location, auth, user) => {
     $rootScope.$on('$stateChangeStart', function(event) {
       if (!auth.isLoggedIn()) {
         $location.path('/login');
+      } else {
+        user.setUser();
       }
     })
   }])
   .controller('HomeController', HomeController)
+  .controller('AuthController', AuthController)
   .controller('CategoriesController', CategoriesController)
   .controller('UserController', UserController)
-  .controller('AuthController', AuthController)
   .controller('StorageController', StorageController)
   .directive('selectableDirective', () => new selectableDirective())
   .directive('categoryOptions', () => new categoryOptions())

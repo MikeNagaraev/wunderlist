@@ -1,29 +1,13 @@
-authServise.$inject = ['$http', '$window', '$location', '$state']
-export default function authServise($http, $window, $location, $state) {
+authServise.$inject = ['$http', '$window', '$location', '$state', 'storageService']
+export default function authServise($http, $window, $location, $state, storage) {
   var auth = {};
 
-  auth.saveToken = function(token) {
-    $window.localStorage['app-auth-token'] = token;
-  }
-
-  auth.getToken = function() {
-    return $window.localStorage['app-auth-token'];
-  }
-
-
-  auth.saveUser = (user) => {
-    $window.localStorage.setItem('user-obj', JSON.stringify(user));
-  }
-
-  auth.getUser = function() {
-    return JSON.parse($window.localStorage.getItem('user-obj'));
-  }
-
   auth.isLoggedIn = function() {
-    var token = auth.getToken();
-    if (token && token != 'undefined') {
-      var payload = JSON.parse($window.atob(token.split('.')[1]))
-      return payload.exp > Date.now() / 1000;
+    console.log(storage)
+    var user = storage.getUser();
+    if (user && user != 'undefined') {
+      console.log('true')
+      return true;
     } else {
       return false;
     }
@@ -44,12 +28,7 @@ export default function authServise($http, $window, $location, $state) {
 
   auth.register = function(user) {
     return $http.post('/register', user).then(function(success) {
-      if(success.data.message) {
-
-        return;
-      }
-      auth.saveUser(success.data.user)
-      auth.saveToken(success.data.token);
+      storage.saveUser(success.data.user)
       $state.go('home')
     }, function(error) {
       console.log(error)
@@ -59,14 +38,13 @@ export default function authServise($http, $window, $location, $state) {
   auth.logIn = function(user) {
     console.log(user)
     return $http.post('/login', user).then(function(success) {
-      auth.saveUser(success.data.user)
-      auth.saveToken(success.data.token);
+      storage.saveUser(success.data.user)
       $state.go('home')
     });
   };
 
   auth.logOut = function() {
-    $window.localStorage.removeItem('app-auth-token');
+    storage.removeItem(storage.localStorageUserKey)
     $location.path('/home')
   };
 

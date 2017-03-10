@@ -46,16 +46,16 @@ router.put('/users/:user', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.categories = req.body.categories || user.categories;
 
-    category.save(function(err, category) {
+    console.log(user)
+    user.save(function(err, user) {
       if (err) {
         res.status(500).send(err)
       }
-      res.send(category);
+      res.send(user);
     })
   })
 })

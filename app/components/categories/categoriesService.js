@@ -1,121 +1,136 @@
 categoriesService.$inject = ['$http', 'userService', '$location', 'storageService'];
 
 export default function categoriesService($http, user, $location, storage) {
-  const storeCategories = {
+  const serviceCategories = {
     categories: [],
     currentCategory: {}
   }
 
-  storeCategories.getAll = () => {
-    // let categories = storage.getAllCategories();
-    // if (categories.length) {
-    //   console.log('cat', categories)
-    //   angular.copy(categories, storeCategories.categories);
-    // } else {
+  serviceCategories.setAll = () => {
+    console.log('kek')
     $http.get('users/' + user.info._id)
       .then(success => {
-        angular.copy(success.data.categories, storeCategories.categories);
-        storage.saveCategories(storeCategories.categories);
-      }, error => console.log(error))
-    // }
-  }
-
-  storeCategories.setCurrentCategory = (id) => {
-    angular.copy(storage.getCategory(id), storeCategories.currentCategory)
-
-
-    //no need
-
-    // return $http.get('/categories/' + id)
-    //   .then(success => angular.copy(success.data, storeCategories.currentCategory),
-    //     error => {
-    //       if (!error.data) {
-    //         let category = storage.getCategory(id);
-    //         if (category) {
-    //           angular.copy(category, storeCategories.currentCategory)
-    //         }
-    //       }
-    //       $location.path('/home')
-    //     })
-  }
-
-  //no need
-  // storeCategories.get = (id) => {
-  //   // angular.copy(storage.getCategory(id), storeCategories.currentCategory)
-  //   return $http.get('/categories/' + id)
-  //     .then(success => angular.copy(success.data, storeCategories.currentCategory))
-  // }
-
-  storeCategories.create = (category) => {
-    category.id = storeCategories.generateId();
-
-    storage.saveCategory(category);
-    storeCategories.categories.push(category)
-
-    $http.post('users/' + user.info._id + '/categories', category)
-      .then(success => {
-        storeCategories.categories.push(success.data)
-      }, error => console.log(error))
-  }
-
-  storeCategories.delete = id => {
-    storage.deleteCategory(storeCategories.currentCategory.id);
-    storeCategories.deleteElement(storeCategories.categories, id);
-    // $location.path('/home');
-    $http.delete('/categories/' + id)
-      .then(success => {
-        storeCategories.deleteElement(storeCategories.categories, id);
-
-        // storeCategories.setDefaultCurrentCategory();
-        $location.path('/home');
+        angular.copy(success.data.categories, serviceCategories.categories);
+        storage.init();
       })
   }
-  //
-  // storeCategories.setDefaultCurrentCategory = () => {
-  //   if (storeCategories.categories.length) {
-  //     storeCategories.setCurrentCategory(storeCategories.categories[0].id)
-  //   } else {
-  //     angular.copy({}, storeCategories.currentCategory);
-  //     $location.path('/home');
-  //   }
-  // }
 
+  serviceCategories.setCurrentCategory = (id) => {
+    let currentCategory = serviceCategories.getCategory(id);
+    if (currentCategory != -1) {
+      angular.copy(currentCategory, serviceCategories.currentCategory);
+    } else {
+      $location.path('/home')
+    }
+  }
 
-  storeCategories.generateId = () => {
+  serviceCategories.create = (category) => {
+    category.id = serviceCategories.generateId();
+    serviceCategories.categories.push(category);
+
+    $http.post('/users/' + user.info._id + '/categories', category)
+      .then(success => {
+        console.log('create')
+        serviceCategories.updateAll();
+      }, error => {
+        storage.categories.create.push(category);
+        storage.update()
+
+      })
+  }
+
+  serviceCategories.update = (id) => {
+    $http.put('/categories / ' + id, serviceCategories.currentCategory)
+      .then(success => {
+        console.log('update')
+        serviceCategories.updateAll();
+      }, error => {
+        storage.categories.update.push(id);
+        storage.update()
+
+      })
+  }
+
+  serviceCategories.delete = id => {
+    serviceCategories.deleteElement(serviceCategories.categories, id);
+
+    $http.delete('/users/' + user.info._id + '/categories/' + id)
+      .then(success => {
+        console.log('delete')
+        serviceCategories.updateAll();
+      }, error => {
+        storage.categories.delete.push(id);
+        storage.update()
+
+      })
+
+    $location.path('/home');
+  }
+
+  serviceCategories.generateId = () => {
     var currentDate = (new Date()).valueOf().toString();
     var random = Math.random().toString().slice(2);
     return currentDate + random;
   }
 
-
-  storeCategories.updateCategory = (id) => {
-    storage.saveCategory(storeCategories.currentCategory);
-
-    $http.put('/categories/' + id, storeCategories.currentCategory)
-      .then(success => {
-        storage.deleteCategory(storeCategories.currentCategory.id)
-      }, error => console.log(error))
+  serviceCategories.updateAll = () => {
+    serviceCategories.checkCreate(storage.categories.create)
+    serviceCategories.checkUpdate(storage.categories.update)
+    serviceCategories.checkDelete(storage.categories.delete)
   }
 
-  storeCategories.addTodo = (id, todo) => {
-    storeCategories.currentCategory.todos.push(todo)
-    return storeCategories.updateCategory(storeCategories.currentCategory.id)
+  serviceCategories.checkCreate = (list) => {
+    if (list.length) {
+      list.forEach(el => {
+        storage.categories.create.remove(el.id);
+        categoriesService.create(el);
+      })
+    }
+    storage.update()
   }
 
-  storeCategories.deleteTodo = (category, todo) => {
-    storeCategories.deleteElement(category.todos, todo.id)
-    return storeCategories.updateCategory(category.id)
+  serviceCategories.checkUpdate = (ids) => {
+    if (ids.length) {
+      ids.forEach(id => {
+        storage.categories.update.remove(id);
 
-
-    /// no need
-
-    // return $http.delete('/categories/' + category.id + '/todos/' + todo.id)
-    //   .then(success => {
-    //     console.log('success', success)
-    //   }, error => console.log('error', error))
+        categoriesService.update(id);
+      })
+    }
+    storage.update()
   }
 
-  storeCategories.deleteElement = (list, id) => {
+  serviceCategories.checkDelete = (ids) => {
+    if (ids.length) {
+      ids.forEach(id => {
+        storage.categories.delete.remove(id);
+
+        categoriesService.delete(id);
+      })
+    }
+    storage.update()
+  }
+
+  serviceCategories.addTodo = (id, todo) => {
+    serviceCategories.currentCategory.todos.push(todo)
+    serviceCategories.update(serviceCategories.currentCategory.id)
+  }
+
+  serviceCategories.deleteTodo = (category, todo) => {
+    serviceCategories.deleteElement(category.todos, todo.id)
+    serviceCategories.update(category.id)
+  }
+
+  serviceCategories.getCategory = (id) => {
+    for (let i = 0; i < serviceCategories.categories.length; i++) {
+      if (serviceCategories.categories[i].id === id) {
+        return serviceCategories.categories[i];
+      }
+    }
+    return -1;
+  }
+
+  serviceCategories.deleteElement = (list, id) => {
     let deleteId;
     list.forEach((el, index) => {
       if (el.id === id) {
@@ -125,5 +140,5 @@ export default function categoriesService($http, user, $location, storage) {
     list.splice(deleteId, 1);
   }
 
-  return storeCategories;
+  return serviceCategories;
 }
