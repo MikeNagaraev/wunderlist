@@ -21,9 +21,7 @@ UserSchema.methods.setPassword = function(password) {
 UserSchema.methods.generateHash = function(password) {}
 
 UserSchema.methods.validPassword = function(password) {
-  console.log('passw', password)
   var truePassword = bcrypt.compare(password, this.password);
-  console.log('true', truePassword)
   return truePassword;
 }
 

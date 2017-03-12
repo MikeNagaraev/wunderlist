@@ -39,23 +39,6 @@
         color: #000000;
       }
     }
-
-    .submit-panel {
-      text-align: center;
-    }
-
-    .btn-login {
-      font-size: 1.5rem;
-      border: none;
-      width: 8rem;
-      background: #5FBEDB;
-      height: 3rem;
-      outline: none;
-
-      &:hover {
-        background: darken(#5FBEDB, 5%);
-      }
-    }
   }
 
   &-footer {
@@ -63,11 +46,60 @@
 
     p {
       margin: 2rem 1rem 0 0;
+      font-size: 1.3rem;
 
       a {
         font-weight: bold;
       }
     }
+  }
+}
+
+.submit-panel {
+  text-align: center;
+}
+
+.default-button {
+  font-size: 1.5rem;
+  display: inline-block;
+  border: none;
+  width: 8rem;
+  background: #5FBEDB;
+  height: 3rem;
+  line-height: 3rem;
+  outline: none;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0;
+  vertical-align: middle;
+
+  &--back {
+    color: #5FBEDB;
+    background: #ffffff;
+
+    &:hover {
+      background: darken(#ffffff, 6%) !important;
+    }
+  }
+
+  &:hover {
+    text-decoration: none;
+    background: darken(#5FBEDB, 5%);
+  }
+}
+
+.btn-login {
+  font-size: 1.5rem;
+  display: inline-block;
+  border: none;
+  width: 8rem;
+  background: #5FBEDB;
+  height: 3rem;
+  outline: none;
+  color: #ffffff;
+
+  &:hover {
+    background: darken(#5FBEDB, 5%);
   }
 }
 
@@ -107,12 +139,19 @@
     background: rgba(#545658,.8);
     color: #ffffff;
 
+    .user-profile-group {
+      margin: 2rem 0;
+    }
+
+    .edit-profile {}
+
     &-content {
       margin-left: 4rem;
+      padding-top: 4rem;
     }
 
     .profile-key {
-      font-size: 3rem;
+      font-size: 2rem;
       font-family: Comic Sans;
     }
 

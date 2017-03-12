@@ -7,7 +7,6 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   serviceCategories.setAll = () => {
-    console.log('kek')
     $http.get('users/' + user.info._id)
       .then(success => {
         angular.copy(success.data.categories, serviceCategories.categories);
@@ -16,55 +15,60 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   serviceCategories.setCurrentCategory = (id) => {
-    let currentCategory = serviceCategories.getCategory(id);
-    if (currentCategory != -1) {
-      angular.copy(currentCategory, serviceCategories.currentCategory);
-    } else {
-      $location.path('/home')
-    }
+    // let currentCategory = serviceCategories.getCategory(id);
+    // if (currentCategory != -1) {
+    $http.get('/users/' + user.info._id + '/categories/' + id)
+      .then(success =>
+        angular.copy(success.data, serviceCategories.currentCategory))
+    // angular.copy(currentCategory, serviceCategories.currentCategory)
+    // } else {
+    //   $location.path('/home')
+    // }
   }
 
   serviceCategories.create = (category) => {
     category.id = serviceCategories.generateId();
     serviceCategories.categories.push(category);
+    serviceCategories.createInBD(category);
+  }
 
+  serviceCategories.createInBD = (category) => {
     $http.post('/users/' + user.info._id + '/categories', category)
       .then(success => {
-        console.log('create')
-        serviceCategories.updateAll();
+        // serviceCategories.updateAll();
       }, error => {
         storage.categories.create.push(category);
         storage.update()
-
       })
   }
 
   serviceCategories.update = (id) => {
-    $http.put('/categories / ' + id, serviceCategories.currentCategory)
+    $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory)
       .then(success => {
         console.log('update')
-        serviceCategories.updateAll();
+        // serviceCategories.updateAll();
       }, error => {
         storage.categories.update.push(id);
         storage.update()
-
       })
   }
 
   serviceCategories.delete = id => {
-    serviceCategories.deleteElement(serviceCategories.categories, id);
+    serviceCategories.deleteElement(serviceCategories.categories, id)
 
+    serviceCategories.deleteDB(id);
+
+  }
+
+  serviceCategories.deleteDB = id => {
     $http.delete('/users/' + user.info._id + '/categories/' + id)
       .then(success => {
-        console.log('delete')
-        serviceCategories.updateAll();
+        $location.path('/home');
+        // serviceCategories.updateAll();
       }, error => {
         storage.categories.delete.push(id);
-        storage.update()
-
+        // storage.update()
       })
-
-    $location.path('/home');
   }
 
   serviceCategories.generateId = () => {
@@ -82,8 +86,8 @@ export default function categoriesService($http, user, $location, storage) {
   serviceCategories.checkCreate = (list) => {
     if (list.length) {
       list.forEach(el => {
-        storage.categories.create.remove(el.id);
-        categoriesService.create(el);
+        storage.remove(storage.categories.create, el.id);
+        serviceCategories.createInBD(el);
       })
     }
     storage.update()
@@ -92,9 +96,9 @@ export default function categoriesService($http, user, $location, storage) {
   serviceCategories.checkUpdate = (ids) => {
     if (ids.length) {
       ids.forEach(id => {
-        storage.categories.update.remove(id);
+        storage.remove(storage.categories.update, id);
 
-        categoriesService.update(id);
+        serviceCategories.update(id);
       })
     }
     storage.update()
@@ -103,9 +107,9 @@ export default function categoriesService($http, user, $location, storage) {
   serviceCategories.checkDelete = (ids) => {
     if (ids.length) {
       ids.forEach(id => {
-        storage.categories.delete.remove(id);
+        storage.remove(storage.categories.delete, id);
 
-        categoriesService.delete(id);
+        serviceCategories.deleteDB(id);
       })
     }
     storage.update()

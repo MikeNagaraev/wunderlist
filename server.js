@@ -4,13 +4,10 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('passport');
 
-require('./server/db/models/Todo');
 require('./server/db/models/User');
 require('./server/db/models/Category');
 require('./server/config/passport');
 
-var index = require('./server/routes/index');
-var todos = require('./server/routes/todos');
 var categories = require('./server/routes/categories');
 var auth = require('./server/routes/auth');
 var user = require('./server/routes/user');
@@ -29,8 +26,6 @@ app.use(express.static(path.join(__dirname, 'app')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', index);
-app.use('/', todos);
 app.use('/', auth);
 app.use('/', categories);
 app.use('/', user);

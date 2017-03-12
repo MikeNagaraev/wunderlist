@@ -32,17 +32,26 @@ export function selectableDirective($scope, $element) {
 export function categoryOptions($scope, $element) {
   return {
     controller: ($scope, $element) => {
-      $scope.showOptions = () => {
-        let toggledOption = $element.next('.category-options-container');
-        if ($(toggledOption).css('display') === 'block') {
-          $(toggledOption).toggle('slideDown');
+      $scope.toggleOptions = () => {
+        if ($element.next('.category-options-container').css('display') === 'block') {
+          hideOptions();
         } else {
-          $('.category-options-container').hide();
-          $(toggledOption).toggle();
+          showOptions();
         }
       }
 
-      $element.click($scope.showOptions);
+      const hideOptions = () => {
+        let toggledOption = $element.next('.category-options-container');
+        $(toggledOption).toggle('slideDown');
+      }
+
+      const showOptions = () => {
+        let toggledOption = $element.next('.category-options-container');
+        $('.category-options-container').hide();
+        $(toggledOption).toggle('slideDown');
+      }
+
+      $element.click($scope.toggleOptions);
     }
   }
 }
@@ -91,11 +100,14 @@ export function toggleDirective($scope, $element) {
   return {
     controller: ($scope, $element) => {
       $scope.toggleAside = () => {
+        $('.category-block-title').toggle();
         if ($element.hasClass('opened')) {
+          $('.categories-list a').css('top', '50px');
           $('.home-aside').css('width', '50px');
           $element.removeClass('opened');
           $scope.toggleHomeContainer(false);
         } else {
+          $('.categories-list a').css('top', '0px');
           $element.addClass('opened');
           $('.home-aside').css('width', '15%');
           $scope.toggleHomeContainer(true);
@@ -114,21 +126,3 @@ export function toggleDirective($scope, $element) {
     }
   }
 }
-
-
-// .directive("selectableDirective", function() {})
-//   .directive("categoryOptions", () => {
-//
-//   })
-//   .directive("categoryToggle", () => {
-//
-//   })
-//   .directive("modalShow", () => {
-//
-//   })
-//   .directive("modalHide", () => {
-//
-//   })
-//   .directive("toggleDirective", () => {
-//
-//   })

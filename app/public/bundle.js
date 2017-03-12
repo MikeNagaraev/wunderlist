@@ -4809,24 +4809,13 @@ function authServise($http, $window, $location, $state, storage) {
   var auth = {};
 
   auth.isLoggedIn = function () {
-    console.log(storage);
     var user = storage.getUser();
     if (user && user != 'undefined') {
-      console.log('true');
       return true;
     } else {
       return false;
     }
   };
-  //
-  // auth.currentUser = function() {
-  //   if (auth.isLoggedIn()) {
-  //     var token = auth.getToken();
-  //     var payload = JSON.parse($window.atob(token.split('.')[1]));
-  //
-  //     return payload.name;
-  //   }
-  // }
 
   auth.logFacebook = function () {
     // $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
@@ -4842,7 +4831,6 @@ function authServise($http, $window, $location, $state, storage) {
   };
 
   auth.logIn = function (user) {
-    console.log(user);
     return $http.post('/login', user).then(function (success) {
       storage.saveUser(success.data.user);
       $state.go('home');
@@ -4878,6 +4866,7 @@ function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
+  $scope.selected = '-priority';
   this.addCategory = function () {
     if (_this.title != "" || _this.title) {
       categoriesService.create({
@@ -4958,7 +4947,6 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.setAll = function () {
-    console.log('kek');
     $http.get('users/' + user.info._id).then(function (success) {
       angular.copy(success.data.categories, serviceCategories.categories);
       storage.init();
@@ -4966,21 +4954,26 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.setCurrentCategory = function (id) {
-    var currentCategory = serviceCategories.getCategory(id);
-    if (currentCategory != -1) {
-      angular.copy(currentCategory, serviceCategories.currentCategory);
-    } else {
-      $location.path('/home');
-    }
+    // let currentCategory = serviceCategories.getCategory(id);
+    // if (currentCategory != -1) {
+    $http.get('/users/' + user.info._id + '/categories/' + id).then(function (success) {
+      return angular.copy(success.data, serviceCategories.currentCategory);
+    });
+    // angular.copy(currentCategory, serviceCategories.currentCategory)
+    // } else {
+    //   $location.path('/home')
+    // }
   };
 
   serviceCategories.create = function (category) {
     category.id = serviceCategories.generateId();
     serviceCategories.categories.push(category);
+    serviceCategories.createInBD(category);
+  };
 
+  serviceCategories.createInBD = function (category) {
     $http.post('/users/' + user.info._id + '/categories', category).then(function (success) {
-      console.log('create');
-      serviceCategories.updateAll();
+      // serviceCategories.updateAll();
     }, function (error) {
       storage.categories.create.push(category);
       storage.update();
@@ -4988,9 +4981,9 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.update = function (id) {
-    $http.put('/categories / ' + id, serviceCategories.currentCategory).then(function (success) {
+    $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory).then(function (success) {
       console.log('update');
-      serviceCategories.updateAll();
+      // serviceCategories.updateAll();
     }, function (error) {
       storage.categories.update.push(id);
       storage.update();
@@ -5000,15 +4993,17 @@ function categoriesService($http, user, $location, storage) {
   serviceCategories['delete'] = function (id) {
     serviceCategories.deleteElement(serviceCategories.categories, id);
 
+    serviceCategories.deleteDB(id);
+  };
+
+  serviceCategories.deleteDB = function (id) {
     $http['delete']('/users/' + user.info._id + '/categories/' + id).then(function (success) {
-      console.log('delete');
-      serviceCategories.updateAll();
+      $location.path('/home');
+      // serviceCategories.updateAll();
     }, function (error) {
       storage.categories['delete'].push(id);
-      storage.update();
+      // storage.update()
     });
-
-    $location.path('/home');
   };
 
   serviceCategories.generateId = function () {
@@ -5026,8 +5021,8 @@ function categoriesService($http, user, $location, storage) {
   serviceCategories.checkCreate = function (list) {
     if (list.length) {
       list.forEach(function (el) {
-        storage.categories.create.remove(el.id);
-        categoriesService.create(el);
+        storage.remove(storage.categories.create, el.id);
+        serviceCategories.createInBD(el);
       });
     }
     storage.update();
@@ -5036,9 +5031,9 @@ function categoriesService($http, user, $location, storage) {
   serviceCategories.checkUpdate = function (ids) {
     if (ids.length) {
       ids.forEach(function (id) {
-        storage.categories.update.remove(id);
+        storage.remove(storage.categories.update, id);
 
-        categoriesService.update(id);
+        serviceCategories.update(id);
       });
     }
     storage.update();
@@ -5047,9 +5042,9 @@ function categoriesService($http, user, $location, storage) {
   serviceCategories.checkDelete = function (ids) {
     if (ids.length) {
       ids.forEach(function (id) {
-        storage.categories['delete'].remove(id);
+        storage.remove(storage.categories['delete'], id);
 
-        categoriesService['delete'](id);
+        serviceCategories.deleteDB(id);
       });
     }
     storage.update();
@@ -5185,7 +5180,7 @@ function storageService($window) {
   storage.remove = function (list, id) {
     var pos = storage.getIdInList(list, id);
     if (pos >= 0) {
-      storage.categories.splice(pos, 1);
+      list.splice(pos, 1);
     } else {
       return -1;
     }
@@ -5309,9 +5304,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = userService;
-userService.$inject = ['$http', 'auth', 'storageService'];
+userService.$inject = ['$http', 'auth', 'storageService', '$location'];
 
-function userService($http, auth, storage) {
+function userService($http, auth, storage, $location) {
   var user = {
     info: {} //cause we loose methods
   };
@@ -5329,7 +5324,11 @@ function userService($http, auth, storage) {
   };
 
   user.updateUser = function () {
-    $http.put('/users/' + user.info._id, user.info);
+    $http.put('/users/' + user.info._id, user.info).then(function (success) {
+      angular.copy(success.data, user.info);
+      user.saveUser(user.info);
+      $location.path('/profile');
+    });
   };
 
   return user;
@@ -5416,7 +5415,15 @@ function MainConfig($stateProvider, $urlRouterProvider) {
     controllerAs: 'user'
   };
 
-  $stateProvider.state(home).state(categories).state(authIndex).state(login).state(logFacebook).state(profile).state(register);
+  var editProfile = {
+    name: 'editProfile',
+    url: '/profile/edit',
+    templateUrl: '../components/user/edit.html',
+    controller: 'UserController',
+    controllerAs: 'user'
+  };
+
+  $stateProvider.state(home).state(categories).state(authIndex).state(login).state(logFacebook).state(profile).state(editProfile).state(register);
 
   $urlRouterProvider.otherwise('home');
 }
@@ -5475,17 +5482,26 @@ function selectableDirective($scope, $element) {
 function categoryOptions($scope, $element) {
   return {
     controller: function controller($scope, $element) {
-      $scope.showOptions = function () {
-        var toggledOption = $element.next('.category-options-container');
-        if ($(toggledOption).css('display') === 'block') {
-          $(toggledOption).toggle('slideDown');
+      $scope.toggleOptions = function () {
+        if ($element.next('.category-options-container').css('display') === 'block') {
+          hideOptions();
         } else {
-          $('.category-options-container').hide();
-          $(toggledOption).toggle();
+          showOptions();
         }
       };
 
-      $element.click($scope.showOptions);
+      var hideOptions = function hideOptions() {
+        var toggledOption = $element.next('.category-options-container');
+        $(toggledOption).toggle('slideDown');
+      };
+
+      var showOptions = function showOptions() {
+        var toggledOption = $element.next('.category-options-container');
+        $('.category-options-container').hide();
+        $(toggledOption).toggle('slideDown');
+      };
+
+      $element.click($scope.toggleOptions);
     }
   };
 }
@@ -5534,11 +5550,14 @@ function toggleDirective($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.toggleAside = function () {
+        $('.category-block-title').toggle();
         if ($element.hasClass('opened')) {
+          $('.categories-list a').css('top', '50px');
           $('.home-aside').css('width', '50px');
           $element.removeClass('opened');
           $scope.toggleHomeContainer(false);
         } else {
+          $('.categories-list a').css('top', '0px');
           $element.addClass('opened');
           $('.home-aside').css('width', '15%');
           $scope.toggleHomeContainer(true);
@@ -5557,23 +5576,6 @@ function toggleDirective($scope, $element) {
     }
   };
 }
-
-// .directive("selectableDirective", function() {})
-//   .directive("categoryOptions", () => {
-//
-//   })
-//   .directive("categoryToggle", () => {
-//
-//   })
-//   .directive("modalShow", () => {
-//
-//   })
-//   .directive("modalHide", () => {
-//
-//   })
-//   .directive("toggleDirective", () => {
-//
-//   })
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),

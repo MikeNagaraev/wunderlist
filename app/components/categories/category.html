@@ -16,20 +16,32 @@
         <div class="col-md-2 priority-content">
           <h5 class="priority-title">
             Priority
-            <input type="number" min="1" max="5" class="form-control priority-select" ng-model="category.todoPriority">
+            <input type="number" min="1" max="5" class="priority-select" ng-model="category.todoPriority">
           </h5>
+        </div>
+        <div class="col-md-2">
+
         </div>
         <input type="hidden" id="createdAt" ng-model="category.todoCreatedAt">
         <input type="hidden" id="expire" ng-model="category.todoExpiredAt">
       </div>
     </div>
   </form>
+  <div class="sort-priority" ng-show="category.currentCategory.todos.length">
+    <h5>
+      Sort by priority:
+      <select ng-model="selected">
+        <option value="-priority">High</option>
+        <option value="priority">Low</option>
+      </select>
+    </h5>
+  </div>
   <div>
-    <ul sortable-list class="todos-container">
-      <li class="todo-item" ng-repeat="todo in category.currentCategory.todos track by $index">
+    <ul class="todos-container">
+      <li class="todo-item" ng-repeat="todo in category.currentCategory.todos | orderBy:selected ">
         <span class="glyphicon glyphicon-remove remove-icon" ng-click="category.deleteTodo(todo)"></span>
         <span class="todo-title">{{todo.title}}</span>
-        <span class="todo-priority">Priority: {{todo.priority}}</span>
+        <span class="todo-priority pull-right">Priority: {{todo.priority}}</span>
       </li>
     </ul>
   </div>

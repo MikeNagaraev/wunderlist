@@ -1,6 +1,6 @@
-userService.$inject = ['$http', 'auth', 'storageService']
+userService.$inject = ['$http', 'auth', 'storageService', '$location']
 
-export default function userService($http, auth, storage) {
+export default function userService($http, auth, storage, $location) {
   const user = {
     info: {} //cause we loose methods
   }
@@ -19,6 +19,11 @@ export default function userService($http, auth, storage) {
 
   user.updateUser = () => {
     $http.put('/users/' + user.info._id, user.info)
+      .then(success => {
+        angular.copy(success.data, user.info)
+        user.saveUser(user.info)
+        $location.path('/profile')
+      })
   }
 
   return user;

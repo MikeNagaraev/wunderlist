@@ -66,6 +66,14 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     controllerAs: 'user'
   }
 
+  let editProfile = {
+    name: 'editProfile',
+    url: '/profile/edit',
+    templateUrl: '../components/user/edit.html',
+    controller: 'UserController',
+    controllerAs: 'user'
+  }
+
   $stateProvider
     .state(home)
     .state(categories)
@@ -73,6 +81,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     .state(login)
     .state(logFacebook)
     .state(profile)
+    .state(editProfile)
     .state(register)
 
   $urlRouterProvider.otherwise('home');

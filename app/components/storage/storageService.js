@@ -45,7 +45,7 @@ export default function storageService($window) {
   storage.remove = (list, id) => {
     let pos = storage.getIdInList(list, id);
     if (pos >= 0) {
-      storage.categories.splice(pos, 1);
+      list.splice(pos, 1);
     } else {
       return -1;
     }

@@ -4,6 +4,7 @@ export default function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
+  $scope.selected = '-priority';
   this.addCategory = () => {
     if (this.title != "" || this.title) {
       categoriesService.create({
@@ -14,6 +15,7 @@ export default function CategoriesController($scope, categoriesService) {
       return;
     }
   };
+
 
   this.setCurrentCategory = (category) => {
     categoriesService.setCurrentCategory(category.id)

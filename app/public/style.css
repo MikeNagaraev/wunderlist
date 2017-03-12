@@ -38,7 +38,8 @@ body {
     list-style: none;
     padding: 0;
     overflow-y: auto;
-    max-height: 85%; }
+    max-height: 80%;
+    width: 100%; }
     .home-container .todos-container .todo-item {
       -webkit-user-select: none;
       height: 40px;
@@ -49,9 +50,16 @@ body {
       padding: 10px;
       border-radius: 3px;
       font-size: 1.4rem;
+      cursor: pointer;
       margin-top: 10px; }
       .home-container .todos-container .todo-item .remove-icon {
-        cursor: pointer; }
+        cursor: pointer;
+        vertical-align: middle; }
+      .home-container .todos-container .todo-item .todo-title {
+        vertical-align: middle; }
+      .home-container .todos-container .todo-item .todo-priority {
+        vertical-align: middle;
+        margin-right: 6rem; }
   .home-container .add-todo {
     -webkit-user-select: none;
     left: 50%;
@@ -107,19 +115,15 @@ body {
     position: absolute;
     left: 0;
     bottom: 0;
-    overflow: hidden;
     background: #5FBEDB;
     font-size: 1.7rem;
-    cursor: pointer; }
+    line-height: 50px;
+    overflow: hidden; }
     .home-aside .add-category p {
-      position: absolute;
-      margin: 0;
+      display: inline-block;
+      padding-left: 2rem;
       color: #ffffff;
-      top: 50%;
-      left: 20px;
-      transform: translateY(-50%); }
-      .home-aside .add-category p span {
-        padding-right: 20px; }
+      height: 100%; }
   .home-aside-header {
     height: 50px;
     width: 100%;
@@ -161,6 +165,19 @@ body {
       width: 50px;
       height: 100%;
       float: left; }
+      .home-aside-body-burger-line .add-category-icon {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-size: 2rem;
+        background: #4ab6d6;
+        cursor: pointer; }
+        .home-aside-body-burger-line .add-category-icon:hover {
+          background: #35add2; }
+        .home-aside-body-burger-line .add-category-icon span {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%); }
     .home-aside-body-container {
       width: calc(100% - $burger-line-width);
       height: 100%; }
@@ -198,8 +215,21 @@ body {
     transform: translateY(-50%); }
   .priority-content .priority-select {
     color: #000000;
-    width: 6rem;
+    border-radius: 0.5rem;
+    width: 3.5rem;
+    height: 2.5rem;
+    padding-left: 0.5rem;
     display: inline-block; }
+
+.sort-priority {
+  width: 100%; }
+  .sort-priority h5 {
+    margin: 0 0 1rem;
+    float: right;
+    font-size: 1.5rem; }
+  .sort-priority select {
+    background: #668964;
+    color: #ffffff; }
 
 .categories-list {
   width: 100%; }
@@ -274,23 +304,50 @@ body {
       outline: none;
       border-radius: 3px;
       color: #000000; }
-  .auth-container-body .submit-panel {
-    text-align: center; }
-  .auth-container-body .btn-login {
-    font-size: 1.5rem;
-    border: none;
-    width: 8rem;
-    background: #5FBEDB;
-    height: 3rem;
-    outline: none; }
-    .auth-container-body .btn-login:hover {
-      background: #4ab6d6; }
   .auth-container-footer {
     text-align: right; }
     .auth-container-footer p {
-      margin: 2rem 1rem 0 0; }
+      margin: 2rem 1rem 0 0;
+      font-size: 1.3rem; }
       .auth-container-footer p a {
         font-weight: bold; }
+
+.submit-panel {
+  text-align: center; }
+
+.default-button {
+  font-size: 1.5rem;
+  display: inline-block;
+  border: none;
+  width: 8rem;
+  background: #5FBEDB;
+  height: 3rem;
+  line-height: 3rem;
+  outline: none;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0;
+  vertical-align: middle; }
+  .default-button--back {
+    color: #5FBEDB;
+    background: #ffffff; }
+    .default-button--back:hover {
+      background: #f0f0f0 !important; }
+  .default-button:hover {
+    text-decoration: none;
+    background: #4ab6d6; }
+
+.btn-login {
+  font-size: 1.5rem;
+  display: inline-block;
+  border: none;
+  width: 8rem;
+  background: #5FBEDB;
+  height: 3rem;
+  outline: none;
+  color: #ffffff; }
+  .btn-login:hover {
+    background: #4ab6d6; }
 
 .profile-container {
   padding: 0; }
@@ -320,10 +377,13 @@ body {
     height: 40rem;
     background: rgba(84, 86, 88, 0.8);
     color: #ffffff; }
+    .profile-container .profile-body .user-profile-group {
+      margin: 2rem 0; }
     .profile-container .profile-body-content {
-      margin-left: 4rem; }
+      margin-left: 4rem;
+      padding-top: 4rem; }
     .profile-container .profile-body .profile-key {
-      font-size: 3rem;
+      font-size: 2rem;
       font-family: Comic Sans; }
     .profile-container .profile-body .profile-value {
       text-shadow: 2px 2px 2px #000000;

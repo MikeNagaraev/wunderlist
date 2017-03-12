@@ -12,8 +12,6 @@ var CategorySchema = new mongoose.Schema({
       type: Boolean,
       default: false
     }
-    // type: mongoose.Schema.Types.ObjectId,
-    // ref: 'Todo'
   }],
   user: {
     type: mongoose.Schema.Types.ObjectId,

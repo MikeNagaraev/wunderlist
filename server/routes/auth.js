@@ -4,17 +4,6 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var User = require('../db/models/User');
 
-//
-// router.post('/login', passport.authenticate('local-login', {
-//   successRedirect: '/profile',
-//   failureRedirect: '/login'
-// }));
-//
-// router.post('/register', passport.authenticate('local-signup', {
-//   successRedirect: '/home',
-//   failureRedirect: '/register'
-// }));
-
 router.get('/auth/facebook', passport.authenticate('facebook', {
   scope: ['email']
 }));

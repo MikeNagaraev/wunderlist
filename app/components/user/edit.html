@@ -1,0 +1,39 @@
+<div class="container profile-container">
+  <div class="profile-navbar">
+    <a class="profile-navbar-item" ui-sref="home">Home</a>
+    <div class="pull-right">
+      <div class="profile-navbar-item" ui-sref="editProfile">
+        Edit profile
+      </div>
+      <div class="profile-navbar-item" ng-click="user.logOut()">
+        Log out
+      </div>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="profile-body-content">
+      <form ng-submit="user.update()" class="edit-profile form-group">
+        <div class="row user-profile-group">
+          <div class="col-md-3">
+            <span class="profile-key">Username</span>
+          </div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" ng-model="user.user.name">
+          </div>
+        </div>
+        <div class="row user-profile-group">
+          <div class="col-md-3">
+            <span class="profile-key">Email</span>
+          </div>
+          <div class="col-md-5">
+            <input type="email" class="form-control" ng-model="user.user.email">
+          </div>
+        </div>
+        <div class="submit-panel">
+          <button type="submit" class="default-button">Save</button>
+          <a ui-sref="profile" class="default-button default-button--back">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

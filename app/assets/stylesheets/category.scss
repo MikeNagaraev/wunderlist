@@ -34,8 +34,26 @@ $selected-item-color: #C0E7F3;
 
   .priority-select {
     color: #000000;
-    width: 6rem;
+    border-radius: 0.5rem;
+    width: 3.5rem;
+    height: 2.5rem;
+    padding-left: 0.5rem;
     display: inline-block;
+  }
+}
+
+.sort-priority {
+  width: 100%;
+
+  h5 {
+    margin: 0 0 1rem;
+    float: right;
+    font-size: 1.5rem;
+  }
+
+  select {
+    background: $main-first-color;
+    color: #ffffff;
   }
 }
 
