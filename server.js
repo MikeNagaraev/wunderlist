@@ -3,12 +3,12 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('passport');
+var favicon = require('serve-favicon')
 
 require('./server/db/models/User');
 require('./server/db/models/Category');
 require('./server/config/passport');
 
-var categories = require('./server/routes/categories');
 var auth = require('./server/routes/auth');
 var user = require('./server/routes/user');
 
@@ -22,12 +22,12 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(express.static(path.join(__dirname, 'app')));
+app.use(favicon(path.join(__dirname, 'favicon.ico')))
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', auth);
-app.use('/', categories);
 app.use('/', user);
 
 app.set('port', (process.env.PORT || 5000));

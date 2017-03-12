@@ -25,6 +25,7 @@ import {
   categoryOptions,
   categoryToggle,
   modalShow,
+  modalEdit,
   modalHide,
   toggleDirective,
   sortableList
@@ -62,6 +63,7 @@ angular.module('wunderlist', [angularRouter])
   .directive('categoryOptions', () => new categoryOptions())
   .directive('categoryToggle', () => new categoryToggle())
   .directive('modalShow', () => new modalShow())
+  .directive('modalEdit', () => new modalEdit())
   .directive('modalHide', () => new modalHide())
   .directive('toggleDirective', () => new toggleDirective())
   .directive('sortableList', () => new sortableList())

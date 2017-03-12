@@ -1,7 +1,7 @@
 @import "variables";
 $selected-item-color: #C0E7F3;
 
-#modal-category {
+.modal-category {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -20,6 +20,10 @@ $selected-item-color: #C0E7F3;
   .modal-body {}
 
   .modal-footer {}
+}
+
+.todos-amount {
+  font-size: 1.6rem;
 }
 
 .priority-content {

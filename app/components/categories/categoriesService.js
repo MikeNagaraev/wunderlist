@@ -43,6 +43,7 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   serviceCategories.update = (id) => {
+    serviceCategories.categories[serviceCategories.getPosCategory(id)].title = serviceCategories.currentCategory.title;
     $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory)
       .then(success => {
         console.log('update')
@@ -129,6 +130,15 @@ export default function categoriesService($http, user, $location, storage) {
     for (let i = 0; i < serviceCategories.categories.length; i++) {
       if (serviceCategories.categories[i].id === id) {
         return serviceCategories.categories[i];
+      }
+    }
+    return -1;
+  }
+
+  serviceCategories.getPosCategory = id => {
+    for (let i = 0; i < serviceCategories.categories.length; i++) {
+      if (serviceCategories.categories[i].id === id) {
+        return i;
       }
     }
     return -1;

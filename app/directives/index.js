@@ -24,6 +24,10 @@ export function selectableDirective($scope, $element) {
         $('.category-item').removeClass('selected');
       }
 
+      $('.category-options-container li').click(() => {
+        $('.category-options-container').hide('slideDown')
+      })
+
       $element.click($scope.selectCategory);
     }
   }
@@ -83,12 +87,25 @@ export function modalShow($scope, $element) {
   }
 }
 
+export function modalEdit($scope, $element) {
+  return {
+    controller: ($scope, $element) => {
+      $scope.showCategoryWindow = () => {
+        if (!$('#modal-category-edit').hasClass('opened')) {
+          $('#modal-category-edit').addClass('opened').show();
+        }
+      }
+      $element.click($scope.showCategoryWindow)
+    }
+  }
+}
+
 export function modalHide($scope, $element) {
   return {
     controller: ($scope, $element) => {
       $scope.hideCategoryWindow = () => {
-        if ($('#modal-category').hasClass('opened')) {
-          $('#modal-category').removeClass('opened').hide();
+        if ($element.closest($('.modal-category')).hasClass('opened')) {
+          $element.closest($('.modal-category')).removeClass('opened').hide();
         }
       }
       $element.click($scope.hideCategoryWindow);

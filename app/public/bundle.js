@@ -4886,7 +4886,9 @@ function CategoriesController($scope, categoriesService) {
     categoriesService['delete'](category.id);
   };
 
-  this.editCategory = function (category) {};
+  this.update = function (id) {
+    categoriesService.update(id);
+  };
 
   this.addTodo = function () {
     if (!_this.todoTitle || _this.todoTitle == '') {
@@ -4981,6 +4983,7 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.update = function (id) {
+    serviceCategories.categories[serviceCategories.getPosCategory(id)].title = serviceCategories.currentCategory.title;
     $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory).then(function (success) {
       console.log('update');
       // serviceCategories.updateAll();
@@ -5064,6 +5067,15 @@ function categoriesService($http, user, $location, storage) {
     for (var i = 0; i < serviceCategories.categories.length; i++) {
       if (serviceCategories.categories[i].id === id) {
         return serviceCategories.categories[i];
+      }
+    }
+    return -1;
+  };
+
+  serviceCategories.getPosCategory = function (id) {
+    for (var i = 0; i < serviceCategories.categories.length; i++) {
+      if (serviceCategories.categories[i].id === id) {
+        return i;
       }
     }
     return -1;
@@ -5445,6 +5457,7 @@ exports.selectableDirective = selectableDirective;
 exports.categoryOptions = categoryOptions;
 exports.categoryToggle = categoryToggle;
 exports.modalShow = modalShow;
+exports.modalEdit = modalEdit;
 exports.modalHide = modalHide;
 exports.toggleDirective = toggleDirective;
 
@@ -5473,6 +5486,10 @@ function selectableDirective($scope, $element) {
       $scope.resetSelectedCategories = function () {
         $('.category-item').removeClass('selected');
       };
+
+      $('.category-options-container li').click(function () {
+        $('.category-options-container').hide('slideDown');
+      });
 
       $element.click($scope.selectCategory);
     }
@@ -5533,12 +5550,25 @@ function modalShow($scope, $element) {
   };
 }
 
+function modalEdit($scope, $element) {
+  return {
+    controller: function controller($scope, $element) {
+      $scope.showCategoryWindow = function () {
+        if (!$('#modal-category-edit').hasClass('opened')) {
+          $('#modal-category-edit').addClass('opened').show();
+        }
+      };
+      $element.click($scope.showCategoryWindow);
+    }
+  };
+}
+
 function modalHide($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.hideCategoryWindow = function () {
-        if ($('#modal-category').hasClass('opened')) {
-          $('#modal-category').removeClass('opened').hide();
+        if ($element.closest($('.modal-category')).hasClass('opened')) {
+          $element.closest($('.modal-category')).removeClass('opened').hide();
         }
       };
       $element.click($scope.hideCategoryWindow);
@@ -49047,6 +49077,8 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return new _directives.categoryToggle();
 }).directive('modalShow', function () {
   return new _directives.modalShow();
+}).directive('modalEdit', function () {
+  return new _directives.modalEdit();
 }).directive('modalHide', function () {
   return new _directives.modalHide();
 }).directive('toggleDirective', function () {
