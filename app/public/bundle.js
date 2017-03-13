@@ -4866,7 +4866,9 @@ function CategoriesController($scope, categoriesService) {
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
-  $scope.selected = '-priority';
+  $scope.userPriority = '';
+  $scope.userExpiredDate = '';
+  $scope.userCreatedDate = '';
   this.addCategory = function () {
     if (_this.title != "" || _this.title) {
       categoriesService.create({
@@ -4876,6 +4878,21 @@ function CategoriesController($scope, categoriesService) {
     } else {
       return;
     }
+  };
+
+  this.getNumberOfDays = function (time) {
+    var timeNow = new Date().getTime();
+    var millisInDay = 1000 * 60 * 60 * 24;
+    return Math.floor(Math.abs((timeNow - time) / millisInDay)) - 30;
+  };
+
+  this.getDay = function (time) {
+    var date = new Date(Number(time));
+    var month = date.getUTCMonth() + 1;
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+    var newdate = day + "-" + month + "-" + year;
+    return newdate;
   };
 
   this.setCurrentCategory = function (category) {
@@ -4891,16 +4908,26 @@ function CategoriesController($scope, categoriesService) {
   };
 
   this.addTodo = function () {
-    if (!_this.todoTitle || _this.todoTitle == '') {
+    if (!_this.todoTitle || _this.todoTitle == '' || !_this.todoExpiredAt) {
       return;
     }
+    var year = Number(_this.todoExpiredAt.slice(6, 10));
+    var month = Number(_this.todoExpiredAt.slice(3, 5));
+    var day = Number(_this.todoExpiredAt.slice(0, 2));
+    var timeExpire = new Date(year, month, day);
+    var timeNow = new Date();
+    console.log(timeNow);
+    console.log(timeNow.getTime());
+    console.log(timeExpire.getTime());
     categoriesService.addTodo(_this.currentCategory.id, {
       title: _this.todoTitle,
       priority: _this.todoPriority || 1,
-      createdAt: _this.todoCreatedAt,
-      expiredAt: _this.todoExpiredAt
+      createdAt: timeNow.getTime(),
+      expiredAt: timeExpire.getTime()
     });
     _this.todoTitle = '';
+    _this.todoExpiredAt = '';
+    _this.todoPriority = '';
   };
 
   this.deleteTodo = function (todo) {
@@ -5460,6 +5487,7 @@ exports.modalShow = modalShow;
 exports.modalEdit = modalEdit;
 exports.modalHide = modalHide;
 exports.toggleDirective = toggleDirective;
+exports.datePicker = datePicker;
 
 function sortableList($scope, $elemet) {
   return {
@@ -5603,6 +5631,20 @@ function toggleDirective($scope, $element) {
           $('.home-container').css('width', 'calc(100% - 50px)');
         }
       };
+    }
+  };
+}
+
+function datePicker($scope, $element) {
+  return {
+    controller: function controller($scope, $element) {
+      var dateToday = new Date();
+      $element.datepicker({
+        dateFormat: 'dd-mm-yy',
+        minDate: dateToday,
+        showOtherMonths: true,
+        dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      });
     }
   };
 }
@@ -49081,6 +49123,8 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return new _directives.modalEdit();
 }).directive('modalHide', function () {
   return new _directives.modalHide();
+}).directive('datePicker', function () {
+  return new _directives.datePicker();
 }).directive('toggleDirective', function () {
   return new _directives.toggleDirective();
 }).directive('sortableList', function () {

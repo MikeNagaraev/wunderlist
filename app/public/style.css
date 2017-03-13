@@ -5,8 +5,8 @@
 body {
   color: #ffffff;
   background: url(77ea26a8f6f08a3f76c28c8af48701e8.png) no-repeat;
-  overflow: hidden;
   min-height: 100%;
+  overflow: hidden;
   background-size: 100% 100%;
   font-size: 10px; }
 
@@ -39,10 +39,12 @@ body {
     padding: 0;
     overflow-y: auto;
     max-height: 80%;
+    padding-bottom: 3rem;
     width: 100%; }
     .home-container .todos-container .todo-item {
       -webkit-user-select: none;
-      height: 40px;
+      min-height: 40px;
+      display: inline-block;
       background: #ffffff;
       color: #000000;
       width: 100%;
@@ -56,7 +58,14 @@ body {
         cursor: pointer;
         vertical-align: middle; }
       .home-container .todos-container .todo-item .todo-title {
-        vertical-align: middle; }
+        vertical-align: middle;
+        height: 100%; }
+      .home-container .todos-container .todo-item .todo-info {
+        vertical-align: middle;
+        font-style: italic; }
+        .home-container .todos-container .todo-item .todo-info-value {
+          font-size: 1.5rem;
+          font-weight: bold; }
       .home-container .todos-container .todo-item .todo-priority {
         vertical-align: middle;
         margin-right: 6rem; }
@@ -71,6 +80,17 @@ body {
     border-radius: 4px;
     position: relative;
     margin-bottom: 20px; }
+    .home-container .add-todo .date-content {
+      height: 100%; }
+      .home-container .add-todo .date-content .date {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%); }
+        .home-container .add-todo .date-content .date input {
+          height: 2.5rem;
+          width: 60%;
+          display: inline-block; }
     .home-container .add-todo-icon {
       background: none;
       border: none;
@@ -224,15 +244,27 @@ body {
     padding-left: 0.5rem;
     display: inline-block; }
 
+.user-panel {
+  height: 3rem; }
+
+.sort-info,
 .sort-priority {
+  height: 100%;
   width: 100%; }
+  .sort-info h5,
   .sort-priority h5 {
+    text-align: right;
+    width: 100%;
     margin: 0 0 1rem;
     float: right;
     font-size: 1.5rem; }
+  .sort-info select,
   .sort-priority select {
     background: #668964;
     color: #ffffff; }
+
+.sort-priority h5 {
+  text-align: center; }
 
 .categories-list {
   width: 100%; }
@@ -388,5 +420,53 @@ body {
     .profile-container .profile-body .profile-value {
       text-shadow: 2px 2px 2px #000000;
       font-size: 2rem; }
+
+.ui-datepicker {
+  display: none; }
+
+.ui-datepicker-title {
+  text-align: center; }
+
+.ui-datepicker-header {
+  height: 2rem; }
+
+.ui-datepicker-next,
+.ui-datepicker-prev {
+  display: inline-block;
+  width: 30px;
+  height: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAA8CAYAAACTiBHmAAAA4klEQVR42u3WMQqDQBSE4ZTCikguKYggBDyDIHikLJ5hqxSCeoRIuhA2byCixCqwr4jMwiA2+1XKf/Leq48IkSMjP5z/QTrZRZaoIdbaZ1VVc5qmN3ktZCY4Mo6jx5xzr7Is5ziOgWWyKDiyxfI8vxtjrkrIur7vnRoyDMNDnrXsHBZZL2+2l4dEJlm7Xr47/OL5qydChAgRIkQOX/X7k3wqv9NAjKxA3aPyUfshkUiWoeZR9QjupSqDIah3VPz28uAI6n25VA1BA8tqBLcW8o01wHSQPdbKJlY9f/VEiBwVeQNTY1vAtkKXTwAAAABJRU5ErkJggg==);
+  background-repeat: no-repeat;
+  line-height: 600%;
+  overflow: hidden; }
+
+.ui-datepicker-prev {
+  float: left;
+  background-position: center -30px; }
+  .ui-datepicker-prev-hover {
+    background: transparent !important;
+    border: none !important; }
+
+.ui-datepicker-next {
+  float: right;
+  background-position: center 0; }
+  .ui-datepicker-next-hover {
+    background: transparent !important;
+    border: none !important; }
+
+.ui-datepicker th {
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 5px 0; }
+
+.ui-datepicker td a,
+.ui-datepicker td span {
+  display: inline-block;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px; }
 
 /*# sourceMappingURL=style.css.map*/

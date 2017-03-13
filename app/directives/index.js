@@ -143,3 +143,17 @@ export function toggleDirective($scope, $element) {
     }
   }
 }
+
+export function datePicker($scope, $element) {
+  return {
+    controller: ($scope, $element) => {
+      let dateToday = new Date();
+      $element.datepicker({
+        dateFormat: 'dd-mm-yy',
+        minDate: dateToday,
+        showOtherMonths: true,
+        dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      });
+    }
+  }
+}

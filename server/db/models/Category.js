@@ -6,8 +6,8 @@ var CategorySchema = new mongoose.Schema({
   todos: [{
     title: String,
     priority: String,
-    createdAt: Date,
-    expiredAt: Date,
+    createdAt: String,
+    expiredAt: String,
     done: {
       type: Boolean,
       default: false

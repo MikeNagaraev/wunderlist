@@ -46,10 +46,18 @@ $selected-item-color: #C0E7F3;
   }
 }
 
+.user-panel {
+  height: 3rem;
+}
+
+.sort-info,
 .sort-priority {
+  height: 100%;
   width: 100%;
 
   h5 {
+    text-align: right;
+    width: 100%;
     margin: 0 0 1rem;
     float: right;
     font-size: 1.5rem;
@@ -58,6 +66,12 @@ $selected-item-color: #C0E7F3;
   select {
     background: $main-first-color;
     color: #ffffff;
+  }
+}
+
+.sort-priority {
+  h5 {
+    text-align: center;
   }
 }
 
