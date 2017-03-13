@@ -15,30 +15,30 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   serviceCategories.setCurrentCategory = (id) => {
-    // let currentCategory = serviceCategories.getCategory(id);
-    // if (currentCategory != -1) {
-    $http.get('/users/' + user.info._id + '/categories/' + id)
-      .then(success =>
-        angular.copy(success.data, serviceCategories.currentCategory))
-    // angular.copy(currentCategory, serviceCategories.currentCategory)
-    // } else {
-    //   $location.path('/home')
-    // }
+    let currentCategory = serviceCategories.getCategory(id);
+    if (currentCategory != -1) {
+      // $http.get('/users/' + user.info._id + '/categories/' + id)
+      //   .then(success =>
+      //     angular.copy(success.data, s erviceCategories.currentCategory))
+      angular.copy(currentCategory, serviceCategories.currentCategory)
+    } else {
+      $location.path('/home')
+    }
   }
 
   serviceCategories.create = (category) => {
     category.id = serviceCategories.generateId();
     serviceCategories.categories.push(category);
     serviceCategories.createInBD(category);
+    storage.update()
   }
 
   serviceCategories.createInBD = (category) => {
     $http.post('/users/' + user.info._id + '/categories', category)
       .then(success => {
-        // serviceCategories.updateAll();
+        serviceCategories.updateAll();
       }, error => {
         storage.categories.create.push(category);
-        storage.update()
       })
   }
 
@@ -46,29 +46,27 @@ export default function categoriesService($http, user, $location, storage) {
     serviceCategories.categories[serviceCategories.getPosCategory(id)].title = serviceCategories.currentCategory.title;
     $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory)
       .then(success => {
-        console.log('update')
-        // serviceCategories.updateAll();
+        serviceCategories.updateAll();
       }, error => {
         storage.categories.update.push(id);
-        storage.update()
       })
+    storage.update()
   }
 
   serviceCategories.delete = id => {
     serviceCategories.deleteElement(serviceCategories.categories, id)
 
     serviceCategories.deleteDB(id);
-
+    storage.update()
   }
 
   serviceCategories.deleteDB = id => {
     $http.delete('/users/' + user.info._id + '/categories/' + id)
       .then(success => {
         $location.path('/home');
-        // serviceCategories.updateAll();
+        serviceCategories.updateAll();
       }, error => {
         storage.categories.delete.push(id);
-        // storage.update()
       })
   }
 
@@ -85,13 +83,14 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   serviceCategories.checkCreate = (list) => {
+    console.log(list)
     if (list.length) {
       list.forEach(el => {
-        storage.remove(storage.categories.create, el.id);
+        storage.remove(storage.categories.create, el.id, true);
         serviceCategories.createInBD(el);
+        storage.update()
       })
     }
-    storage.update()
   }
 
   serviceCategories.checkUpdate = (ids) => {
@@ -100,9 +99,9 @@ export default function categoriesService($http, user, $location, storage) {
         storage.remove(storage.categories.update, id);
 
         serviceCategories.update(id);
+        storage.update()
       })
     }
-    storage.update()
   }
 
   serviceCategories.checkDelete = (ids) => {
@@ -111,9 +110,9 @@ export default function categoriesService($http, user, $location, storage) {
         storage.remove(storage.categories.delete, id);
 
         serviceCategories.deleteDB(id);
+        storage.update()
       })
     }
-    storage.update()
   }
 
   serviceCategories.addTodo = (id, todo) => {

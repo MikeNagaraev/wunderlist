@@ -54,9 +54,6 @@ export default function CategoriesController($scope, categoriesService) {
     let day = Number(this.todoExpiredAt.slice(0, 2))
     let timeExpire = new Date(year, month, day)
     let timeNow = new Date();
-    console.log(timeNow)
-    console.log(timeNow.getTime())
-    console.log(timeExpire.getTime())
     categoriesService.addTodo(this.currentCategory.id, {
       title: this.todoTitle,
       priority: this.todoPriority || 1,

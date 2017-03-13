@@ -12,7 +12,7 @@ export default function authServise($http, $window, $location, $state, storage) 
   }
 
   auth.logFacebook = () => {
-    // $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
+
   }
 
   auth.register = function(user) {

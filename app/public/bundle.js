@@ -4817,9 +4817,7 @@ function authServise($http, $window, $location, $state, storage) {
     }
   };
 
-  auth.logFacebook = function () {
-    // $http.get($window.location.protocol + "//" + $window.location.host + $window.location.pathname + "auth/facebook");
-  };
+  auth.logFacebook = function () {};
 
   auth.register = function (user) {
     return $http.post('/register', user).then(function (success) {
@@ -4916,9 +4914,6 @@ function CategoriesController($scope, categoriesService) {
     var day = Number(_this.todoExpiredAt.slice(0, 2));
     var timeExpire = new Date(year, month, day);
     var timeNow = new Date();
-    console.log(timeNow);
-    console.log(timeNow.getTime());
-    console.log(timeExpire.getTime());
     categoriesService.addTodo(_this.currentCategory.id, {
       title: _this.todoTitle,
       priority: _this.todoPriority || 1,
@@ -4983,56 +4978,55 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.setCurrentCategory = function (id) {
-    // let currentCategory = serviceCategories.getCategory(id);
-    // if (currentCategory != -1) {
-    $http.get('/users/' + user.info._id + '/categories/' + id).then(function (success) {
-      return angular.copy(success.data, serviceCategories.currentCategory);
-    });
-    // angular.copy(currentCategory, serviceCategories.currentCategory)
-    // } else {
-    //   $location.path('/home')
-    // }
+    var currentCategory = serviceCategories.getCategory(id);
+    if (currentCategory != -1) {
+      // $http.get('/users/' + user.info._id + '/categories/' + id)
+      //   .then(success =>
+      //     angular.copy(success.data, s erviceCategories.currentCategory))
+      angular.copy(currentCategory, serviceCategories.currentCategory);
+    } else {
+      $location.path('/home');
+    }
   };
 
   serviceCategories.create = function (category) {
     category.id = serviceCategories.generateId();
     serviceCategories.categories.push(category);
     serviceCategories.createInBD(category);
+    storage.update();
   };
 
   serviceCategories.createInBD = function (category) {
     $http.post('/users/' + user.info._id + '/categories', category).then(function (success) {
-      // serviceCategories.updateAll();
+      serviceCategories.updateAll();
     }, function (error) {
       storage.categories.create.push(category);
-      storage.update();
     });
   };
 
   serviceCategories.update = function (id) {
     serviceCategories.categories[serviceCategories.getPosCategory(id)].title = serviceCategories.currentCategory.title;
     $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory).then(function (success) {
-      console.log('update');
-      // serviceCategories.updateAll();
+      serviceCategories.updateAll();
     }, function (error) {
       storage.categories.update.push(id);
-      storage.update();
     });
+    storage.update();
   };
 
   serviceCategories['delete'] = function (id) {
     serviceCategories.deleteElement(serviceCategories.categories, id);
 
     serviceCategories.deleteDB(id);
+    storage.update();
   };
 
   serviceCategories.deleteDB = function (id) {
     $http['delete']('/users/' + user.info._id + '/categories/' + id).then(function (success) {
       $location.path('/home');
-      // serviceCategories.updateAll();
+      serviceCategories.updateAll();
     }, function (error) {
       storage.categories['delete'].push(id);
-      // storage.update()
     });
   };
 
@@ -5049,13 +5043,14 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.checkCreate = function (list) {
+    console.log(list);
     if (list.length) {
       list.forEach(function (el) {
-        storage.remove(storage.categories.create, el.id);
+        storage.remove(storage.categories.create, el.id, true);
         serviceCategories.createInBD(el);
+        storage.update();
       });
     }
-    storage.update();
   };
 
   serviceCategories.checkUpdate = function (ids) {
@@ -5064,9 +5059,9 @@ function categoriesService($http, user, $location, storage) {
         storage.remove(storage.categories.update, id);
 
         serviceCategories.update(id);
+        storage.update();
       });
     }
-    storage.update();
   };
 
   serviceCategories.checkDelete = function (ids) {
@@ -5075,9 +5070,9 @@ function categoriesService($http, user, $location, storage) {
         storage.remove(storage.categories['delete'], id);
 
         serviceCategories.deleteDB(id);
+        storage.update();
       });
     }
-    storage.update();
   };
 
   serviceCategories.addTodo = function (id, todo) {
@@ -5146,20 +5141,14 @@ module.exports = exports["default"];
 "use strict";
 
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports['default'] = StorageController;
-StorageController.$inject = ['$scope', 'storageService'];
+exports["default"] = StorageController;
 
-function StorageController($scope, storage) {
-  $scope.storage = storage;
-  $scope.watch(storage, function (n, o) {
-    storage.update();
-  });
-}
+function StorageController() {}
 
-module.exports = exports['default'];
+module.exports = exports["default"];
 
 /***/ }),
 /* 9 */
@@ -5186,13 +5175,10 @@ function storageService($window) {
   };
 
   storage.init = function () {
-    storage.categories = JSON.parse($window.localStorage.getItem(storage.localStorageCategoriesKey));
-    console.log('storage categories', storage.categories);
+    angular.copy(JSON.parse($window.localStorage.getItem(storage.localStorageCategoriesKey)), storage.categories);
   };
-
   storage.update = function () {
     $window.localStorage.setItem(storage.localStorageCategoriesKey, JSON.stringify(storage.categories));
-    console.log('storage update', storage.categories);
   };
 
   storage.removeItem = function (key) {
@@ -5216,8 +5202,8 @@ function storageService($window) {
     return user;
   };
 
-  storage.remove = function (list, id) {
-    var pos = storage.getIdInList(list, id);
+  storage.remove = function (list, id, listOfId) {
+    var pos = storage.getIdInList(list, id, listOfId);
     if (pos >= 0) {
       list.splice(pos, 1);
     } else {
@@ -5225,81 +5211,23 @@ function storageService($window) {
     }
   };
 
-  storage.getIdInList = function (list, id) {
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].id === id) {
-        return i;
+  storage.getIdInList = function (list, id, listOfId) {
+    if (!listOfId) {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i] === id) {
+          return i;
+        }
+      }
+    } else {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          return i;
+        }
       }
     }
     return -1;
   };
 
-  // storage.setLocalStorage = (key, item) => {
-  //   $window.localStorage.setItem(key, JSON.stringify(item));
-  // }
-  //
-  // storage.getLocalStorage = (key) => {
-  //   return JSON.parse($window.localStorage.getItem(key));
-  // }
-  //
-  // storage.saveCategories = (categories) => {
-  //   categories.forEach(category => {
-  //     storage.saveCategory(category);
-  //   })
-  // }
-  //
-  // storage.saveCategory = (category) => {
-  //   let pos = storage.getIdInList(storage.categories, category.id);
-  //   if (pos >= 0) {
-  //     storage.categories[pos] = category;
-  //   } else {
-  //     storage.categories.push(category);
-  //   }
-  //   storage.setLocalStorage('categories', storage.categories);
-  // }
-  //
-  // storage.getCategory = (id) => {
-  //   let pos = storage.getIdInList(storage.categories, id);
-  //   if (pos >= 0) {
-  //     return storage.categories[pos];
-  //   } else {
-  //     return -1;
-  //   }
-  // }
-  //
-  // storage.deleteCategory = (id) => {
-  //   let pos = storage.getIdInList(storage.categories, id);
-  //   if (pos >= 0) {
-  //     storage.categories.splice(pos, 1);
-  //   } else {
-  //     return -1;
-  //   }
-  //   storage.setLocalStorage('categories', storage.categories);
-  // }
-  //
-  // storage.deleteAllCategories = () => {
-  //   storage.clearList(storage.categories);
-  //   storage.setLocalStorage('categories', storage.categories);
-  // }
-  //
-  //
-  // storage.getAllCategories = () => {
-  //   angular.copy(storage.getLocalStorage('categories'), storage.categories);
-  //   return storage.categories;
-  // }
-  //
-  // storage.getIdInList = (list, id) => {
-  //   for (let i = 0; i < list.length; i++) {
-  //     if (list[i].id === id) {
-  //       return i;
-  //     }
-  //   }
-  //   return -1;
-  // }
-  //
-  // storage.clearList = (list) => {
-  //   list.splice(0, list.length);
-  // }
   return storage;
 }
 

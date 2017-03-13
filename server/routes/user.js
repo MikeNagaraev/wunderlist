@@ -59,11 +59,9 @@ router.put('/users/:user', function(req, res, next) {
     if (err) {
       res.send(err);
     }
-    console.log('body', req.body)
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
 
-    console.log(user)
     user.save(function(err, user) {
       if (err) {
         res.status(500).send(err)
