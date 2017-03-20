@@ -24,14 +24,6 @@ export default function storageService($window) {
     $window.localStorage.removeItem(key);
   }
 
-  storage.saveToken = function(token) {
-    $window.localStorage[storage.localStorageTokenKey] = token;
-  }
-
-  storage.getToken = function() {
-    return $window.localStorage[storage.localStorageTokenKey];
-  }
-
   storage.saveUser = (user) => {
     $window.localStorage.setItem(storage.localStorageUserKey, JSON.stringify(user));
   }

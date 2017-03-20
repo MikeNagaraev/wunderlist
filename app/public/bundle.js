@@ -4962,9 +4962,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = categoriesService;
-categoriesService.$inject = ['$http', 'userService', '$location', 'storageService'];
+categoriesService.$inject = ['$http', 'userService', '$location'];
 
-function categoriesService($http, user, $location, storage) {
+function categoriesService($http, user, $location) {
   var serviceCategories = {
     categories: [],
     currentCategory: {}
@@ -4973,105 +4973,47 @@ function categoriesService($http, user, $location, storage) {
   serviceCategories.setAll = function () {
     $http.get('users/' + user.info._id).then(function (success) {
       angular.copy(success.data.categories, serviceCategories.categories);
-      storage.init();
     });
   };
 
   serviceCategories.setCurrentCategory = function (id) {
-    var currentCategory = serviceCategories.getCategory(id);
-    if (currentCategory != -1) {
-      // $http.get('/users/' + user.info._id + '/categories/' + id)
-      //   .then(success =>
-      //     angular.copy(success.data, s erviceCategories.currentCategory))
-      angular.copy(currentCategory, serviceCategories.currentCategory);
-    } else {
-      $location.path('/home');
-    }
+    $http.get('/users/' + user.info._id + '/categories/' + id).then(function (success) {
+      return angular.copy(success.data, serviceCategories.currentCategory);
+    }, function (error) {
+      return $location.path('/home');
+    });
   };
 
   serviceCategories.create = function (category) {
     category.id = serviceCategories.generateId();
     serviceCategories.categories.push(category);
     serviceCategories.createInBD(category);
-    storage.update();
   };
 
   serviceCategories.createInBD = function (category) {
-    $http.post('/users/' + user.info._id + '/categories', category).then(function (success) {
-      serviceCategories.updateAll();
-    }, function (error) {
-      storage.categories.create.push(category);
-    });
+    $http.post('/users/' + user.info._id + '/categories', category).then(function (success) {}, function (error) {});
   };
 
   serviceCategories.update = function (id) {
     serviceCategories.categories[serviceCategories.getPosCategory(id)].title = serviceCategories.currentCategory.title;
-    $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory).then(function (success) {
-      serviceCategories.updateAll();
-    }, function (error) {
-      storage.categories.update.push(id);
-    });
-    storage.update();
+    $http.put('/users/' + user.info._id + '/categories/' + id, serviceCategories.currentCategory).then(function (success) {}, function (error) {});
   };
 
   serviceCategories['delete'] = function (id) {
     serviceCategories.deleteElement(serviceCategories.categories, id);
-
     serviceCategories.deleteDB(id);
-    storage.update();
   };
 
   serviceCategories.deleteDB = function (id) {
     $http['delete']('/users/' + user.info._id + '/categories/' + id).then(function (success) {
       $location.path('/home');
-      serviceCategories.updateAll();
-    }, function (error) {
-      storage.categories['delete'].push(id);
-    });
+    }, function (error) {});
   };
 
   serviceCategories.generateId = function () {
     var currentDate = new Date().valueOf().toString();
     var random = Math.random().toString().slice(2);
     return currentDate + random;
-  };
-
-  serviceCategories.updateAll = function () {
-    serviceCategories.checkCreate(storage.categories.create);
-    serviceCategories.checkUpdate(storage.categories.update);
-    serviceCategories.checkDelete(storage.categories['delete']);
-  };
-
-  serviceCategories.checkCreate = function (list) {
-    if (list.length) {
-      list.forEach(function (el) {
-        storage.remove(storage.categories.create, el.id, true);
-        serviceCategories.createInBD(el);
-        storage.update();
-      });
-    }
-  };
-
-  serviceCategories.checkUpdate = function (ids) {
-    if (ids.length) {
-      ids.forEach(function (id) {
-        storage.remove(storage.categories.update, id);
-
-        serviceCategories.update(id);
-        storage.update();
-      });
-    }
-  };
-
-  serviceCategories.checkDelete = function (ids) {
-    if (ids.length) {
-      ids.forEach(function (id) {
-        storage.remove(storage.categories['delete'], id);
-
-        serviceCategories.deleteDB(id);
-        storage.update();
-      });
-    }
   };
 
   serviceCategories.addTodo = function (id, todo) {
@@ -49040,7 +48982,7 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
       user.setUser();
     }
   });
-}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).controller('StorageController', _componentsStorageStorageController2['default']).directive('selectableDirective', function () {
+}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
   return new _directives.selectableDirective();
 }).directive('categoryOptions', function () {
   return new _directives.categoryOptions();
