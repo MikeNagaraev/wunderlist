@@ -62,11 +62,8 @@ router.post('/login', function(req, res, next) {
       message: 'Please fill out all fields'
     });
   }
-  console.log('preauth', req.body)
 
   passport.authenticate('local', function(err, user, info) {
-    console.log('auth user',user)
-
     if (err) {
       return next(err);
     }

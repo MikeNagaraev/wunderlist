@@ -12,8 +12,10 @@ export default function storageService($window) {
   };
 
   storage.init = () => {
+    $window.localStorage.setItem(storage.localStorageCategoriesKey, JSON.stringify(storage.categories));
     angular.copy(JSON.parse($window.localStorage.getItem(storage.localStorageCategoriesKey)), storage.categories);
   }
+
   storage.update = () => {
     $window.localStorage.setItem(storage.localStorageCategoriesKey, JSON.stringify(storage.categories));
   }

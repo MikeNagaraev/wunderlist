@@ -83,7 +83,6 @@ export default function categoriesService($http, user, $location, storage) {
   }
 
   serviceCategories.checkCreate = (list) => {
-    console.log(list)
     if (list.length) {
       list.forEach(el => {
         storage.remove(storage.categories.create, el.id, true);

@@ -5043,7 +5043,6 @@ function categoriesService($http, user, $location, storage) {
   };
 
   serviceCategories.checkCreate = function (list) {
-    console.log(list);
     if (list.length) {
       list.forEach(function (el) {
         storage.remove(storage.categories.create, el.id, true);
@@ -5175,8 +5174,10 @@ function storageService($window) {
   };
 
   storage.init = function () {
+    $window.localStorage.setItem(storage.localStorageCategoriesKey, JSON.stringify(storage.categories));
     angular.copy(JSON.parse($window.localStorage.getItem(storage.localStorageCategoriesKey)), storage.categories);
   };
+
   storage.update = function () {
     $window.localStorage.setItem(storage.localStorageCategoriesKey, JSON.stringify(storage.categories));
   };
