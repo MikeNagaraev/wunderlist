@@ -4777,8 +4777,10 @@ exports['default'] = AuthController;
 AuthController.$inject = ['$state', 'auth'];
 
 function AuthController($state, auth) {
+  var _this = this;
+
   this.register = function () {
-    auth.register($scope.user);
+    auth.register(_this.user);
   };
 
   this.logFacebook = function () {
@@ -4786,7 +4788,7 @@ function AuthController($state, auth) {
   };
 
   this.logIn = function () {
-    auth.logIn($scope.user);
+    auth.logIn(_this.user);
   };
 }
 
