@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4759,7 +4759,7 @@ angular.module('ui.router.state')
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(14);
+__webpack_require__(16);
 module.exports = angular;
 
 
@@ -4936,7 +4936,46 @@ function CategoriesController(categoriesService) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 5 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var categoriesList = function categoriesList() {
+  return {
+    restrict: 'A',
+    controller: 'CategoriesController',
+    templateUrl: './components/categories/categoriesList.html'
+  };
+};
+
+var editCategoryPopUp = function editCategoryPopUp() {
+  return {
+    restrict: 'A',
+    templateUrl: './components/categories/editCategoryPopUp.html',
+    controller: 'CategoriesController',
+    controllerAs: 'category'
+  };
+};
+
+var newCategoryPopUp = function newCategoryPopUp() {
+  return {
+    restrict: 'A',
+    templateUrl: './components/categories/newCategoryPopUp.html',
+    controller: 'CategoriesController',
+    controllerAs: 'category'
+  };
+};
+
+exports.categoriesList = categoriesList;
+exports.editCategoryPopUp = editCategoryPopUp;
+exports.newCategoryPopUp = newCategoryPopUp;
+
+/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5147,6 +5186,27 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+exports['default'] = function () {
+  return {
+    controller: 'CategoriesController',
+    restrict: 'A',
+    templateUrl: './components/todos/addTodoForm.html'
+  };
+};
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 exports['default'] = UserController;
 UserController.$inject = ['$scope', 'auth', 'userService'];
 
@@ -5165,7 +5225,7 @@ function UserController($scope, auth, user) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5208,8 +5268,111 @@ function userService($http, auth, storage, $location) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 11 */,
 /* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = MainConfig;
+MainConfig.$inject = ['$rootScope', '$location', 'auth', 'userService'];
+
+function MainConfig($rootScope, $location, auth, user) {
+  $rootScope.$on('$stateChangeStart', function (event) {
+    if (!auth.isLoggedIn()) {
+      $location.path('/login');
+    } else {
+      user.setUser();
+    }
+  });
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = routerConfig;
+routerConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+
+function routerConfig($stateProvider, $urlRouterProvider) {
+  var home = {
+    name: 'home',
+    url: '/home',
+    templateUrl: '../components/home/home.html',
+    controller: 'HomeController',
+    controllerAs: 'home',
+    resolve: {
+      promise: ['categoriesService', function (categoriesService) {
+        categoriesService.setAll();
+      }]
+    }
+  };
+
+  var categories = {
+    name: 'home.categories',
+    url: '/categories/{id}',
+    controller: 'CategoriesController',
+    controllerAs: 'category',
+    templateUrl: '../components/categories/category.html',
+    resolve: {
+      promise: ['$stateParams', 'categoriesService', function ($stateParams, categoriesService) {
+        return categoriesService.setCurrentCategory($stateParams.id);
+      }]
+    }
+  };
+
+  var login = {
+    name: 'login',
+    url: '/login',
+    templateUrl: '../components/auth/login.html',
+    controller: 'AuthController',
+    controllerAs: 'auth'
+  };
+
+  var register = {
+    name: 'register',
+    url: '/register',
+    templateUrl: '../components/auth/register.html',
+    controller: 'AuthController',
+    controllerAs: 'auth'
+  };
+
+  var profile = {
+    name: 'profile',
+    url: '/profile',
+    templateUrl: '../components/user/profile.html',
+    controller: 'UserController',
+    controllerAs: 'user'
+  };
+
+  var editProfile = {
+    name: 'editProfile',
+    url: '/profile/edit',
+    templateUrl: '../components/user/edit.html',
+    controller: 'UserController',
+    controllerAs: 'user'
+  };
+
+  $stateProvider.state(home).state(categories).state(login).state(profile).state(editProfile).state(register);
+
+  $urlRouterProvider.otherwise('home');
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5220,7 +5383,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 var sortableList = function sortableList($scope, $elemet) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $element.sortable();
       $element.disableSelection();
     }
@@ -5229,7 +5392,7 @@ var sortableList = function sortableList($scope, $elemet) {
 
 var selectableDirective = function selectableDirective($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.selectCategory = function () {
         $scope.resetSelectedCategories();
         if ($element.hasClass('category-item')) {
@@ -5255,7 +5418,7 @@ var selectableDirective = function selectableDirective($scope, $element) {
 
 var categoryOptions = function categoryOptions($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.toggleOptions = function () {
         if ($element.next('.category-options-container').css('display') === 'block') {
           hideOptions();
@@ -5282,7 +5445,7 @@ var categoryOptions = function categoryOptions($scope, $element) {
 
 var categoryToggle = function categoryToggle($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.toggleCategoryList = function () {
         $('.categories-list').toggle();
         $element.find('.glyphicon').toggleClass('glyphicon-chevron-up');
@@ -5296,7 +5459,7 @@ var categoryToggle = function categoryToggle($scope, $element) {
 
 var modalShow = function modalShow($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.showCategoryWindow = function () {
         if (!$('#modal-category').hasClass('opened')) {
           $('#modal-category').addClass('opened').show();
@@ -5309,7 +5472,7 @@ var modalShow = function modalShow($scope, $element) {
 
 var modalEdit = function modalEdit($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.showCategoryWindow = function () {
         if (!$('#modal-category-edit').hasClass('opened')) {
           $('#modal-category-edit').addClass('opened').show();
@@ -5322,7 +5485,7 @@ var modalEdit = function modalEdit($scope, $element) {
 
 var modalHide = function modalHide($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.hideCategoryWindow = function () {
         if ($element.closest($('.modal-category')).hasClass('opened')) {
           $element.closest($('.modal-category')).removeClass('opened').hide();
@@ -5335,7 +5498,7 @@ var modalHide = function modalHide($scope, $element) {
 
 var toggleDirective = function toggleDirective($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       $scope.toggleAside = function () {
         $('.category-block-title').toggle();
         if ($element.hasClass('opened')) {
@@ -5366,7 +5529,7 @@ var toggleDirective = function toggleDirective($scope, $element) {
 
 var datePicker = function datePicker($scope, $element) {
   return {
-    controller: function controller($scope, $element) {
+    link: function link($scope, $element) {
       var dateToday = new Date();
       $element.datepicker({
         dateFormat: 'dd-mm-yy',
@@ -5387,16 +5550,16 @@ exports.modalEdit = modalEdit;
 exports.modalHide = modalHide;
 exports.toggleDirective = toggleDirective;
 exports.datePicker = datePicker;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -38535,7 +38698,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -48762,7 +48925,7 @@ return jQuery;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48794,7 +48957,7 @@ var _componentsAuthAuthController = __webpack_require__(2);
 
 var _componentsAuthAuthController2 = _interopRequireDefault(_componentsAuthAuthController);
 
-var _componentsUserUserController = __webpack_require__(9);
+var _componentsUserUserController = __webpack_require__(10);
 
 var _componentsUserUserController2 = _interopRequireDefault(_componentsUserUserController);
 
@@ -48808,7 +48971,7 @@ var _componentsAuthAuthService = __webpack_require__(3);
 
 var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthService);
 
-var _componentsUserUserService = __webpack_require__(10);
+var _componentsUserUserService = __webpack_require__(11);
 
 var _componentsUserUserService2 = _interopRequireDefault(_componentsUserUserService);
 
@@ -48818,27 +48981,27 @@ var _componentsStorageStorageService2 = _interopRequireDefault(_componentsStorag
 
 ////Directives////
 
-var _directives = __webpack_require__(12);
+var _directives = __webpack_require__(14);
 
-var _componentsCategoriesCategoriesDirectives = __webpack_require__(23);
+var _componentsCategoriesCategoriesDirectives = __webpack_require__(5);
 
-var _componentsTodosAddTodoFormDirective = __webpack_require__(22);
+var _componentsTodosAddTodoFormDirective = __webpack_require__(9);
 
 var _componentsTodosAddTodoFormDirective2 = _interopRequireDefault(_componentsTodosAddTodoFormDirective);
 
 //// Assets /////
 
-var _assetsStylesheetsMainScss = __webpack_require__(13);
+var _assetsStylesheetsMainScss = __webpack_require__(15);
 
 var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainScss);
 
 ////Config//////
 
-var _configRouterConfig = __webpack_require__(20);
+var _configRouterConfig = __webpack_require__(13);
 
 var _configRouterConfig2 = _interopRequireDefault(_configRouterConfig);
 
-var _configMainConfig = __webpack_require__(21);
+var _configMainConfig = __webpack_require__(12);
 
 var _configMainConfig2 = _interopRequireDefault(_configMainConfig);
 
@@ -48871,174 +49034,6 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).run(_c
 }).directive('addTodoForm', function () {
   return new _componentsTodosAddTodoFormDirective2['default']();
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']).factory('storageService', _componentsStorageStorageService2['default']);
-
-/***/ }),
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = routerConfig;
-routerConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
-
-function routerConfig($stateProvider, $urlRouterProvider) {
-  var home = {
-    name: 'home',
-    url: '/home',
-    templateUrl: '../components/home/home.html',
-    controller: 'HomeController',
-    controllerAs: 'home',
-    resolve: {
-      promise: ['categoriesService', function (categoriesService) {
-        categoriesService.setAll();
-      }]
-    }
-  };
-
-  var categories = {
-    name: 'home.categories',
-    url: '/categories/{id}',
-    controller: 'CategoriesController',
-    controllerAs: 'category',
-    templateUrl: '../components/categories/category.html',
-    resolve: {
-      promise: ['$stateParams', 'categoriesService', function ($stateParams, categoriesService) {
-        return categoriesService.setCurrentCategory($stateParams.id);
-      }]
-    }
-  };
-
-  var login = {
-    name: 'login',
-    url: '/login',
-    templateUrl: '../components/auth/login.html',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  };
-
-  var register = {
-    name: 'register',
-    url: '/register',
-    templateUrl: '../components/auth/register.html',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  };
-
-  var profile = {
-    name: 'profile',
-    url: '/profile',
-    templateUrl: '../components/user/profile.html',
-    controller: 'UserController',
-    controllerAs: 'user'
-  };
-
-  var editProfile = {
-    name: 'editProfile',
-    url: '/profile/edit',
-    templateUrl: '../components/user/edit.html',
-    controller: 'UserController',
-    controllerAs: 'user'
-  };
-
-  $stateProvider.state(home).state(categories).state(login).state(profile).state(editProfile).state(register);
-
-  $urlRouterProvider.otherwise('home');
-}
-
-module.exports = exports['default'];
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = MainConfig;
-MainConfig.$inject = ['$rootScope', '$location', 'auth', 'userService'];
-
-function MainConfig($rootScope, $location, auth, user) {
-  $rootScope.$on('$stateChangeStart', function (event) {
-    if (!auth.isLoggedIn()) {
-      $location.path('/login');
-    } else {
-      user.setUser();
-    }
-  });
-}
-
-module.exports = exports['default'];
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-exports['default'] = function () {
-  return {
-    controller: 'CategoriesController',
-    restrict: 'A',
-    templateUrl: './components/todos/addTodoForm.html'
-  };
-};
-
-module.exports = exports['default'];
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-var categoriesList = function categoriesList() {
-  return {
-    restrict: 'A',
-    controller: 'CategoriesController',
-    templateUrl: './components/categories/categoriesList.html'
-  };
-};
-
-var editCategoryPopUp = function editCategoryPopUp() {
-  return {
-    restrict: 'A',
-    templateUrl: './components/categories/editCategoryPopUp.html',
-    controller: 'CategoriesController',
-    controllerAs: 'category'
-  };
-};
-
-var newCategoryPopUp = function newCategoryPopUp() {
-  return {
-    restrict: 'A',
-    templateUrl: './components/categories/newCategoryPopUp.html',
-    controller: 'CategoriesController',
-    controllerAs: 'category'
-  };
-};
-
-exports.categoriesList = categoriesList;
-exports.editCategoryPopUp = editCategoryPopUp;
-exports.newCategoryPopUp = newCategoryPopUp;
 
 /***/ })
 /******/ ]);

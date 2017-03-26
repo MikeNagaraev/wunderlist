@@ -1,6 +1,6 @@
 const sortableList = ($scope, $elemet) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $element.sortable()
       $element.disableSelection();
     }
@@ -9,7 +9,7 @@ const sortableList = ($scope, $elemet) => {
 
 const selectableDirective = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.selectCategory = () => {
         $scope.resetSelectedCategories();
         if ($element.hasClass('category-item')) {
@@ -35,7 +35,7 @@ const selectableDirective = ($scope, $element) => {
 
 const categoryOptions = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.toggleOptions = () => {
         if ($element.next('.category-options-container').css('display') === 'block') {
           hideOptions();
@@ -62,7 +62,7 @@ const categoryOptions = ($scope, $element) => {
 
 const categoryToggle = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.toggleCategoryList = () => {
         $('.categories-list').toggle();
         $element.find('.glyphicon').toggleClass('glyphicon-chevron-up')
@@ -76,7 +76,7 @@ const categoryToggle = ($scope, $element) => {
 
 const modalShow = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.showCategoryWindow = () => {
         if (!$('#modal-category').hasClass('opened')) {
           $('#modal-category').addClass('opened').show();
@@ -89,7 +89,7 @@ const modalShow = ($scope, $element) => {
 
 const modalEdit = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.showCategoryWindow = () => {
         if (!$('#modal-category-edit').hasClass('opened')) {
           $('#modal-category-edit').addClass('opened').show();
@@ -102,7 +102,7 @@ const modalEdit = ($scope, $element) => {
 
 const modalHide = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.hideCategoryWindow = () => {
         if ($element.closest($('.modal-category')).hasClass('opened')) {
           $element.closest($('.modal-category')).removeClass('opened').hide();
@@ -115,7 +115,7 @@ const modalHide = ($scope, $element) => {
 
 const toggleDirective = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       $scope.toggleAside = () => {
         $('.category-block-title').toggle();
         if ($element.hasClass('opened')) {
@@ -146,7 +146,7 @@ const toggleDirective = ($scope, $element) => {
 
 const datePicker = ($scope, $element) => {
   return {
-    controller: ($scope, $element) => {
+    link: ($scope, $element) => {
       let dateToday = new Date();
       $element.datepicker({
         dateFormat: 'dd-mm-yy',
