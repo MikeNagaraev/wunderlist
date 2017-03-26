@@ -1,6 +1,6 @@
-MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+routerConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-export default function MainConfig($stateProvider, $urlRouterProvider) {
+export default function routerConfig($stateProvider, $urlRouterProvider) {
   let home = {
     name: 'home',
     url: '/home',
@@ -43,21 +43,6 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
     controllerAs: 'auth'
   }
 
-  let logFacebook = {
-    name: 'logFacebook',
-    url: '/auth/facebook',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  }
-
-  let authIndex = {
-    name: 'authIndex',
-    url: '/auth',
-    templateUrl: '../components/auth/index.html',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  }
-
   let profile = {
     name: 'profile',
     url: '/profile',
@@ -77,9 +62,7 @@ export default function MainConfig($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state(home)
     .state(categories)
-    .state(authIndex)
     .state(login)
-    .state(logFacebook)
     .state(profile)
     .state(editProfile)
     .state(register)

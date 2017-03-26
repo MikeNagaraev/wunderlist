@@ -1,2 +1,1 @@
-export default function HomeController() {
-}
+export default function HomeController() {}

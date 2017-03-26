@@ -2,7 +2,7 @@ authServise.$inject = ['$http', '$window', '$location', '$state', 'storageServic
 export default function authServise($http, $window, $location, $state, storage) {
   var auth = {};
 
-  auth.isLoggedIn = function() {
+  auth.isLoggedIn = () => {
     var user = storage.getUser();
     if (user && user != 'undefined') {
       return true;
@@ -15,7 +15,7 @@ export default function authServise($http, $window, $location, $state, storage) 
 
   }
 
-  auth.register = function(user) {
+  auth.register = (user) => {
     return $http.post('/register', user).then(function(success) {
       storage.saveUser(success.data.user)
       $state.go('home')
@@ -24,14 +24,14 @@ export default function authServise($http, $window, $location, $state, storage) 
     });
   };
 
-  auth.logIn = function(user) {
+  auth.logIn = (user) => {
     return $http.post('/login', user).then(function(success) {
       storage.saveUser(success.data.user)
       $state.go('home')
     });
   };
 
-  auth.logOut = function() {
+  auth.logOut = () => {
     storage.removeItem(storage.localStorageUserKey)
     $location.path('/home')
   };

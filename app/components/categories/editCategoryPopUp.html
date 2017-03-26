@@ -1,0 +1,19 @@
+<div id="modal-category-edit" class="modal modal-category" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" modal-hide>&times;</button>
+        <h4 class="modal-title">Change Category</h4>
+      </div>
+      <form class="form-group add-category-input" ng-submit="category.update(category.currentCategory.id)">
+        <div class="modal-body">
+          <input type="text" class="form-control" autofocus autocomplete="on" ng-model='category.currentCategory.title'>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" modal-hide>Cancel</button>
+          <button type="submit" class="btn btn-primary" modal-hide>Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

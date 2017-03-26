@@ -1,4 +1,4 @@
-export function sortableList($scope, $elemet) {
+const sortableList = ($scope, $elemet) => {
   return {
     controller: ($scope, $element) => {
       $element.sortable()
@@ -7,7 +7,7 @@ export function sortableList($scope, $elemet) {
   }
 }
 
-export function selectableDirective($scope, $element) {
+const selectableDirective = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.selectCategory = () => {
@@ -33,7 +33,7 @@ export function selectableDirective($scope, $element) {
   }
 }
 
-export function categoryOptions($scope, $element) {
+const categoryOptions = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.toggleOptions = () => {
@@ -60,7 +60,7 @@ export function categoryOptions($scope, $element) {
   }
 }
 
-export function categoryToggle($scope, $element) {
+const categoryToggle = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.toggleCategoryList = () => {
@@ -74,7 +74,7 @@ export function categoryToggle($scope, $element) {
   }
 }
 
-export function modalShow($scope, $element) {
+const modalShow = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.showCategoryWindow = () => {
@@ -87,7 +87,7 @@ export function modalShow($scope, $element) {
   }
 }
 
-export function modalEdit($scope, $element) {
+const modalEdit = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.showCategoryWindow = () => {
@@ -100,7 +100,7 @@ export function modalEdit($scope, $element) {
   }
 }
 
-export function modalHide($scope, $element) {
+const modalHide = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.hideCategoryWindow = () => {
@@ -113,7 +113,7 @@ export function modalHide($scope, $element) {
   }
 }
 
-export function toggleDirective($scope, $element) {
+const toggleDirective = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       $scope.toggleAside = () => {
@@ -144,7 +144,7 @@ export function toggleDirective($scope, $element) {
   }
 }
 
-export function datePicker($scope, $element) {
+const datePicker = ($scope, $element) => {
   return {
     controller: ($scope, $element) => {
       let dateToday = new Date();
@@ -156,4 +156,16 @@ export function datePicker($scope, $element) {
       });
     }
   }
+}
+
+export {
+  sortableList,
+  selectableDirective,
+  categoryOptions,
+  categoryToggle,
+  modalShow,
+  modalEdit,
+  modalHide,
+  toggleDirective,
+  datePicker
 }

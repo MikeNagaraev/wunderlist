@@ -1,0 +1,24 @@
+<form class="add-todo" ng-submit="category.addTodo()">
+  <button type="submit" class="add-todo-icon">
+    +
+  </button>
+  <div class="add-todo-input">
+    <div class="form-group">
+      <div class="col-md-7">
+        <input type="text" class="title-input" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
+      </div>
+      <div class="col-md-2 priority-content">
+        <h5 class="priority-title">
+          Priority
+          <input type="number" min="1" max="5" class="priority-select" ng-model="category.todoPriority">
+        </h5>
+      </div>
+      <div class="col-md-2 date-content">
+        <h5 class="date">
+          Date:
+          <input type="text" id="datepicker" date-picker ng-model="category.todoExpiredAt" class="form-control">
+        </h5>
+      </div>
+    </div>
+  </div>
+</form>

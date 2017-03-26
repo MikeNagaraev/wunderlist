@@ -28,7 +28,7 @@ export default function storageService($window) {
     $window.localStorage.setItem(storage.localStorageUserKey, JSON.stringify(user));
   }
 
-  storage.getUser = function() {
+  storage.getUser = () => {
     let user = JSON.parse($window.localStorage.getItem(storage.localStorageUserKey));
     return user;
   }

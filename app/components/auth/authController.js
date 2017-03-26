@@ -1,7 +1,7 @@
-AuthController.$inject = ['$scope', '$state', 'auth']
+AuthController.$inject = ['$state', 'auth']
 
-export default function AuthController($scope, $state, auth) {
-  this.register = function() {
+export default function AuthController($state, auth) {
+  this.register = () => {
     auth.register($scope.user)
   };
 
@@ -9,7 +9,7 @@ export default function AuthController($scope, $state, auth) {
     auth.logFacebook()
   }
 
-  this.logIn = function() {
+  this.logIn = () => {
     auth.logIn($scope.user)
   };
 }

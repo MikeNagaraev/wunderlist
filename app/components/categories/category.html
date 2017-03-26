@@ -1,33 +1,12 @@
 <div class="home-container-header">
-  <p class="home-container-header-title">
+  <p class="home-container-header-title" ng-cloak>
     {{category.currentCategory.title}}
   </p>
 </div>
-<div class="home-container-body">
-  <form class="add-todo" ng-submit="category.addTodo()">
-    <button type="submit" class="add-todo-icon">
-      +
-    </button>
-    <div class="add-todo-input">
-      <div class="form-group">
-        <div class="col-md-7">
-          <input type="text" class="title-input" placeholder="Add a to-do..." ng-model="category.todoTitle" class="form-control">
-        </div>
-        <div class="col-md-2 priority-content">
-          <h5 class="priority-title">
-            Priority
-            <input type="number" min="1" max="5" class="priority-select" ng-model="category.todoPriority">
-          </h5>
-        </div>
-        <div class="col-md-2 date-content">
-          <h5 class="date">
-            Date:
-            <input type="text" id="datepicker" date-picker ng-model="category.todoExpiredAt" class="form-control">
-          </h5>
-        </div>
-      </div>
-    </div>
-  </form>
+<div class="home-container-body" ng-cloak>
+
+  <div add-todo-form></div>
+
   <div class="row user-panel">
     <div class="col-md-6">
       <div ng-show="category.currentCategory.todos.length" class="todos-amount">
@@ -38,7 +17,7 @@
       <div class="sort-info" ng-show="category.currentCategory.todos.length">
         <h5>
       Created at:
-      <select ng-model="userCreatedDate">
+      <select ng-model="category.userCreatedDate">
         <option value="">-</option>
         <option value="createdAt">Old</option>
         <option value="-createdAt">New</option>
@@ -50,7 +29,7 @@
       <div class="sort-info" ng-show="category.currentCategory.todos.length">
         <h5>
       DeadLine:
-      <select ng-model="userExpriredDate">
+      <select ng-model="category.userExpriredDate">
         <option value="">-</option>
         <option value="expiredAt">Hot</option>
         <option value="-expiredAt">Cold</option>
@@ -62,7 +41,7 @@
       <div class="sort-priority" ng-show="category.currentCategory.todos.length">
         <h5>
       Priority:
-      <select ng-model="userPriority">
+      <select ng-model="category.userPriority">
         <option value="">-</option>
         <option value="-priority">High</option>
         <option value="priority">Low</option>
@@ -73,7 +52,7 @@
   </div>
   <div>
     <ul class="todos-container">
-      <li class="todo-item" ng-repeat="todo in category.currentCategory.todos | orderBy: userPriority | orderBy: userExpriredDate | orderBy: userCreatedDate ">
+      <li class="todo-item" ng-repeat="todo in category.currentCategory.todos | orderBy: category.userPriority | orderBy: category.userExpriredDate | orderBy: category.userCreatedDate ">
         <div class="col-md-6">
           <span class="glyphicon glyphicon-remove remove-icon" ng-click="category.deleteTodo(todo)"></span>
           <span class="todo-title">{{todo.title}}</span>

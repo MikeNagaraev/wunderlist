@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4759,7 +4759,7 @@ angular.module('ui.router.state')
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(15);
+__webpack_require__(14);
 module.exports = angular;
 
 
@@ -4774,9 +4774,9 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = AuthController;
-AuthController.$inject = ['$scope', '$state', 'auth'];
+AuthController.$inject = ['$state', 'auth'];
 
-function AuthController($scope, $state, auth) {
+function AuthController($state, auth) {
   this.register = function () {
     auth.register($scope.user);
   };
@@ -4856,17 +4856,18 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports['default'] = CategoriesController;
-CategoriesController.$inject = ['$scope', 'categoriesService'];
+CategoriesController.$inject = ['categoriesService'];
 
-function CategoriesController($scope, categoriesService) {
+function CategoriesController(categoriesService) {
   var _this = this;
 
   this.categories = categoriesService.categories;
   this.currentCategory = categoriesService.currentCategory;
 
-  $scope.userPriority = '';
-  $scope.userExpiredDate = '';
-  $scope.userCreatedDate = '';
+  this.userPriority = '';
+  this.userExpiredDate = '';
+  this.userCreatedDate = '';
+
   this.addCategory = function () {
     if (_this.title != "" || _this.title) {
       categoriesService.create({
@@ -4879,17 +4880,17 @@ function CategoriesController($scope, categoriesService) {
   };
 
   this.getNumberOfDays = function (time) {
-    var timeNow = new Date().getTime();
-    var millisInDay = 1000 * 60 * 60 * 24;
+    var timeNow = new Date().getTime(),
+        millisInDay = 1000 * 60 * 60 * 24;
     return Math.floor(Math.abs((timeNow - time) / millisInDay)) - 30;
   };
 
   this.getDay = function (time) {
-    var date = new Date(Number(time));
-    var month = date.getUTCMonth() + 1;
-    var day = date.getUTCDate();
-    var year = date.getUTCFullYear();
-    var newdate = day + "-" + month + "-" + year;
+    var date = new Date(Number(time)),
+        month = date.getUTCMonth() + 1,
+        day = date.getUTCDate(),
+        year = date.getUTCFullYear(),
+        newdate = day + "-" + month + "-" + year;
     return newdate;
   };
 
@@ -4909,17 +4910,19 @@ function CategoriesController($scope, categoriesService) {
     if (!_this.todoTitle || _this.todoTitle == '' || !_this.todoExpiredAt) {
       return;
     }
-    var year = Number(_this.todoExpiredAt.slice(6, 10));
-    var month = Number(_this.todoExpiredAt.slice(3, 5));
-    var day = Number(_this.todoExpiredAt.slice(0, 2));
-    var timeExpire = new Date(year, month, day);
-    var timeNow = new Date();
+    var year = Number(_this.todoExpiredAt.slice(6, 10)),
+        month = Number(_this.todoExpiredAt.slice(3, 5)),
+        day = Number(_this.todoExpiredAt.slice(0, 2)),
+        timeExpire = new Date(year, month, day),
+        timeNow = new Date();
+
     categoriesService.addTodo(_this.currentCategory.id, {
       title: _this.todoTitle,
       priority: _this.todoPriority || 1,
       createdAt: timeNow.getTime(),
       expiredAt: timeExpire.getTime()
     });
+
     _this.todoTitle = '';
     _this.todoExpiredAt = '';
     _this.todoPriority = '';
@@ -4933,25 +4936,7 @@ function CategoriesController($scope, categoriesService) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-exports['default'] = function () {
-  return {
-    templateUrl: './categories.html'
-  };
-};
-
-module.exports = exports['default'];
-
-/***/ }),
+/* 5 */,
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5082,22 +5067,6 @@ module.exports = exports["default"];
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = StorageController;
-
-function StorageController() {}
-
-module.exports = exports["default"];
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -5126,14 +5095,6 @@ function storageService($window) {
 
   storage.removeItem = function (key) {
     $window.localStorage.removeItem(key);
-  };
-
-  storage.saveToken = function (token) {
-    $window.localStorage[storage.localStorageTokenKey] = token;
-  };
-
-  storage.getToken = function () {
-    return $window.localStorage[storage.localStorageTokenKey];
   };
 
   storage.saveUser = function (user) {
@@ -5177,7 +5138,7 @@ function storageService($window) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5204,7 +5165,7 @@ function UserController($scope, auth, user) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5247,101 +5208,8 @@ function userService($http, auth, storage, $location) {
 module.exports = exports['default'];
 
 /***/ }),
+/* 11 */,
 /* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports['default'] = MainConfig;
-MainConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
-
-function MainConfig($stateProvider, $urlRouterProvider) {
-  var home = {
-    name: 'home',
-    url: '/home',
-    templateUrl: '../components/home/home.html',
-    controller: 'HomeController',
-    controllerAs: 'home',
-    resolve: {
-      promise: ['categoriesService', function (categoriesService) {
-        categoriesService.setAll();
-      }]
-    }
-  };
-
-  var categories = {
-    name: 'home.categories',
-    url: '/categories/{id}',
-    controller: 'CategoriesController',
-    controllerAs: 'category',
-    templateUrl: '../components/categories/category.html',
-    resolve: {
-      promise: ['$stateParams', 'categoriesService', function ($stateParams, categoriesService) {
-        return categoriesService.setCurrentCategory($stateParams.id);
-      }]
-    }
-  };
-
-  var login = {
-    name: 'login',
-    url: '/login',
-    templateUrl: '../components/auth/login.html',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  };
-
-  var register = {
-    name: 'register',
-    url: '/register',
-    templateUrl: '../components/auth/register.html',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  };
-
-  var logFacebook = {
-    name: 'logFacebook',
-    url: '/auth/facebook',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  };
-
-  var authIndex = {
-    name: 'authIndex',
-    url: '/auth',
-    templateUrl: '../components/auth/index.html',
-    controller: 'AuthController',
-    controllerAs: 'auth'
-  };
-
-  var profile = {
-    name: 'profile',
-    url: '/profile',
-    templateUrl: '../components/user/profile.html',
-    controller: 'UserController',
-    controllerAs: 'user'
-  };
-
-  var editProfile = {
-    name: 'editProfile',
-    url: '/profile/edit',
-    templateUrl: '../components/user/edit.html',
-    controller: 'UserController',
-    controllerAs: 'user'
-  };
-
-  $stateProvider.state(home).state(categories).state(authIndex).state(login).state(logFacebook).state(profile).state(editProfile).state(register);
-
-  $urlRouterProvider.otherwise('home');
-}
-
-module.exports = exports['default'];
-
-/***/ }),
-/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5350,26 +5218,16 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.sortableList = sortableList;
-exports.selectableDirective = selectableDirective;
-exports.categoryOptions = categoryOptions;
-exports.categoryToggle = categoryToggle;
-exports.modalShow = modalShow;
-exports.modalEdit = modalEdit;
-exports.modalHide = modalHide;
-exports.toggleDirective = toggleDirective;
-exports.datePicker = datePicker;
-
-function sortableList($scope, $elemet) {
+var sortableList = function sortableList($scope, $elemet) {
   return {
     controller: function controller($scope, $element) {
       $element.sortable();
       $element.disableSelection();
     }
   };
-}
+};
 
-function selectableDirective($scope, $element) {
+var selectableDirective = function selectableDirective($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.selectCategory = function () {
@@ -5393,9 +5251,9 @@ function selectableDirective($scope, $element) {
       $element.click($scope.selectCategory);
     }
   };
-}
+};
 
-function categoryOptions($scope, $element) {
+var categoryOptions = function categoryOptions($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.toggleOptions = function () {
@@ -5420,9 +5278,9 @@ function categoryOptions($scope, $element) {
       $element.click($scope.toggleOptions);
     }
   };
-}
+};
 
-function categoryToggle($scope, $element) {
+var categoryToggle = function categoryToggle($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.toggleCategoryList = function () {
@@ -5434,9 +5292,9 @@ function categoryToggle($scope, $element) {
       $element.click($scope.toggleCategoryList);
     }
   };
-}
+};
 
-function modalShow($scope, $element) {
+var modalShow = function modalShow($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.showCategoryWindow = function () {
@@ -5447,9 +5305,9 @@ function modalShow($scope, $element) {
       $element.click($scope.showCategoryWindow);
     }
   };
-}
+};
 
-function modalEdit($scope, $element) {
+var modalEdit = function modalEdit($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.showCategoryWindow = function () {
@@ -5460,9 +5318,9 @@ function modalEdit($scope, $element) {
       $element.click($scope.showCategoryWindow);
     }
   };
-}
+};
 
-function modalHide($scope, $element) {
+var modalHide = function modalHide($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.hideCategoryWindow = function () {
@@ -5473,9 +5331,9 @@ function modalHide($scope, $element) {
       $element.click($scope.hideCategoryWindow);
     }
   };
-}
+};
 
-function toggleDirective($scope, $element) {
+var toggleDirective = function toggleDirective($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       $scope.toggleAside = function () {
@@ -5504,9 +5362,9 @@ function toggleDirective($scope, $element) {
       };
     }
   };
-}
+};
 
-function datePicker($scope, $element) {
+var datePicker = function datePicker($scope, $element) {
   return {
     controller: function controller($scope, $element) {
       var dateToday = new Date();
@@ -5518,17 +5376,27 @@ function datePicker($scope, $element) {
       });
     }
   };
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
+};
+
+exports.sortableList = sortableList;
+exports.selectableDirective = selectableDirective;
+exports.categoryOptions = categoryOptions;
+exports.categoryToggle = categoryToggle;
+exports.modalShow = modalShow;
+exports.modalEdit = modalEdit;
+exports.modalHide = modalHide;
+exports.toggleDirective = toggleDirective;
+exports.datePicker = datePicker;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -38667,7 +38535,7 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -48894,7 +48762,7 @@ return jQuery;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48926,13 +48794,9 @@ var _componentsAuthAuthController = __webpack_require__(2);
 
 var _componentsAuthAuthController2 = _interopRequireDefault(_componentsAuthAuthController);
 
-var _componentsUserUserController = __webpack_require__(10);
+var _componentsUserUserController = __webpack_require__(9);
 
 var _componentsUserUserController2 = _interopRequireDefault(_componentsUserUserController);
-
-var _componentsStorageStorageController = __webpack_require__(8);
-
-var _componentsStorageStorageController2 = _interopRequireDefault(_componentsStorageStorageController);
 
 ////Services////
 
@@ -48944,45 +48808,43 @@ var _componentsAuthAuthService = __webpack_require__(3);
 
 var _componentsAuthAuthService2 = _interopRequireDefault(_componentsAuthAuthService);
 
-var _componentsUserUserService = __webpack_require__(11);
+var _componentsUserUserService = __webpack_require__(10);
 
 var _componentsUserUserService2 = _interopRequireDefault(_componentsUserUserService);
 
-var _componentsStorageStorageService = __webpack_require__(9);
+var _componentsStorageStorageService = __webpack_require__(8);
 
 var _componentsStorageStorageService2 = _interopRequireDefault(_componentsStorageStorageService);
 
 ////Directives////
 
-var _directives = __webpack_require__(13);
+var _directives = __webpack_require__(12);
 
-var _componentsCategoriesCategoriesDirective = __webpack_require__(5);
+var _componentsCategoriesCategoriesDirectives = __webpack_require__(23);
 
-var _componentsCategoriesCategoriesDirective2 = _interopRequireDefault(_componentsCategoriesCategoriesDirective);
+var _componentsTodosAddTodoFormDirective = __webpack_require__(22);
+
+var _componentsTodosAddTodoFormDirective2 = _interopRequireDefault(_componentsTodosAddTodoFormDirective);
 
 //// Assets /////
 
-var _assetsStylesheetsMainScss = __webpack_require__(14);
+var _assetsStylesheetsMainScss = __webpack_require__(13);
 
 var _assetsStylesheetsMainScss2 = _interopRequireDefault(_assetsStylesheetsMainScss);
 
 ////Config//////
 
-var _config = __webpack_require__(12);
+var _configRouterConfig = __webpack_require__(20);
 
-var _config2 = _interopRequireDefault(_config);
+var _configRouterConfig2 = _interopRequireDefault(_configRouterConfig);
+
+var _configMainConfig = __webpack_require__(21);
+
+var _configMainConfig2 = _interopRequireDefault(_configMainConfig);
 
 /////////////////////////////////////////////////////////
 
-_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config(_config2['default']).run(['$rootScope', '$location', 'auth', 'userService', function ($rootScope, $location, auth, user) {
-  $rootScope.$on('$stateChangeStart', function (event) {
-    if (!auth.isLoggedIn()) {
-      $location.path('/login');
-    } else {
-      user.setUser();
-    }
-  });
-}]).controller('HomeController', _componentsHomeHomeController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
+_angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).run(_configMainConfig2['default']).config(_configRouterConfig2['default']).controller('HomeController', _componentsHomeHomeController2['default']).controller('AuthController', _componentsAuthAuthController2['default']).controller('CategoriesController', _componentsCategoriesCategoriesController2['default']).controller('UserController', _componentsUserUserController2['default']).directive('selectableDirective', function () {
   return new _directives.selectableDirective();
 }).directive('categoryOptions', function () {
   return new _directives.categoryOptions();
@@ -49000,11 +48862,183 @@ _angular2['default'].module('wunderlist', [_angularUiRouter2['default']]).config
   return new _directives.toggleDirective();
 }).directive('sortableList', function () {
   return new _directives.sortableList();
-}).directive('categoriesDirective', function () {
-  return {
-    templateUrl: './components/categories/categories.html'
-  };
+}).directive('newCategoryPopUp', function () {
+  return new _componentsCategoriesCategoriesDirectives.newCategoryPopUp();
+}).directive('editCategoryPopUp', function () {
+  return new _componentsCategoriesCategoriesDirectives.editCategoryPopUp();
+}).directive('categoriesList', function () {
+  return new _componentsCategoriesCategoriesDirectives.categoriesList();
+}).directive('addTodoForm', function () {
+  return new _componentsTodosAddTodoFormDirective2['default']();
 }).factory('categoriesService', _componentsCategoriesCategoriesService2['default']).factory('auth', _componentsAuthAuthService2['default']).factory('userService', _componentsUserUserService2['default']).factory('storageService', _componentsStorageStorageService2['default']);
+
+/***/ }),
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = routerConfig;
+routerConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+
+function routerConfig($stateProvider, $urlRouterProvider) {
+  var home = {
+    name: 'home',
+    url: '/home',
+    templateUrl: '../components/home/home.html',
+    controller: 'HomeController',
+    controllerAs: 'home',
+    resolve: {
+      promise: ['categoriesService', function (categoriesService) {
+        categoriesService.setAll();
+      }]
+    }
+  };
+
+  var categories = {
+    name: 'home.categories',
+    url: '/categories/{id}',
+    controller: 'CategoriesController',
+    controllerAs: 'category',
+    templateUrl: '../components/categories/category.html',
+    resolve: {
+      promise: ['$stateParams', 'categoriesService', function ($stateParams, categoriesService) {
+        return categoriesService.setCurrentCategory($stateParams.id);
+      }]
+    }
+  };
+
+  var login = {
+    name: 'login',
+    url: '/login',
+    templateUrl: '../components/auth/login.html',
+    controller: 'AuthController',
+    controllerAs: 'auth'
+  };
+
+  var register = {
+    name: 'register',
+    url: '/register',
+    templateUrl: '../components/auth/register.html',
+    controller: 'AuthController',
+    controllerAs: 'auth'
+  };
+
+  var profile = {
+    name: 'profile',
+    url: '/profile',
+    templateUrl: '../components/user/profile.html',
+    controller: 'UserController',
+    controllerAs: 'user'
+  };
+
+  var editProfile = {
+    name: 'editProfile',
+    url: '/profile/edit',
+    templateUrl: '../components/user/edit.html',
+    controller: 'UserController',
+    controllerAs: 'user'
+  };
+
+  $stateProvider.state(home).state(categories).state(login).state(profile).state(editProfile).state(register);
+
+  $urlRouterProvider.otherwise('home');
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = MainConfig;
+MainConfig.$inject = ['$rootScope', '$location', 'auth', 'userService'];
+
+function MainConfig($rootScope, $location, auth, user) {
+  $rootScope.$on('$stateChangeStart', function (event) {
+    if (!auth.isLoggedIn()) {
+      $location.path('/login');
+    } else {
+      user.setUser();
+    }
+  });
+}
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+exports['default'] = function () {
+  return {
+    controller: 'CategoriesController',
+    restrict: 'A',
+    templateUrl: './components/todos/addTodoForm.html'
+  };
+};
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var categoriesList = function categoriesList() {
+  return {
+    restrict: 'A',
+    controller: 'CategoriesController',
+    templateUrl: './components/categories/categoriesList.html'
+  };
+};
+
+var editCategoryPopUp = function editCategoryPopUp() {
+  return {
+    restrict: 'A',
+    templateUrl: './components/categories/editCategoryPopUp.html',
+    controller: 'CategoriesController',
+    controllerAs: 'category'
+  };
+};
+
+var newCategoryPopUp = function newCategoryPopUp() {
+  return {
+    restrict: 'A',
+    templateUrl: './components/categories/newCategoryPopUp.html',
+    controller: 'CategoriesController',
+    controllerAs: 'category'
+  };
+};
+
+exports.categoriesList = categoriesList;
+exports.editCategoryPopUp = editCategoryPopUp;
+exports.newCategoryPopUp = newCategoryPopUp;
 
 /***/ })
 /******/ ]);

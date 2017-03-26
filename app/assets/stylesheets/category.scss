@@ -81,7 +81,6 @@ $selected-item-color: #C0E7F3;
   .category-options-container {
     border-radius: 2px;
     border: 1px solid #000000;
-    // box-shadow: 0 0 2px #000000;
     display: none;
     position: absolute;
     right: -55px;
@@ -133,7 +132,4 @@ $selected-item-color: #C0E7F3;
   .selected {
     background: $selected-item-color;
   }
-  // .category-item:first-child {
-  //   border-top: 1px solid #000000;
-  // }
 }
